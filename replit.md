@@ -7,8 +7,6 @@ TrackSmart is a web application designed for registering logistics companies and
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-File structure: Simple layout without static/templates folders - all files in root directory
-QR Scanner input: Prefer file browsing over manual text input for better usability
 
 ## System Architecture
 

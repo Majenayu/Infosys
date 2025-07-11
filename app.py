@@ -14,8 +14,8 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 
-# Create the app with root directory as template and static folder
-app = Flask(__name__, template_folder='.', static_folder='.')
+# Create the app
+app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
@@ -52,13 +52,6 @@ class Location(db.Model):
     here_maps_url = db.Column(db.String(500))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     qr_generated = db.Column(db.Boolean, default=True)
-
-# Live location model for tracking
-class LiveLocation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 with app.app_context():
     db.create_all()
@@ -199,6 +192,13 @@ def get_companies():
     except Exception as e:
         app.logger.error(f"Error fetching companies: {str(e)}")
         return jsonify({'message': 'Failed to fetch companies'}), 500
+
+# Live location model for tracking
+class LiveLocation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route('/live-location', methods=['POST'])
 def store_live_location():
