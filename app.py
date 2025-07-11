@@ -46,13 +46,55 @@ def register_company():
     try:
         data = request.get_json()
         
-        # For now, just return success without database operations
-        # This will be functional once MongoDB connection is fixed
-        app.logger.info(f"Company registration request: {data.get('name', 'Unknown')}")
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        # Validate required fields
+        required_fields = ['name', 'contactPerson', 'email', 'phone', 'apiUrl', 'apiKey', 'address']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'message': f'Missing required field: {field}'}), 400
+        
+        # Check if company already exists
+        db = mongo_client.get_database("tracksmart")
+        companies_collection = db.get_collection("companies")
+        
+        existing_company = companies_collection.find_one({
+            '$or': [
+                {'email': data['email']},
+                {'name': data['name']}
+            ]
+        })
+        
+        if existing_company:
+            return jsonify({'message': 'Company with this name or email already exists'}), 400
+        
+        # Create company document
+        company_doc = {
+            'name': data['name'],
+            'contact_person': data['contactPerson'],
+            'email': data['email'],
+            'phone': data['phone'],
+            'api_url': data['apiUrl'],
+            'api_key': data['apiKey'],
+            'address': data['address'],
+            'created_at': datetime.utcnow(),
+            'status': 'active'
+        }
+        
+        # Insert into companies collection
+        result = companies_collection.insert_one(company_doc)
+        
+        app.logger.info(f"Company registered: {data['name']} ({data['email']})")
         
         return jsonify({
-            'message': 'Company registration received successfully!',
-            'note': 'Database storage will be activated once MongoDB connection is established'
+            'message': 'Company registered successfully!',
+            'company_id': str(result.inserted_id),
+            'name': data['name']
         })
         
     except Exception as e:
@@ -61,16 +103,71 @@ def register_company():
 
 @app.route('/store-location', methods=['POST'])
 def store_location():
-    """Store QR location data"""
+    """Store QR location data with unique 4-digit ID and create MongoDB collection"""
     try:
         data = request.get_json()
         
-        # For now, just return success without database operations
-        app.logger.info(f"Location storage request: {data.get('name', 'Unknown')}")
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        # Generate unique 4-digit ID
+        import random
+        qr_id = str(random.randint(1000, 9999))
+        
+        # Check if this ID already exists and generate new one if needed
+        db = mongo_client.get_database("tracksmart")
+        attempts = 0
+        while attempts < 10:  # Prevent infinite loop
+            if qr_id not in db.list_collection_names():
+                break
+            qr_id = str(random.randint(1000, 9999))
+            attempts += 1
+        
+        # Store location data in locations collection
+        location_doc = {
+            'qr_id': qr_id,
+            'name': data.get('name', ''),
+            'address': data.get('address', ''),
+            'latitude': data.get('latitude'),
+            'longitude': data.get('longitude'),
+            'google_maps_url': data.get('google_maps_url', ''),
+            'here_maps_url': data.get('here_maps_url', ''),
+            'timestamp': datetime.utcnow(),
+            'qr_generated': True
+        }
+        
+        # Insert into locations collection
+        locations_collection = db.get_collection("locations")
+        result = locations_collection.insert_one(location_doc)
+        
+        # Create new collection with the 4-digit ID name
+        qr_collection = db.get_collection(qr_id)
+        
+        # Insert initial document in the new collection
+        qr_collection.insert_one({
+            'type': 'qr_info',
+            'qr_id': qr_id,
+            'location_name': data.get('name', ''),
+            'address': data.get('address', ''),
+            'coordinates': {
+                'latitude': data.get('latitude'),
+                'longitude': data.get('longitude')
+            },
+            'created_at': datetime.utcnow(),
+            'status': 'active'
+        })
+        
+        app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')}")
         
         return jsonify({
-            'message': 'Location data received successfully!',
-            'note': 'Database storage will be activated once MongoDB connection is established'
+            'message': 'Location data stored successfully!',
+            'qr_id': qr_id,
+            'location_id': str(result.inserted_id),
+            'collection_created': qr_id
         })
         
     except Exception as e:

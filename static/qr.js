@@ -374,12 +374,34 @@ const storeLocationData = async (data) => {
     });
 
     if (response.ok) {
+      const result = await response.json();
       console.log('Location data stored successfully');
+      
+      // Display QR ID if available
+      if (result.qr_id) {
+        showStatus(`QR code generated! ID: ${result.qr_id}`, 'success');
+        
+        // Update the QR code display with the ID
+        const qrIdElement = document.getElementById('qrId');
+        if (qrIdElement) {
+          qrIdElement.textContent = result.qr_id;
+        }
+        
+        // Add QR ID to the download filename
+        if (currentLocation && downloadBtn) {
+          const originalName = currentLocation.name || 'Location';
+          currentLocation.qr_id = result.qr_id;
+          downloadBtn.setAttribute('data-qr-id', result.qr_id);
+        }
+      }
     } else {
-      console.warn('Failed to store location data');
+      const error = await response.json();
+      console.warn('Failed to store location data:', error.message);
+      showStatus(`Failed to store location: ${error.message}`, 'error');
     }
   } catch (error) {
     console.warn('Offline or server unavailable:', error);
+    showStatus('Offline or server unavailable', 'warning');
   }
 };
 
@@ -396,13 +418,15 @@ const setupDownload = () => {
 
     try {
       const link = document.createElement('a');
-      const filename = `QR_${currentLocation.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.png`;
+      const qrId = currentLocation.qr_id || downloadBtn.getAttribute('data-qr-id') || 'XXXX';
+      const locationName = currentLocation.name.replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = `QR_${qrId}_${locationName}_${Date.now()}.png`;
       link.download = filename;
       link.href = canvas.toDataURL('image/png');
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showStatus('QR code downloaded successfully!', 'success');
+      showStatus(`QR code downloaded! ID: ${qrId}`, 'success');
     } catch (error) {
       console.error('Download error:', error);
       showStatus('Failed to download QR code', 'error');
