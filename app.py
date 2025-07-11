@@ -452,34 +452,45 @@ def delivery_login():
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():
     """Initialize MongoDB connection"""
-    global mongo_client, companies_collection, locations_collection, live_locations_collection, mongo_connected
+    global mongo_client, mongo_connected
     
     try:
-        # Import pymongo
-        from pymongo import MongoClient
+        # Clean approach to import pymongo
+        import importlib
         
-        # Connection string
-        connection_string = "mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in"
+        # Try multiple approaches to avoid bson conflicts
+        try:
+            # Remove any existing problematic modules
+            modules_to_remove = ['bson', 'bson.codec_options', 'bson.son']
+            for mod in modules_to_remove:
+                if mod in sys.modules:
+                    del sys.modules[mod]
+        except:
+            pass
         
-        # Create MongoClient with timeout
-        mongo_client = MongoClient(connection_string, serverSelectionTimeoutMS=5000)
-        mongo_db = mongo_client.get_database("tracksmart")
+        # Import pymongo directly
+        pymongo = importlib.import_module('pymongo')
+        MongoClient = pymongo.MongoClient
         
-        # Collections
-        companies_collection = mongo_db.get_collection("companies")
-        locations_collection = mongo_db.get_collection("locations")
-        live_locations_collection = mongo_db.get_collection("live_locations")
+        # Create connection
+        mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
         
-        # Test connection with ping command
-        result = mongo_client.admin.command('ping')
+        # Test connection
+        mongo_client.admin.command('ping')
+        app.logger.info("MongoDB connected successfully")
         mongo_connected = True
-        app.logger.info(f"MongoDB connection established successfully: {result}")
+        return True
         
-    except Exception as e:
-        app.logger.error(f"MongoDB connection failed: {str(e)}")
+    except ImportError as import_error:
+        app.logger.error(f"MongoDB import failed: {import_error}")
         app.logger.info("Application will continue without MongoDB connection")
         mongo_connected = False
-        mongo_client = None
+        return False
+    except Exception as e:
+        app.logger.error(f"MongoDB connection failed: {e}")
+        app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
+        return False
 
-# Initialize MongoDB on startup
-initialize_mongodb()
+# Initialize MongoDB on startup - temporarily disabled during migration
+# initialize_mongodb()
