@@ -33,6 +33,8 @@ Updated: Enhanced rate limiting handling in all map initialization functions wit
 - **Package Management**: ✓ COMPLETED - Removed conflicting bson>=0.5.10, using only pymongo>=4.13.2
 - **Application Status**: ✓ WORKING - All core features functional including user dashboard tracking
 - **New Features Added**: QR tracking API endpoint (/api/qr-tracking/<qr_id>) for delivery status monitoring
+- **QR Location Storage**: ✓ ENHANCED - QR generation now stores complete location data (coordinates, address, maps URLs) in QR-specific MongoDB collections
+- **User Dashboard**: ✓ ENHANCED - Added location status panel showing coordinates, distance, travel time, speed, and delivery status
 
 ### Frontend Architecture
 - **Template Engine**: Jinja2 (Flask's default)

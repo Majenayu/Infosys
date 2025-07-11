@@ -172,19 +172,28 @@ def store_location():
         # Create new collection with the 4-digit ID name
         qr_collection = db.get_collection(qr_id)
         
-        # Insert initial document in the new collection
-        qr_collection.insert_one({
+        # Insert complete location data in the QR-specific collection
+        qr_info_doc = {
             'type': 'qr_info',
             'qr_id': qr_id,
             'location_name': data.get('name', ''),
             'address': data.get('address', ''),
             'coordinates': {
-                'latitude': data.get('latitude'),
-                'longitude': data.get('longitude')
+                'lat': data.get('latitude'),
+                'lng': data.get('longitude')
             },
+            'latitude': data.get('latitude'),
+            'longitude': data.get('longitude'),
+            'google_maps_url': data.get('google_maps_url', ''),
+            'here_maps_url': data.get('here_maps_url', ''),
+            'timestamp': datetime.utcnow(),
             'created_at': datetime.utcnow(),
+            'qr_generated': True,
             'status': 'active'
-        })
+        }
+        
+        qr_collection.insert_one(qr_info_doc)
+        app.logger.info(f"Complete QR location data stored in collection {qr_id} with coordinates lat: {data.get('latitude')}, lng: {data.get('longitude')}")
         
         app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')}")
         
