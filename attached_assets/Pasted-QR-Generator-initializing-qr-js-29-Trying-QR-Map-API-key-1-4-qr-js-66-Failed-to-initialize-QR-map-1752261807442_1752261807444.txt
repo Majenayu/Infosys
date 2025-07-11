@@ -1,0 +1,1039 @@
+QR Generator initializing...
+qr.js:29 Trying QR Map API key 1/4
+qr.js:66 Failed to initialize QR map with API key 1: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (qr.js:49:20)
+    at HTMLDocument.<anonymous> (qr.js:497:3)
+initializeMap @ qr.js:66
+(anonymous) @ qr.js:497Understand this error
+qr.js:29 Trying QR Map API key 2/4
+qr.js:66 Failed to initialize QR map with API key 2: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (qr.js:49:20)
+    at HTMLDocument.<anonymous> (qr.js:497:3)
+initializeMap @ qr.js:66
+(anonymous) @ qr.js:497Understand this error
+qr.js:29 Trying QR Map API key 3/4
+qr.js:66 Failed to initialize QR map with API key 3: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (qr.js:49:20)
+    at HTMLDocument.<anonymous> (qr.js:497:3)
+initializeMap @ qr.js:66
+(anonymous) @ qr.js:497Understand this error
+qr.js:29 Trying QR Map API key 4/4
+qr.js:66 Failed to initialize QR map with API key 4: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (qr.js:49:20)
+    at HTMLDocument.<anonymous> (qr.js:497:3)
+initializeMap @ qr.js:66
+(anonymous) @ qr.js:497Understand this error
+qr.js:71 All HERE Maps API keys failed for QR generator
+initializeMap @ qr.js:71
+(anonymous) @ qr.js:497Understand this error
+qr.js:502 QR Generator initialized successfully
+mapsjs-core.js:184  GET https://vector.hereapi.com/v2/vectortiles/copyrights?xnlp=CL_JSMv3.1.66.0&apikey=KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ 429 (Too Many Requests)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Mf @ VM85:46
+ap.X @ VM85:47
+X.X @ VM85:43
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ qr.js:41
+(anonymous) @ qr.js:497Understand this error
+mapsjs-core.js:184  GET https://vector.hereapi.com/v2/vectortiles/copyrights?xnlp=CL_JSMv3.1.66.0&apikey=fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE 429 (Too Many Requests)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Mf @ VM85:46
+ap.X @ VM85:47
+X.X @ VM85:43
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ qr.js:41
+(anonymous) @ qr.js:497Understand this error
+mapsjs-core.js:184  GET https://vector.hereapi.com/v2/vectortiles/copyrights?xnlp=CL_JSMv3.1.66.0&apikey=qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI 429 (Too Many Requests)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Mf @ VM85:46
+ap.X @ VM85:47
+X.X @ VM85:43
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ qr.js:41
+(anonymous) @ qr.js:497Understand this error
+mapsjs-core.js:184  GET https://vector.hereapi.com/v2/vectortiles/copyrights?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI 429 (Too Many Requests)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Mf @ VM85:46
+ap.X @ VM85:47
+X.X @ VM85:43
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ qr.js:41
+(anonymous) @ qr.js:497Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/45/29/6 and id 103: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/7/45/29/6 and id 94: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/45/29/6 and id 165: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/7/45/29/6 and id 72: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/7/45/28/6 and id 70: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/7/44/29/6 and id 67: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/7/44/28/6 and id 65: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/bf7a98f4-bbc5-49c2-8263-f10eb7413421:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 87/7/44/28/6 and id 127: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/7/44/28/6 and id 87: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 87/7/45/29/6 and id 134: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/7/44/29/6 and id 89: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/44/28/6 and id 100: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/7/45/28/6 and id 92: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/6cd72d64-289a-4c28-90ee-368e74276c99:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/44/28/6 and id 158: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/45/28/omv?xnlp=CL_JSMv3.1.66.0&apikey=KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 87/7/45/28/6 and id 132: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://vector.hereapi.com/v2/vectortiles/base/mc/6/44/29/omv?xnlp=CL_JSMv3.1.66.0&apikey=KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ&content=default%2Ctransit 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM85:19
+ap.Sa @ VM85:45
+X.u @ VM85:41
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+value @ mapsjs-core.js:459
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 87/7/44/29/6 and id 129: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/d8a4350b-b5eb-41b7-b31f-f557c65278f9:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/44/29/6 and id 101: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/44/29/6 and id 160: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/45/28/6 and id 102: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/7/45/28/6 and id 163: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:7547)
+    at Pbf.readFields (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:4939)
+    at new e (blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:53725)
+    at blob:https://e5274110-3f60-4077-8a2a-0e16daee6bbb-00-1jtewh9v0dykt.sisko.replit.dev/92058877-2baa-47b9-9053-136b8887614b:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error

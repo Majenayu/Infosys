@@ -470,27 +470,46 @@ window.testSampleLocation = testSampleLocation;
 
 // ====== NAVIGATION FUNCTIONS ======
 
-// Initialize HERE Maps - Simple approach like working QR page
-function initializeMap() {
+// Initialize HERE Maps with rate limiting handling
+async function initializeMap() {
   try {
     const API_KEY = 'qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI';
+    console.log('Initializing navigation map with prioritized API key');
     
-    // Initialize HERE Maps platform - same as working QR page
+    // Add delay to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Initialize HERE Maps platform
     platform = new H.service.Platform({ apikey: API_KEY });
-    defaultLayers = platform.createDefaultLayers();
+    
+    // Initialize layers with error handling
+    let defaultLayers;
+    try {
+      defaultLayers = platform.createDefaultLayers();
+    } catch (layerError) {
+      console.warn('Vector layers failed, trying fallback approach:', layerError);
+      showStatus('Map loading with reduced functionality due to rate limits', 'warning');
+      initializeFallbackMap();
+      return;
+    }
     
     const mapContainer = document.getElementById('mapContainer');
     if (!mapContainer) {
       throw new Error('Map container not found');
     }
     
-    // Initialize map - same as working QR page
-    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+    // Initialize map with fallback layer selection
+    const mapLayer = defaultLayers.vector?.normal?.map || defaultLayers.raster?.normal?.map;
+    if (!mapLayer) {
+      throw new Error('No map layers available');
+    }
+    
+    map = new H.Map(mapContainer, mapLayer, {
       zoom: 10,
       center: { lat: 12.9716, lng: 77.5946 } // Bangalore coordinates
     });
     
-    // Enable map events and behaviors - same as working QR page
+    // Enable map events and behaviors
     mapEvents = new H.mapevents.MapEvents(map);
     behavior = new H.mapevents.Behavior(mapEvents);
     ui = H.ui.UI.createDefault(map);
@@ -503,7 +522,7 @@ function initializeMap() {
     
   } catch (error) {
     console.error('Error initializing map:', error);
-    showStatus('Map initialization failed - using fallback', 'warning');
+    showStatus('Map temporarily unavailable due to API rate limits - using fallback', 'warning');
     initializeFallbackMap();
   }
 }

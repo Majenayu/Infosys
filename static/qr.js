@@ -20,58 +20,90 @@ const myLocationBtn = document.getElementById('myLocationBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const qrContainer = document.getElementById('qrcode');
 
-// Initialize HERE Maps with multiple API keys
-const initializeMap = () => {
-  // Try each API key until one works
-  for (let i = 0; i < HERE_API_KEYS.length; i++) {
-    try {
-      const API_KEY = HERE_API_KEYS[currentApiKeyIndex];
-      console.log(`Trying QR Map API key ${currentApiKeyIndex + 1}/${HERE_API_KEYS.length}`);
-      
-      platform = new H.service.Platform({ apikey: API_KEY });
-      defaultLayers = platform.createDefaultLayers();
-      geocoder = platform.getSearchService();
-
-      const mapContainer = document.getElementById('mapContainer');
-      if (!mapContainer) {
-        throw new Error('Map container not found');
-      }
-
-      // Initialize map centered on Karnataka
-      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
-        zoom: 7,
-        center: { lat: 15.3173, lng: 75.7139 }
-      });
-
-      // Enable map events and behaviors
-      mapEvents = new H.mapevents.MapEvents(map);
-      behavior = new H.mapevents.Behavior(mapEvents);
-      ui = H.ui.UI.createDefault(map);
-
-      // Add map click listener
-      map.addEventListener('tap', handleMapClick);
-
-      // Resize map when window resizes
-      window.addEventListener('resize', () => {
-        if (map) {
-          map.getViewPort().resize();
+// Initialize HERE Maps with rate limiting handling
+const initializeMap = async () => {
+  try {
+    // Use the first API key with rate limiting delay
+    const API_KEY = HERE_API_KEYS[0]; // Use prioritized API key
+    console.log(`Initializing QR Map with prioritized API key`);
+    
+    // Add a small delay to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    platform = new H.service.Platform({ 
+      apikey: API_KEY,
+      // Add rate limiting configuration
+      'rest-api': {
+        'search': {
+          'host': 'geocode.search.hereapi.com'
         }
-      });
-
-      console.log(`QR Map initialized successfully with API key ${currentApiKeyIndex + 1}`);
-      showStatus('QR Generator ready. Click map or search to begin.', 'success');
-      return; // Success, exit the loop
-      
-    } catch (error) {
-      console.error(`Failed to initialize QR map with API key ${currentApiKeyIndex + 1}:`, error);
-      currentApiKeyIndex = (currentApiKeyIndex + 1) % HERE_API_KEYS.length;
-      
-      // If we've tried all keys, show error
-      if (currentApiKeyIndex === 0) {
-        console.error('All HERE Maps API keys failed for QR generator');
-        showStatus('Map initialization failed - all API keys exhausted', 'error');
-        return;
       }
+    });
+    
+    // Initialize layers with error handling
+    try {
+      defaultLayers = platform.createDefaultLayers();
+    } catch (layerError) {
+      console.warn('Vector layers failed, trying raster layers:', layerError);
+      // Fallback to raster layers if vector fails
+      defaultLayers = {
+        raster: {
+          normal: {
+            map: platform.createDefaultLayers().raster.normal.map
+          }
+        }
+      };
+    }
+    
+    geocoder = platform.getSearchService();
+
+    const mapContainer = document.getElementById('mapContainer');
+    if (!mapContainer) {
+      throw new Error('Map container not found');
+    }
+
+    // Initialize map with fallback layer selection
+    const mapLayer = defaultLayers.vector?.normal?.map || defaultLayers.raster?.normal?.map;
+    if (!mapLayer) {
+      throw new Error('No map layers available');
+    }
+
+    map = new H.Map(mapContainer, mapLayer, {
+      zoom: 7,
+      center: { lat: 15.3173, lng: 75.7139 }
+    });
+
+    // Enable map events and behaviors
+    mapEvents = new H.mapevents.MapEvents(map);
+    behavior = new H.mapevents.Behavior(mapEvents);
+    ui = H.ui.UI.createDefault(map);
+
+    // Add map click listener
+    map.addEventListener('tap', handleMapClick);
+
+    // Resize map when window resizes
+    window.addEventListener('resize', () => {
+      if (map) {
+        map.getViewPort().resize();
+      }
+    });
+
+    console.log('QR Map initialized successfully');
+    showStatus('QR Generator ready. Click map or search to begin.', 'success');
+    
+  } catch (error) {
+    console.error('Failed to initialize QR map:', error);
+    showStatus('Map temporarily unavailable - you can still use search functionality', 'warning');
+    
+    // Initialize without map for search functionality
+    try {
+      const API_KEY = HERE_API_KEYS[0];
+      platform = new H.service.Platform({ apikey: API_KEY });
+      geocoder = platform.getSearchService();
+      console.log('Search functionality initialized without map');
+    } catch (searchError) {
+      console.error('Search initialization also failed:', searchError);
+      showStatus('Map and search temporarily unavailable - please try again later', 'error');
     }
   }
 };

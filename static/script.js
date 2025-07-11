@@ -11,65 +11,71 @@ const HERE_API_KEYS = [
 
 let currentApiKeyIndex = 0;
 
-// Initialize HERE Maps with fallback API keys
+// Initialize HERE Maps with rate limiting handling
 const initializeMap = async () => {
-  let platform = null;
-  
-  // Try each API key until one works
-  for (let i = 0; i < HERE_API_KEYS.length; i++) {
+  try {
+    // Use the first API key with rate limiting delay
+    const API_KEY = HERE_API_KEYS[0]; // Use prioritized API key
+    console.log('Initializing company registration map with prioritized API key');
+    
+    // Add a small delay to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    platform = new H.service.Platform({
+      apikey: API_KEY
+    });
+
+    // Initialize layers with error handling
+    let defaultLayers;
     try {
-      const API_KEY = HERE_API_KEYS[currentApiKeyIndex];
-      console.log(`Trying HERE Maps API key ${currentApiKeyIndex + 1}/${HERE_API_KEYS.length}`);
-      
-      platform = new H.service.Platform({
-        apikey: API_KEY
-      });
-
-      const defaultLayers = platform.createDefaultLayers();
-      const mapContainer = document.getElementById('mapContainer');
-      
-      if (!mapContainer) {
-        console.warn('Map container not found');
-        return;
-      }
-
-      map = new H.Map(
-        mapContainer,
-        defaultLayers.vector.normal.map,
-        {
-          zoom: 5,
-          center: { lat: 20.5937, lng: 78.9629 } // Center on India
-        }
-      );
-
-      // Enable map interaction
-      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-      const ui = H.ui.UI.createDefault(map, defaultLayers);
-      
-      // Initialize geocoder
-      geocoder = platform.getSearchService();
-
-      // Resize map when window resizes
-      window.addEventListener('resize', () => {
-        if (map) {
-          map.getViewPort().resize();
-        }
-      });
-
-      console.log(`Map initialized successfully with API key ${currentApiKeyIndex + 1}`);
-      return; // Success, exit the loop
-      
-    } catch (error) {
-      console.error(`Failed to initialize map with API key ${currentApiKeyIndex + 1}:`, error);
-      currentApiKeyIndex = (currentApiKeyIndex + 1) % HERE_API_KEYS.length;
-      
-      // If we've tried all keys, show error
-      if (currentApiKeyIndex === 0) {
-        console.error('All HERE Maps API keys failed');
-        showStatus('Map initialization failed - all API keys exhausted', 'error');
-        return;
-      }
+      defaultLayers = platform.createDefaultLayers();
+    } catch (layerError) {
+      console.warn('Vector layers failed, trying alternative approach:', layerError);
+      showStatus('Map loading with reduced functionality', 'warning');
+      return;
     }
+    
+    const mapContainer = document.getElementById('mapContainer');
+    
+    if (!mapContainer) {
+      console.warn('Map container not found');
+      return;
+    }
+
+    // Initialize map with fallback layer selection
+    const mapLayer = defaultLayers.vector?.normal?.map || defaultLayers.raster?.normal?.map;
+    if (!mapLayer) {
+      throw new Error('No map layers available');
+    }
+
+    map = new H.Map(
+      mapContainer,
+      mapLayer,
+      {
+        zoom: 5,
+        center: { lat: 20.5937, lng: 78.9629 } // Center on India
+      }
+    );
+
+    // Enable map interaction
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    const ui = H.ui.UI.createDefault(map, defaultLayers);
+    
+    // Initialize geocoder
+    geocoder = platform.getSearchService();
+
+    // Resize map when window resizes
+    window.addEventListener('resize', () => {
+      if (map) {
+        map.getViewPort().resize();
+      }
+    });
+
+    console.log('Company registration map initialized successfully');
+    
+  } catch (error) {
+    console.error('Failed to initialize map:', error);
+    showStatus('Map temporarily unavailable due to API rate limits', 'warning');
   }
 };
 
