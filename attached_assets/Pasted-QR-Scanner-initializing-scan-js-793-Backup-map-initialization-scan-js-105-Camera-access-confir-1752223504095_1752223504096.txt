@@ -1,0 +1,76 @@
+QR Scanner initializing...
+scan.js:793 Backup map initialization...
+scan.js:105 Camera access confirmed
+scan.js:137 QR Scanner initialized successfully
+scan.js:777 QR Scanner initialization complete
+scan.js:73 Failed to initialize map: TypeError: Cannot read properties of undefined (reading 's')
+    at new tn (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:1:357)
+    at initializeMapWithDelay (scan.js:60:22)
+    at scan.js:31:5
+initializeMapWithDelay @ scan.js:73
+(anonymous) @ scan.js:31
+setTimeout
+initializeMap @ scan.js:30
+(anonymous) @ scan.js:749Understand this error
+scan.js:74 Backup map initialization...
+scan.js:73 Failed to initialize map: TypeError: Cannot read properties of undefined (reading 's')
+    at new tn (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:1:357)
+    at initializeMapWithDelay (scan.js:60:22)
+    at scan.js:31:5
+initializeMapWithDelay @ scan.js:73
+(anonymous) @ scan.js:31
+setTimeout
+initializeMap @ scan.js:30
+(anonymous) @ scan.js:794Understand this error
+scan.js:74 Backup map initialization...
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:237 QR Code detected: {"name":"Mysore Palace","address":"Mysore Palace","latitude":12.3052,"longitude":76.65532,"googleMapsUrl":"https://www.google.com/maps?q=12.3052,76.65532","hereMapsUrl":"https://wego.here.com/directions/mix/12.3052,76.65532","timestamp":"2025-07-11T07:00:12.701Z"}
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465
+loadTexture @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this warning
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465
+loadTexture @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this warning
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
+scan.js:399 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:399Understand this error
