@@ -86,7 +86,7 @@ def register_company():
         if existing_company:
             return jsonify({'message': 'Company with this name or email already exists'}), 400
         
-        # Create company document
+        # Create new company document
         company_doc = {
             'name': data['name'],
             'contact_person': data['contactPerson'],
@@ -95,24 +95,22 @@ def register_company():
             'api_url': data['apiUrl'],
             'api_key': data['apiKey'],
             'address': data['address'],
-            'created_at': datetime.utcnow(),
-            'status': 'active'
+            'created_at': datetime.utcnow()
         }
         
-        # Insert into companies collection
+        # Insert company
         result = companies_collection.insert_one(company_doc)
         
         app.logger.info(f"Company registered: {data['name']} ({data['email']})")
         
         return jsonify({
             'message': 'Company registered successfully!',
-            'company_id': str(result.inserted_id),
-            'name': data['name']
+            'company_id': str(result.inserted_id)
         })
         
     except Exception as e:
         app.logger.error(f"Error registering company: {str(e)}")
-        return jsonify({'message': 'Failed to register company'}), 500
+        return jsonify({'message': 'Registration failed'}), 500
 
 @app.route('/store-location', methods=['POST'])
 def store_location():
@@ -127,60 +125,57 @@ def store_location():
         if not mongo_client:
             return jsonify({'message': 'Database connection failed'}), 500
         
+        # Validate required fields
+        if not all(key in data for key in ['name', 'address', 'latitude', 'longitude']):
+            return jsonify({'message': 'Missing required location data'}), 400
+        
         # Generate unique 4-digit ID
-        import random
-        qr_id = str(random.randint(1000, 9999))
-        
-        # Check if this ID already exists and generate new one if needed
         db = mongo_client.get_database("tracksmart")
-        attempts = 0
-        while attempts < 10:  # Prevent infinite loop
-            if qr_id not in db.list_collection_names():
-                break
-            qr_id = str(random.randint(1000, 9999))
-            attempts += 1
+        locations_collection = db.get_collection("locations")
         
-        # Store location data in locations collection
+        qr_id = None
+        max_attempts = 100
+        
+        for attempt in range(max_attempts):
+            qr_id = random.randint(1000, 9999)
+            
+            # Check if this ID already exists
+            existing_location = locations_collection.find_one({'qr_id': qr_id})
+            if not existing_location:
+                break
+            
+            if attempt == max_attempts - 1:
+                return jsonify({'message': 'Unable to generate unique QR ID'}), 500
+        
+        # Create location document
         location_doc = {
             'qr_id': qr_id,
-            'name': data.get('name', ''),
-            'address': data.get('address', ''),
-            'latitude': data.get('latitude'),
-            'longitude': data.get('longitude'),
+            'name': data['name'],
+            'address': data['address'],
+            'latitude': float(data['latitude']),
+            'longitude': float(data['longitude']),
             'google_maps_url': data.get('google_maps_url', ''),
             'here_maps_url': data.get('here_maps_url', ''),
             'timestamp': datetime.utcnow(),
             'qr_generated': True
         }
         
-        # Insert into locations collection
-        locations_collection = db.get_collection("locations")
-        result = locations_collection.insert_one(location_doc)
+        # Store in main locations collection
+        locations_collection.insert_one(location_doc)
         
-        # Create new collection with the 4-digit ID name
-        qr_collection = db.get_collection(qr_id)
+        # Create dedicated collection for this QR code
+        qr_collection_name = str(qr_id)
+        qr_collection = db.get_collection(qr_collection_name)
         
-        # Insert initial document in the new collection
-        qr_collection.insert_one({
-            'type': 'qr_info',
-            'qr_id': qr_id,
-            'location_name': data.get('name', ''),
-            'address': data.get('address', ''),
-            'coordinates': {
-                'latitude': data.get('latitude'),
-                'longitude': data.get('longitude')
-            },
-            'created_at': datetime.utcnow(),
-            'status': 'active'
-        })
+        # Store location data in QR-specific collection
+        qr_collection.insert_one(location_doc)
         
-        app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')}")
+        app.logger.info(f"Location stored with QR ID: {qr_id} - {data['name']}")
         
         return jsonify({
-            'message': 'Location data stored successfully!',
+            'message': 'Location stored successfully!',
             'qr_id': qr_id,
-            'location_id': str(result.inserted_id),
-            'collection_created': qr_id
+            'location_id': str(location_doc['_id']) if '_id' in location_doc else None
         })
         
     except Exception as e:
@@ -191,48 +186,73 @@ def store_location():
 def get_locations():
     """Get all stored locations"""
     try:
-        # Return empty list for now
-        return jsonify([])
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        locations_collection = db.get_collection("locations")
+        
+        locations = list(locations_collection.find({}, {'_id': 0}))
+        
+        return jsonify({'locations': locations})
         
     except Exception as e:
-        app.logger.error(f"Error fetching locations: {str(e)}")
-        return jsonify({'message': 'Failed to fetch locations'}), 500
+        app.logger.error(f"Error getting locations: {str(e)}")
+        return jsonify({'message': 'Failed to get locations'}), 500
 
-@app.route('/location/<location_id>')
+@app.route('/locations/<int:location_id>')
 def get_location(location_id):
     """Get a specific location by ID"""
     try:
-        # Return not found for now
-        return jsonify({'message': 'Location not found'}), 404
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        locations_collection = db.get_collection("locations")
+        
+        location = locations_collection.find_one({'qr_id': location_id}, {'_id': 0})
+        
+        if not location:
+            return jsonify({'message': 'Location not found'}), 404
+        
+        return jsonify({'location': location})
         
     except Exception as e:
-        app.logger.error(f"Error fetching location: {str(e)}")
-        return jsonify({'message': 'Failed to fetch location'}), 500
+        app.logger.error(f"Error getting location: {str(e)}")
+        return jsonify({'message': 'Failed to get location'}), 500
 
 @app.route('/companies')
 def get_companies():
     """Get all registered companies"""
     try:
-        # Return empty list for now
-        return jsonify([])
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        companies_collection = db.get_collection("companies")
+        
+        companies = list(companies_collection.find({}, {'_id': 0, 'api_key': 0}))
+        
+        return jsonify({'companies': companies})
         
     except Exception as e:
-        app.logger.error(f"Error fetching companies: {str(e)}")
-        return jsonify({'message': 'Failed to fetch companies'}), 500
+        app.logger.error(f"Error getting companies: {str(e)}")
+        return jsonify({'message': 'Failed to get companies'}), 500
 
 @app.route('/store-live-location', methods=['POST'])
 def store_live_location():
     """Store live location data in individual user collection"""
     try:
         data = request.get_json()
-        
-        # Get user email from the request (check both keys for compatibility)
-        user_email = data.get('user_email') or data.get('email')
-        app.logger.info(f"Store live location request - user_email: {user_email}, data: {data}")
-        
-        if not user_email:
-            app.logger.error("User email is missing from request")
-            return jsonify({'message': 'User email is required'}), 400
         
         # Try to initialize MongoDB if not connected
         if not mongo_connected:
@@ -241,68 +261,82 @@ def store_live_location():
         if not mongo_client:
             return jsonify({'message': 'Database connection failed'}), 500
         
-        # Get user's individual collection
-        user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
-        user_collection = mongo_client.get_database("tracksmart").get_collection(user_collection_name)
+        # Validate required fields
+        required_fields = ['latitude', 'longitude', 'user_email']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'message': f'Missing required field: {field}'}), 400
         
-        # Check if QR ID is provided for specific QR collection tracking
-        qr_id = data.get('qr_id')
+        # Store location data
+        db = mongo_client.get_database("tracksmart")
         
-        # Create location document to update/insert
+        # Store in user-specific collection
+        user_email = data['user_email'].lower()
+        collection_name = f"delivery_{user_email.replace('@', '_').replace('.', '_')}"
+        user_collection = db.get_collection(collection_name)
+        
         location_doc = {
-            'latitude': data['latitude'],
-            'longitude': data['longitude'],
+            'latitude': float(data['latitude']),
+            'longitude': float(data['longitude']),
             'timestamp': datetime.utcnow(),
-            'type': 'current_location',
-            'user_email': user_email
+            'accuracy': data.get('accuracy', 0),
+            'speed': data.get('speed', 0),
+            'heading': data.get('heading', 0)
         }
         
-        # Store in QR-specific collection if QR ID is provided
-        if qr_id:
-            # Update or insert in the QR-specific collection (only keep one current location per user)
-            qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
-            qr_location_doc = {
-                'latitude': data['latitude'],
-                'longitude': data['longitude'],
-                'timestamp': datetime.utcnow(),
-                'type': 'delivery_location',
-                'user_email': user_email,
-                'qr_id': qr_id
-            }
-            qr_collection.update_one(
-                {'user_email': user_email, 'type': 'delivery_location'},
-                {'$set': qr_location_doc},
-                upsert=True
-            )
-        
-        # Update or insert the current location (only keep one current location record)
-        result = user_collection.update_one(
-            {'type': 'current_location'},
-            {'$set': location_doc},
+        # Update existing location or create new one
+        result = user_collection.replace_one(
+            {'location_type': 'current'},
+            {**location_doc, 'location_type': 'current'},
             upsert=True
         )
         
-        app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}")
+        # Also store in QR-specific collection if QR ID is provided
+        if 'qr_id' in data:
+            qr_collection_name = str(data['qr_id'])
+            qr_collection = db.get_collection(qr_collection_name)
+            
+            qr_location_doc = {
+                **location_doc,
+                'user_email': user_email,
+                'qr_id': data['qr_id'],
+                'delivery_status': 'in_progress'
+            }
+            
+            # Store location update in QR collection
+            qr_collection.insert_one(qr_location_doc)
+        
+        app.logger.info(f"Live location stored for user: {user_email}")
         
         return jsonify({
-            'message': 'Live location updated successfully!',
-            'updated': result.modified_count > 0 or result.upserted_id is not None
+            'message': 'Location stored successfully!',
+            'collection': collection_name
         })
         
     except Exception as e:
         app.logger.error(f"Error storing live location: {str(e)}")
-        return jsonify({'message': 'Failed to store live location'}), 500
+        return jsonify({'message': 'Failed to store location'}), 500
 
 @app.route('/live-locations')
 def get_live_locations():
     """Get live location data"""
     try:
-        # Return empty list for now
-        return jsonify([])
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        live_locations_collection = db.get_collection("live_locations")
+        
+        locations = list(live_locations_collection.find({}, {'_id': 0}))
+        
+        return jsonify({'locations': locations})
         
     except Exception as e:
-        app.logger.error(f"Error fetching live locations: {str(e)}")
-        return jsonify({'message': 'Failed to fetch live locations'}), 500
+        app.logger.error(f"Error getting live locations: {str(e)}")
+        return jsonify({'message': 'Failed to get live locations'}), 500
 
 @app.route('/delivery/register', methods=['POST'])
 def delivery_register():
@@ -316,12 +350,9 @@ def delivery_register():
             if not data.get(field):
                 return jsonify({'message': f'Missing required field: {field}'}), 400
         
-        # Basic email validation
-        import re
-        if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', data['email']):
-            return jsonify({'message': 'Invalid email format'}), 400
-        
         email = data['email'].lower()
+        
+        app.logger.info(f"Delivery partner registration attempt: {data['name']} ({email})")
         
         # Try to initialize MongoDB if not connected
         if not mongo_connected:
@@ -329,10 +360,11 @@ def delivery_register():
         
         if mongo_client:
             try:
-                # Check if delivery partner already exists
-                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
-                existing_partner = partners_collection.find_one({'email': email})
+                # Check if partner already exists
+                db = mongo_client.get_database("tracksmart")
+                partners_collection = db.get_collection("delivery_partners")
                 
+                existing_partner = partners_collection.find_one({'email': email})
                 if existing_partner:
                     return jsonify({'message': 'Email already registered'}), 400
                 
@@ -353,11 +385,11 @@ def delivery_register():
                 # Store in main delivery partners collection
                 result = partners_collection.insert_one(delivery_partner)
                 
-                # Create individual collection for this delivery partner (empty collection)
+                # Create individual collection for this delivery partner
                 collection_name = f"delivery_{email.replace('@', '_').replace('.', '_')}"
-                partner_collection = mongo_client.get_database("tracksmart").get_collection(collection_name)
+                partner_collection = db.get_collection(collection_name)
                 
-                # Just create the collection by inserting a placeholder document and then removing it
+                # Initialize collection with a placeholder document
                 temp_doc = partner_collection.insert_one({'temp': 'placeholder'})
                 partner_collection.delete_one({'_id': temp_doc.inserted_id})
                 
@@ -401,7 +433,8 @@ def delivery_login():
         if mongo_client:
             try:
                 # Find delivery partner in database
-                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
+                db = mongo_client.get_database("tracksmart")
+                partners_collection = db.get_collection("delivery_partners")
                 partner = partners_collection.find_one({'email': email})
                 
                 if not partner:
@@ -447,34 +480,42 @@ def delivery_login():
         app.logger.error(f"Error logging in delivery partner: {str(e)}")
         return jsonify({'message': 'Login failed'}), 500
 
-# Initialize MongoDB connection after app is created
 def initialize_mongodb():
     """Initialize MongoDB connection"""
-    global mongo_client, companies_collection, locations_collection, live_locations_collection, mongo_connected
+    global mongo_client, mongo_connected
     
     try:
-        # Try to import pymongo without conflicting bson
-        import sys
+        # Clean approach to import pymongo
+        import importlib
         
-        # Remove any conflicting bson module if present
-        if 'bson' in sys.modules:
-            del sys.modules['bson']
+        # Try multiple approaches to avoid bson conflicts
+        try:
+            # Remove any existing problematic modules
+            modules_to_remove = ['bson', 'bson.codec_options', 'bson.son']
+            for mod in modules_to_remove:
+                if mod in sys.modules:
+                    del sys.modules[mod]
+        except:
+            pass
         
-        # Clean import of pymongo
-        from pymongo import MongoClient
+        # Import pymongo directly
+        pymongo = importlib.import_module('pymongo')
+        MongoClient = pymongo.MongoClient
+        
+        # Create connection
         mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
-        mongo_db = mongo_client.get_database("tracksmart")
-        
-        # Collections
-        companies_collection = mongo_db.get_collection("companies")
-        locations_collection = mongo_db.get_collection("locations")
-        live_locations_collection = mongo_db.get_collection("live_locations")
         
         # Test connection
         mongo_client.admin.command('ping')
         app.logger.info("MongoDB connected successfully")
         mongo_connected = True
         return True
+        
+    except ImportError as import_error:
+        app.logger.error(f"MongoDB import failed: {import_error}")
+        app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
+        return False
     except Exception as e:
         app.logger.error(f"MongoDB connection failed: {e}")
         app.logger.info("Application will continue without MongoDB connection")
@@ -483,3 +524,6 @@ def initialize_mongodb():
 
 # Try to initialize MongoDB on startup
 initialize_mongodb()
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

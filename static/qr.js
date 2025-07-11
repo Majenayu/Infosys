@@ -1,5 +1,12 @@
-// HERE Maps API Configuration with working API key
-const API_KEY = 'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI';
+// HERE Maps API Configuration with multiple API keys for better reliability
+const HERE_API_KEYS = [
+  "qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI",
+  "fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE", 
+  "KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ",
+  "YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI"
+];
+
+let currentApiKeyIndex = 0;
 let platform, defaultLayers, map, mapEvents, behavior, ui, geocoder;
 let currentMarker = null;
 let currentQR = null;
@@ -13,44 +20,59 @@ const myLocationBtn = document.getElementById('myLocationBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const qrContainer = document.getElementById('qrcode');
 
-// Initialize HERE Maps
+// Initialize HERE Maps with multiple API keys
 const initializeMap = () => {
-  try {
-    platform = new H.service.Platform({ apikey: API_KEY });
-    defaultLayers = platform.createDefaultLayers();
-    geocoder = platform.getSearchService();
+  // Try each API key until one works
+  for (let i = 0; i < HERE_API_KEYS.length; i++) {
+    try {
+      const API_KEY = HERE_API_KEYS[currentApiKeyIndex];
+      console.log(`Trying QR Map API key ${currentApiKeyIndex + 1}/${HERE_API_KEYS.length}`);
+      
+      platform = new H.service.Platform({ apikey: API_KEY });
+      defaultLayers = platform.createDefaultLayers();
+      geocoder = platform.getSearchService();
 
-    const mapContainer = document.getElementById('mapContainer');
-    if (!mapContainer) {
-      throw new Error('Map container not found');
-    }
-
-    // Initialize map centered on Karnataka
-    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
-      zoom: 7,
-      center: { lat: 15.3173, lng: 75.7139 }
-    });
-
-    // Enable map events and behaviors
-    mapEvents = new H.mapevents.MapEvents(map);
-    behavior = new H.mapevents.Behavior(mapEvents);
-    ui = H.ui.UI.createDefault(map);
-
-    // Add map click listener
-    map.addEventListener('tap', handleMapClick);
-
-    // Resize map when window resizes
-    window.addEventListener('resize', () => {
-      if (map) {
-        map.getViewPort().resize();
+      const mapContainer = document.getElementById('mapContainer');
+      if (!mapContainer) {
+        throw new Error('Map container not found');
       }
-    });
 
-    console.log('QR Map initialized successfully');
-    showStatus('QR Generator ready. Click map or search to begin.', 'success');
-  } catch (error) {
-    console.error('Failed to initialize map:', error);
-    showStatus('Map initialization failed. Please refresh the page.', 'error');
+      // Initialize map centered on Karnataka
+      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+        zoom: 7,
+        center: { lat: 15.3173, lng: 75.7139 }
+      });
+
+      // Enable map events and behaviors
+      mapEvents = new H.mapevents.MapEvents(map);
+      behavior = new H.mapevents.Behavior(mapEvents);
+      ui = H.ui.UI.createDefault(map);
+
+      // Add map click listener
+      map.addEventListener('tap', handleMapClick);
+
+      // Resize map when window resizes
+      window.addEventListener('resize', () => {
+        if (map) {
+          map.getViewPort().resize();
+        }
+      });
+
+      console.log(`QR Map initialized successfully with API key ${currentApiKeyIndex + 1}`);
+      showStatus('QR Generator ready. Click map or search to begin.', 'success');
+      return; // Success, exit the loop
+      
+    } catch (error) {
+      console.error(`Failed to initialize QR map with API key ${currentApiKeyIndex + 1}:`, error);
+      currentApiKeyIndex = (currentApiKeyIndex + 1) % HERE_API_KEYS.length;
+      
+      // If we've tried all keys, show error
+      if (currentApiKeyIndex === 0) {
+        console.error('All HERE Maps API keys failed for QR generator');
+        showStatus('Map initialization failed - all API keys exhausted', 'error');
+        return;
+      }
+    }
   }
 };
 
