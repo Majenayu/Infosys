@@ -538,27 +538,40 @@ function initializeNavigation() {
   }
   
   // Add destination marker first
+  console.log('About to add destination marker...');
   addDestinationMarker();
   
   // Get current location and set up navigation
   if (userLocation) {
+    console.log('About to add current location marker...');
     addCurrentLocationMarker();
     
     // Small delay to ensure markers are rendered before routing
     setTimeout(() => {
+      console.log('Starting route calculation...');
       calculateAndDisplayRoute();
       fitMapToMarkers();
-    }, 500);
+    }, 1000); // Increased delay
   } else {
+    console.log('No current location, centering on destination');
     // If no current location, just center map on destination
     map.setCenter({ lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) });
     map.setZoom(15);
   }
+  
+  // Debug: Log all map objects
+  setTimeout(() => {
+    const objects = map.getObjects();
+    console.log('Map objects after marker addition:', objects.length, objects);
+  }, 2000);
 }
 
 // Add destination marker
 function addDestinationMarker() {
-  if (!destination || !map) return;
+  if (!destination || !map) {
+    console.error('Cannot add destination marker:', { destination, map: !!map });
+    return;
+  }
   
   console.log('Adding destination marker at:', destination);
   
@@ -567,24 +580,44 @@ function addDestinationMarker() {
     map.removeObject(destinationMarker);
   }
   
-  // Create red destination marker with larger size
-  const destIcon = new H.map.Icon(
-    '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#dc3545"/></svg>',
-    { size: { w: 32, h: 32 }, anchor: { x: 16, y: 32 } }
-  );
-  
-  destinationMarker = new H.map.Marker(
-    { lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) },
-    { icon: destIcon }
-  );
-  
-  map.addObject(destinationMarker);
-  console.log('Destination marker added successfully');
+  try {
+    // Use simple default marker instead of custom SVG
+    const destIcon = new H.map.Icon(
+      'https://img.icons8.com/color/48/marker.png',
+      { size: { w: 32, h: 32 }, anchor: { x: 16, y: 32 } }
+    );
+    
+    const lat = parseFloat(destination.lat);
+    const lng = parseFloat(destination.lng);
+    
+    console.log('Creating marker with coordinates:', { lat, lng });
+    
+    destinationMarker = new H.map.Marker(
+      { lat: lat, lng: lng },
+      { icon: destIcon }
+    );
+    
+    map.addObject(destinationMarker);
+    console.log('Destination marker added successfully');
+    
+    // Also try to set map center to marker location for testing
+    map.setCenter({ lat: lat, lng: lng });
+    
+  } catch (error) {
+    console.error('Error creating destination marker:', error);
+    // Fallback to default marker
+    destinationMarker = new H.map.Marker({ lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) });
+    map.addObject(destinationMarker);
+    console.log('Added fallback destination marker');
+  }
 }
 
 // Add current location marker
 function addCurrentLocationMarker() {
-  if (!userLocation || !map) return;
+  if (!userLocation || !map) {
+    console.error('Cannot add current location marker:', { userLocation, map: !!map });
+    return;
+  }
   
   console.log('Adding current location marker at:', userLocation);
   
@@ -593,19 +626,33 @@ function addCurrentLocationMarker() {
     map.removeObject(currentLocationMarker);
   }
   
-  // Create blue current location marker with larger size
-  const currentIcon = new H.map.Icon(
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#007bff" stroke="#fff" stroke-width="3"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
-    { size: { w: 24, h: 24 }, anchor: { x: 12, y: 12 } }
-  );
-  
-  currentLocationMarker = new H.map.Marker(
-    { lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) },
-    { icon: currentIcon }
-  );
-  
-  map.addObject(currentLocationMarker);
-  console.log('Current location marker added successfully');
+  try {
+    // Use simple default marker instead of custom SVG
+    const currentIcon = new H.map.Icon(
+      'https://img.icons8.com/color/48/marker--v1.png',
+      { size: { w: 24, h: 24 }, anchor: { x: 12, y: 24 } }
+    );
+    
+    const lat = parseFloat(userLocation.lat);
+    const lng = parseFloat(userLocation.lng);
+    
+    console.log('Creating current location marker with coordinates:', { lat, lng });
+    
+    currentLocationMarker = new H.map.Marker(
+      { lat: lat, lng: lng },
+      { icon: currentIcon }
+    );
+    
+    map.addObject(currentLocationMarker);
+    console.log('Current location marker added successfully');
+    
+  } catch (error) {
+    console.error('Error creating current location marker:', error);
+    // Fallback to default marker
+    currentLocationMarker = new H.map.Marker({ lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) });
+    map.addObject(currentLocationMarker);
+    console.log('Added fallback current location marker');
+  }
 }
 
 // Calculate and display route using HERE Maps API
