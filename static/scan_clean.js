@@ -497,11 +497,14 @@ async function initializeMap() {
     mapContainer.style.height = '500px';
     mapContainer.style.width = '100%';
     
-    // Initialize layers
+    // Initialize layers with proper error handling
     const defaultLayers = platform.createDefaultLayers();
     
+    // Use vector.normal.map which is more reliable than raster layers
+    const mapLayer = defaultLayers.vector.normal.map;
+    
     // Create map
-    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+    map = new H.Map(mapContainer, mapLayer, {
       zoom: 10,
       center: { lat: 12.9716, lng: 77.5946 } // Bangalore coordinates
     });
@@ -532,9 +535,13 @@ function initializeNavigation() {
   
   console.log('Initializing navigation to:', destination);
   
-  // Clear existing route (but keep markers visible)
+  // Clear existing route safely
   if (routeGroup) {
-    map.removeObject(routeGroup);
+    try {
+      map.removeObject(routeGroup);
+    } catch (e) {
+      console.log('Route group already removed or not found');
+    }
   }
   
   // Add destination marker first
@@ -581,27 +588,23 @@ function addDestinationMarker() {
   }
   
   try {
-    // Use simple default marker instead of custom SVG
-    const destIcon = new H.map.Icon(
-      'https://img.icons8.com/color/48/marker.png',
-      { size: { w: 32, h: 32 }, anchor: { x: 16, y: 32 } }
-    );
-    
     const lat = parseFloat(destination.lat);
     const lng = parseFloat(destination.lng);
     
     console.log('Creating marker with coordinates:', { lat, lng });
     
-    destinationMarker = new H.map.Marker(
-      { lat: lat, lng: lng },
-      { icon: destIcon }
-    );
+    // Create red destination marker using HERE's default marker
+    destinationMarker = new H.map.Marker({ lat: lat, lng: lng });
+    
+    // Set marker color to red for destination
+    destinationMarker.getIcon().setColor('#ff0000');
     
     map.addObject(destinationMarker);
     console.log('Destination marker added successfully');
     
-    // Also try to set map center to marker location for testing
+    // Center map on destination
     map.setCenter({ lat: lat, lng: lng });
+    map.setZoom(15);
     
   } catch (error) {
     console.error('Error creating destination marker:', error);
@@ -627,21 +630,16 @@ function addCurrentLocationMarker() {
   }
   
   try {
-    // Use simple default marker instead of custom SVG
-    const currentIcon = new H.map.Icon(
-      'https://img.icons8.com/color/48/marker--v1.png',
-      { size: { w: 24, h: 24 }, anchor: { x: 12, y: 24 } }
-    );
-    
     const lat = parseFloat(userLocation.lat);
     const lng = parseFloat(userLocation.lng);
     
     console.log('Creating current location marker with coordinates:', { lat, lng });
     
-    currentLocationMarker = new H.map.Marker(
-      { lat: lat, lng: lng },
-      { icon: currentIcon }
-    );
+    // Create blue current location marker using HERE's default marker
+    currentLocationMarker = new H.map.Marker({ lat: lat, lng: lng });
+    
+    // Set marker color to blue for current location
+    currentLocationMarker.getIcon().setColor('#0000ff');
     
     map.addObject(currentLocationMarker);
     console.log('Current location marker added successfully');
