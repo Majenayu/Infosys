@@ -154,6 +154,9 @@ class UserDashboard {
     document.getElementById('destinationName').textContent = trackingData.destination.name || 'Unknown Location';
     document.getElementById('destinationAddress').textContent = trackingData.destination.address || 'Address not available';
     
+    // Show and update location status panel
+    this.updateLocationStatusPanel(trackingData);
+    
     // Initialize map
     this.initializeTrackingMap(trackingData);
   }
@@ -300,6 +303,67 @@ class UserDashboard {
     setTimeout(() => {
       window.location.href = '/user';
     }, 1000);
+  }
+
+  updateLocationStatusPanel(trackingData) {
+    const panel = document.getElementById('locationStatusPanel');
+    panel.style.display = 'block';
+    
+    // Update current location coordinates
+    if (trackingData.driver_location) {
+      const coords = `${trackingData.driver_location.latitude.toFixed(6)}, ${trackingData.driver_location.longitude.toFixed(6)}`;
+      document.getElementById('currentLocationCoords').textContent = coords;
+    } else {
+      document.getElementById('currentLocationCoords').textContent = '--';
+    }
+    
+    // Calculate and display route distance if both locations available
+    if (trackingData.driver_location && trackingData.destination.coordinates) {
+      const distance = this.calculateDistance(
+        trackingData.driver_location,
+        trackingData.destination.coordinates
+      );
+      document.getElementById('routeDistance').textContent = `${distance.toFixed(2)} km`;
+      
+      // Calculate estimated travel time (assuming average speed of 30 km/h)
+      const travelTimeHours = distance / 30;
+      const travelTimeMinutes = Math.round(travelTimeHours * 60);
+      document.getElementById('travelTime').textContent = `${travelTimeMinutes} min`;
+    } else {
+      document.getElementById('routeDistance').textContent = '--';
+      document.getElementById('travelTime').textContent = '--';
+    }
+    
+    // Update destination status
+    const destinationText = trackingData.destination.name || 'Not set';
+    document.getElementById('destinationStatus').textContent = destinationText;
+    
+    // Update tracking status
+    let statusText = 'Ready for QR scan';
+    if (trackingData.delivery_status === 'driver_assigned') {
+      statusText = 'Driver en route';
+    } else if (trackingData.delivery_status === 'no_driver_assigned') {
+      statusText = 'Waiting for driver';
+    }
+    document.getElementById('trackingStatus').textContent = statusText;
+    
+    // Default speed display
+    document.getElementById('currentSpeed').textContent = '10.0 km/h';
+  }
+  
+  calculateDistance(point1, point2) {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = this.toRadians(point2.lat - point1.latitude);
+    const dLng = this.toRadians(point2.lng - point1.longitude);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(this.toRadians(point1.latitude)) * Math.cos(this.toRadians(point2.lat)) *
+              Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+  
+  toRadians(degrees) {
+    return degrees * (Math.PI / 180);
   }
 
   async refreshTrackingData(qrCode) {

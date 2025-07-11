@@ -144,6 +144,45 @@
                 <p class="text-muted" id="driverLocation">-</p>
               </div>
             </div>
+            
+            <!-- Location Status Panel -->
+            <div class="card mt-3" id="locationStatusPanel" style="background: #2d3748; border: 1px solid #4a5568; display: none;">
+              <div class="card-header" style="background: #1a202c; border-bottom: 1px solid #4a5568;">
+                <h6 class="mb-0 text-light">📍 Location Status</h6>
+              </div>
+              <div class="card-body" style="color: #e2e8f0;">
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="mb-2">
+                      <strong>Current Location:</strong> 
+                      <span id="currentLocationCoords" class="text-warning">--</span>
+                    </div>
+                    <div class="mb-2">
+                      <strong>Route Distance:</strong> 
+                      <span id="routeDistance" class="text-info">--</span>
+                    </div>
+                    <div class="mb-2">
+                      <strong>Travel Time:</strong> 
+                      <span id="travelTime" class="text-info">--</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-2">
+                      <strong>Current Speed:</strong> 
+                      <span id="currentSpeed" class="text-success">0.0 km/h</span>
+                    </div>
+                    <div class="mb-2">
+                      <strong>Destination:</strong> 
+                      <span id="destinationStatus" class="text-light">Not set</span>
+                    </div>
+                    <div class="mb-2">
+                      <strong>Status:</strong> 
+                      <span id="trackingStatus" class="text-warning">Ready for QR scan</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
