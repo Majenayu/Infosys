@@ -1,0 +1,48 @@
+QR Scanner initializing...
+scan_fixed.js:929 QR Scanner script loaded successfully
+scan_fixed.js:26 Page loaded, initializing QR scanner...
+scan_fixed.js:509 Initializing navigation map with prioritized API key
+scan_fixed.js:167 Starting automatic location tracking...
+scan_fixed.js:47 QR Scanner initialized successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:556 Error initializing map: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (scan_fixed.js:547:18)
+initializeMap @ scan_fixed.js:556Understand this error
+scan_fixed.js:851 Initializing fallback map functionality
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:97 QR Code detected: {"name":"Mangaluru, Karnataka, India","address":"Mangaluru, Karnataka, India","latitude":12.89789,"longitude":74.8454,"googleMapsUrl":"https://www.google.com/maps?q=12.89789,74.8454","hereMapsUrl":"https://wego.here.com/directions/mix/12.89789,74.8454","timestamp":"2025-07-11T10:36:01.280Z","qr_id":"9957"}
+scan_fixed.js:108 QR ID stored for location tracking: 9957
+scan_fixed.js:566 Initializing navigation to: Object
+scan_fixed.js:613 Destination marker added
+scan_fixed.js:630 Current location obtained: Object
+scan_fixed.js:667 Current location marker added
+scan_fixed.js:674 Calculating route from Object to Object
+VM190:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM190:2
+scan_fixed.js:674 Calculating route from Object to Object
+VM190:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM190:2
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://5b1c9768-f1e9-482a-b640-7921b3f2c0be-00-21yywbnx0xf0x.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:704 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:704Understand this error
+route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+mapsjs-core.js:80 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465Understand this warning
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://5b1c9768-f1e9-482a-b640-7921b3f2c0be-00-21yywbnx0xf0x.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:704 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:704Understand this error
+route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display:1  Failed to load resource: net::ERR_FAI
