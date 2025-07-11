@@ -295,7 +295,8 @@ def store_live_location():
                 {'$set': qr_location_doc},
                 upsert=True
             )
-            app.logger.info(f"QR location updated for {user_email} in collection {qr_id}: {'updated' if qr_result.modified_count > 0 else 'inserted'}")
+            app.logger.info(f"QR location updated for {user_email} in collection '{qr_id}': {'updated' if qr_result.modified_count > 0 else 'inserted'}")
+            app.logger.info(f"QR collection name used: '{qr_id}' (this is the actual MongoDB collection name)")
         
         # Update or insert the current location (only keep one current location record)
         result = user_collection.update_one(
@@ -321,6 +322,34 @@ def store_live_location():
     except Exception as e:
         app.logger.error(f"Error storing live location: {str(e)}")
         return jsonify({'message': 'Failed to store live location'}), 500
+
+@app.route('/list-collections')
+def list_collections():
+    """List all MongoDB collections to verify QR-specific collections exist"""
+    try:
+        if not mongo_client:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        collections = db.list_collection_names()
+        
+        # Filter for QR-specific collections (numeric names)
+        qr_collections = [name for name in collections if name.isdigit()]
+        delivery_collections = [name for name in collections if name.startswith('delivery_')]
+        other_collections = [name for name in collections if not name.isdigit() and not name.startswith('delivery_')]
+        
+        return jsonify({
+            'qr_collections': qr_collections,
+            'delivery_collections': delivery_collections,
+            'other_collections': other_collections,
+            'total_collections': len(collections)
+        })
+        
+    except Exception as e:
+        return jsonify({'message': f'Error listing collections: {str(e)}'}), 500
 
 @app.route('/live-locations')
 def get_live_locations():
