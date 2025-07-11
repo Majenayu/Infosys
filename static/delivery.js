@@ -122,6 +122,7 @@ class DeliveryAuth {
         const email = document.getElementById('registerEmail').value;
         const phone = document.getElementById('registerPhone').value;
         const address = document.getElementById('registerAddress').value;
+        const role = document.getElementById('registerRole').value;
         const vehicleType = document.getElementById('registerVehicleType').value;
         const license = document.getElementById('registerLicense').value;
         const password = document.getElementById('registerPassword').value;
