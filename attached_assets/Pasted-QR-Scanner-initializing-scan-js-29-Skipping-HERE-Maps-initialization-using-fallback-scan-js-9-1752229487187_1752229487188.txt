@@ -1,0 +1,39 @@
+QR Scanner initializing...
+scan.js:29 Skipping HERE Maps initialization, using fallback...
+scan.js:951 Page loaded, ensuring UI is ready...
+scan.js:98 Camera access confirmed
+scan.js:131 QR Scanner initialized successfully
+scan.js:861 Starting automatic location tracking...
+scan.js:936 QR Scanner initialization complete
+3scan.js:635 Live location updated successfully
+scan.js:231 QR Code detected: {
+  "name": "Bangalore City Center",
+  "address": "Bengaluru, Karnataka, India",
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "googleMapsUrl": "https://www.google.com/maps?q=12.9716,77.5946",
+  "hereMapsUrl": "https://wego.here.com/directions/mix/12.9716,77.5946",
+  "timestamp": "2025-07-11T10:21:00.000Z",
+  "qr_id": "7916"
+}
+scan.js:247 QR ID stored for location tracking: 7916
+scan.js:268 Failed to process QR code: ReferenceError: trackLocationBtn is not defined
+    at startLocationTracking (scan.js:325:3)
+    at onScanSuccess (scan.js:257:7)
+    at processManualQRData (scan.js:668:3)
+    at HTMLButtonElement.onclick (scan:79:101)
+onScanSuccess @ scan.js:268Understand this error
+scan.js:635 Live location updated successfully
+scan.js:733 Html5Qrcode failed, trying jsQR... D: No MultiFormat Readers were able to detect the code.
+    at lr.decodeInternal (https://unpkg.com/html5-qrcode:1:253484)
+    at lr.decode (https://unpkg.com/html5-qrcode:1:252382)
+    at e.decode (https://unpkg.com/html5-qrcode:1:299459)
+    at https://unpkg.com/html5-qrcode:1:299248
+    at new Promise (<anonymous>)
+    at e.decodeAsync (https://unpkg.com/html5-qrcode:1:299213)
+    at t.<anonymous> (https://unpkg.com/html5-qrcode:1:305832)
+    at https://unpkg.com/html5-qrcode:1:304845
+    at Object.next (https://unpkg.com/html5-qrcode:1:304950)
+    at https://unpkg.com/html5-qrcode:1:303865
+scan.js:773 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+img.onload @ scan.js:773Understand this warning

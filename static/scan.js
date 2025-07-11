@@ -322,8 +322,10 @@ const startLocationTracking = () => {
     return;
   }
 
-  trackLocationBtn.disabled = true;
-  trackLocationBtn.textContent = '🔄 Starting Tracking...';
+  // Update status to show tracking is starting
+  if (trackingStatusSpan) {
+    trackingStatusSpan.textContent = 'Starting tracking...';
+  }
 
   // Get initial position
   navigator.geolocation.getCurrentPosition(
@@ -339,8 +341,9 @@ const startLocationTracking = () => {
       startContinuousTracking();
       
       isTracking = true;
-      trackLocationBtn.textContent = '🔄 Tracking Active';
-      trackingStatusSpan.textContent = 'Active';
+      if (trackingStatusSpan) {
+        trackingStatusSpan.textContent = 'Location tracking active';
+      }
       showStatus('Location tracking started', 'success');
     },
     (error) => {
@@ -350,8 +353,9 @@ const startLocationTracking = () => {
         message = 'Location access denied. Please allow location access.';
       }
       showStatus(message, 'error');
-      trackLocationBtn.disabled = false;
-      trackLocationBtn.textContent = '🎯 Enable Location Tracking';
+      if (trackingStatusSpan) {
+        trackingStatusSpan.textContent = 'Location access denied';
+      }
     },
     {
       enableHighAccuracy: true,
@@ -735,7 +739,7 @@ const handleFileUpload = async (event) => {
     
     // Fallback to jsQR with canvas processing
     const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const img = new Image();
     
     img.onload = async () => {
