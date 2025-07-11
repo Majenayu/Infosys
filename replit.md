@@ -61,9 +61,9 @@ Added: Navigation integration with "Delivery Boy" button replacing QR scanner na
    - Status: Fully functional with MongoDB storage
 
 5. **Individual Delivery Collections** (IMPLEMENTED & WORKING)
-   - Each delivery partner gets their own collection named: delivery_{email_sanitized}
-   - Purpose: Store individual delivery partner's specific data and delivery history
-   - Status: Automatically created upon registration with profile data
+   - Each delivery partner gets their own empty collection named: delivery_{email_sanitized}
+   - Purpose: Available for storing individual delivery partner's specific data and delivery history
+   - Status: Empty collections automatically created upon registration (ready for future use)
 
 ### Core Features
 1. **Company Registration System**

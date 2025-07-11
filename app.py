@@ -187,23 +187,13 @@ def delivery_register():
                 # Store in main delivery partners collection
                 result = partners_collection.insert_one(delivery_partner)
                 
-                # Create individual collection for this delivery partner
+                # Create individual collection for this delivery partner (empty collection)
                 collection_name = f"delivery_{email.replace('@', '_').replace('.', '_')}"
                 partner_collection = mongo_client.get_database("tracksmart").get_collection(collection_name)
                 
-                # Initialize partner collection with profile
-                partner_collection.insert_one({
-                    'type': 'profile',
-                    'partner_id': str(result.inserted_id),
-                    'name': data['name'],
-                    'email': email,
-                    'phone': data['phone'],
-                    'address': data['address'],
-                    'vehicle_type': data['vehicleType'],
-                    'license': data['license'],
-                    'created_at': datetime.utcnow(),
-                    'active': True
-                })
+                # Just create the collection by inserting a placeholder document and then removing it
+                temp_doc = partner_collection.insert_one({'temp': 'placeholder'})
+                partner_collection.delete_one({'_id': temp_doc.inserted_id})
                 
                 app.logger.info(f"Delivery partner registered: {data['name']} ({email}) - Collection: {collection_name}")
                 
