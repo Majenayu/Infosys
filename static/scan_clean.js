@@ -193,7 +193,14 @@ function trackUserLocation() {
       
       // Update location if it has changed significantly
       if (!userLocation || calculateDistance(userLocation, newLocation) > 0.01) {
+        const previousLocation = userLocation;
         userLocation = newLocation;
+        
+        // Calculate speed if we have a previous location
+        if (previousLocation) {
+          calculateCurrentSpeed(previousLocation, newLocation);
+        }
+        
         updateLocationDisplay();
         updateCurrentLocationMarker(newLocation);
         
@@ -374,6 +381,33 @@ function calculateTravelTime(distanceInMeters, routeTimeInSeconds = null) {
   return Math.round(timeInSeconds);
 }
 
+// Calculate current speed based on location changes
+function calculateCurrentSpeed(oldLocation, newLocation) {
+  const distance = calculateDistance(oldLocation, newLocation); // km
+  const timeDifference = 5; // seconds (typical GPS update interval)
+  
+  if (distance > 0 && timeDifference > 0) {
+    const speedKmH = (distance / timeDifference) * 3600; // Convert to km/h
+    
+    // Only update if speed is reasonable (between 0-120 km/h)
+    if (speedKmH >= 0 && speedKmH <= 120) {
+      window.currentSpeed = speedKmH;
+      updateSpeedDisplay(speedKmH);
+      console.log(`Speed updated: ${speedKmH.toFixed(1)} km/h`);
+    }
+  }
+}
+
+// Update speed display in the UI
+function updateSpeedDisplay(speedKmH) {
+  const currentSpeedElement = document.querySelector('.card-body').children[3]; // Current Speed element
+  
+  if (currentSpeedElement && currentSpeedElement.textContent.includes('Current Speed:')) {
+    const speedColor = speedKmH > 0 ? 'text-warning' : 'text-muted';
+    currentSpeedElement.innerHTML = `<strong>Current Speed:</strong> <span class="${speedColor}">${speedKmH.toFixed(1)} km/h</span>`;
+  }
+}
+
 // Update travel time display
 function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
   const hours = Math.floor(timeInSeconds / 3600);
@@ -387,7 +421,19 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
     timeDisplay = `${minutes}m`;
   }
   
-  // Update UI elements
+  // Update Location Status panel elements
+  const routeDistanceElement = document.querySelector('.card-body').children[1]; // Route Distance element
+  const travelTimeElement = document.querySelector('.card-body').children[2]; // Travel Time element
+  
+  if (routeDistanceElement && routeDistanceElement.textContent.includes('Route Distance:')) {
+    routeDistanceElement.innerHTML = `<strong>Route Distance:</strong> <span class="text-info">${distanceKm} km</span>`;
+  }
+  
+  if (travelTimeElement && travelTimeElement.textContent.includes('Travel Time:')) {
+    travelTimeElement.innerHTML = `<strong>Travel Time:</strong> <span class="text-success">${timeDisplay}</span>`;
+  }
+  
+  // Also update any other UI elements that might exist
   const travelTimeSpan = document.getElementById('travelTime');
   const distanceSpan = document.getElementById('distance');
   const routeInfoDiv = document.getElementById('routeInfo');
@@ -400,7 +446,7 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
     distanceSpan.textContent = `${distanceKm} km`;
   }
   
-  // Update route information panel
+  // Update route information panel if it exists
   if (routeInfoDiv) {
     routeInfoDiv.innerHTML = `
       <div class="row">
@@ -425,6 +471,8 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
       </div>
     `;
   }
+  
+  console.log(`Travel info updated: ${distanceKm} km, ${timeDisplay}`);
 }
 
 // Initialize HERE Maps
@@ -501,7 +549,7 @@ function initializeNavigation() {
   // Get current location and set up navigation
   if (userLocation) {
     addCurrentLocationMarker();
-    displayDirectPath();
+    calculateAndDisplayRoute(); // Use real routing instead of direct path
     
     // Fit map to show both locations
     fitMapToMarkers();
@@ -546,7 +594,100 @@ function addCurrentLocationMarker() {
   console.log('Current location marker added');
 }
 
-// Display direct path between locations
+// Calculate and display route using HERE Maps API
+function calculateAndDisplayRoute() {
+  if (!userLocation || !destination || !platform) {
+    console.log('Missing required data for route calculation');
+    displayDirectPath(); // Fallback to direct path
+    return;
+  }
+  
+  console.log('Calculating route using HERE Maps API...');
+  
+  // Get routing service
+  const router = platform.getRoutingService(null, 8);
+  
+  const routeRequestParams = {
+    'routingMode': 'fast',
+    'transportMode': 'car',
+    'origin': `${userLocation.lat},${userLocation.lng}`,
+    'destination': `${destination.lat},${destination.lng}`,
+    'return': 'polyline,summary,actions'
+  };
+  
+  // Make routing request
+  router.calculateRoute(
+    routeRequestParams,
+    (result) => {
+      console.log('Route calculation successful:', result);
+      
+      if (result.routes && result.routes.length > 0) {
+        const route = result.routes[0];
+        displayHereRoute(route);
+      } else {
+        console.log('No routes found, using direct path');
+        displayDirectPath();
+      }
+    },
+    (error) => {
+      console.error('Route calculation failed:', error);
+      console.log('Falling back to direct path');
+      displayDirectPath();
+    }
+  );
+}
+
+// Display HERE Maps route
+function displayHereRoute(route) {
+  console.log('Displaying HERE Maps route');
+  
+  // Remove existing route
+  if (routeGroup) {
+    map.removeObject(routeGroup);
+  }
+  
+  // Create route polyline from HERE Maps data
+  const section = route.sections[0];
+  const polyline = section.polyline;
+  
+  // Decode the polyline
+  const decodedPolyline = H.geo.LineString.fromFlexiblePolyline(polyline);
+  
+  // Create route line
+  const routeLine = new H.map.Polyline(decodedPolyline, {
+    style: {
+      strokeColor: '#007bff',
+      lineWidth: 6,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }
+  });
+  
+  // Add route to map
+  routeGroup = new H.map.Group();
+  routeGroup.addObject(routeLine);
+  map.addObject(routeGroup);
+  
+  // Get route summary
+  const summary = section.summary;
+  const distanceInMeters = summary.length;
+  const timeInSeconds = summary.duration;
+  
+  console.log('Route summary:', {
+    distance: `${(distanceInMeters/1000).toFixed(1)} km`,
+    time: `${Math.round(timeInSeconds/60)} minutes`
+  });
+  
+  // Update travel time display with real route data
+  updateTravelTimeDisplay(timeInSeconds, distanceInMeters);
+  
+  // Fit map to show the route
+  fitMapToRoute();
+  
+  showStatus(`Road route: ${(distanceInMeters/1000).toFixed(1)} km, ${Math.round(timeInSeconds/60)} min`, 'success');
+}
+
+// Display direct path as fallback
 function displayDirectPath() {
   if (!userLocation || !destination || !map) return;
   
@@ -568,7 +709,8 @@ function displayDirectPath() {
       strokeColor: '#007bff',
       lineWidth: 6,
       lineCap: 'round',
-      lineJoin: 'round'
+      lineJoin: 'round',
+      lineDash: [10, 5] // Dashed line to indicate direct path
     }
   });
   
@@ -584,7 +726,7 @@ function displayDirectPath() {
   updateTravelTimeDisplay(estimatedTime, distance * 1000);
   
   console.log('Direct path displayed successfully');
-  showStatus(`Route: ${distance.toFixed(1)} km`, 'success');
+  showStatus(`Direct route: ${distance.toFixed(1)} km (estimated)`, 'success');
 }
 
 // Fit map to show both markers
@@ -597,10 +739,26 @@ function fitMapToMarkers() {
     group.addObject(destinationMarker);
     
     map.getViewModel().setLookAtData({
-      bounds: group.getBoundingBox()
+      bounds: group.getBoundingBox(),
+      padding: 50
     });
   } catch (error) {
     console.error('Error fitting map bounds:', error);
+  }
+}
+
+// Fit map to show the entire route
+function fitMapToRoute() {
+  if (!map || !routeGroup) return;
+  
+  try {
+    map.getViewModel().setLookAtData({
+      bounds: routeGroup.getBoundingBox(),
+      padding: 50
+    });
+  } catch (error) {
+    console.error('Error fitting map to route:', error);
+    fitMapToMarkers(); // Fallback to marker-based fitting
   }
 }
 
@@ -617,7 +775,7 @@ function updateCurrentLocationMarker(newLocation) {
   
   // Update route if destination exists
   if (destination) {
-    displayDirectPath();
+    calculateAndDisplayRoute(); // Use real routing
   }
 }
 
