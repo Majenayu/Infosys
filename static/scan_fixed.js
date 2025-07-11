@@ -547,6 +547,17 @@ async function initializeMap() {
       center: { lat: 12.9716, lng: 77.5946 } // Bangalore coordinates
     });
     
+    // Ensure proper map sizing
+    mapContainer.style.height = '500px';
+    mapContainer.style.width = '100%';
+    
+    // Force map resize after creation
+    setTimeout(() => {
+      if (map) {
+        map.getViewPort().resize();
+      }
+    }, 100);
+    
     // Enable map events and behaviors
     mapEvents = new H.mapevents.MapEvents(map);
     behavior = new H.mapevents.Behavior(mapEvents);
@@ -714,15 +725,105 @@ function calculateRoute() {
   
   console.log('Calculating route from', userLocation, 'to', destination);
   
-  // Due to CORS issues with HERE Maps routing API, we'll use the direct path approach
-  // which still provides accurate distance and time calculations
-  console.log('Using direct path due to API limitations');
-  displayDirectPath();
+  // Try HERE Maps routing API first, then fallback to direct path
+  try {
+    if (platform) {
+      calculateHereRoute();
+    } else {
+      console.log('Using direct path due to API limitations');
+      displayDirectPath();
+    }
+  } catch (error) {
+    console.error('Route calculation error:', error);
+    displayDirectPath();
+  }
   
   // Fit map to show both locations (only if HERE Maps is available)
   if (map && currentLocationMarker && destinationMarker && !window.fallbackMode) {
     try {
       const group = new H.map.Group();
+      group.addObject(currentLocationMarker);
+      group.addObject(destinationMarker);
+      map.getViewModel().setLookAtData({
+        bounds: group.getBoundingBox()
+      });
+    } catch (error) {
+      console.error('Error fitting map bounds:', error);
+    }
+  }
+}
+
+// Calculate route using HERE Maps API
+function calculateHereRoute() {
+  if (!platform || !userLocation || !destination) return;
+  
+  const router = platform.getRoutingService(null, 8);
+  
+  const routeRequestParams = {
+    'routingMode': 'fast',
+    'transportMode': 'car',
+    'origin': `${userLocation.lat},${userLocation.lng}`,
+    'destination': `${destination.lat},${destination.lng}`,
+    'return': 'polyline,turnByTurnActions,summary'
+  };
+  
+  router.calculateRoute(
+    routeRequestParams,
+    (result) => {
+      console.log('HERE Maps route calculated successfully');
+      
+      if (result.routes && result.routes.length > 0) {
+        const route = result.routes[0];
+        displayRoute(route);
+      } else {
+        console.log('No routes found, using direct path');
+        displayDirectPath();
+      }
+    },
+    (error) => {
+      console.error('HERE Maps routing failed:', error);
+      displayDirectPath();
+    }
+  );
+}
+
+// Display HERE Maps route
+function displayRoute(route) {
+  if (!map || !route) return;
+  
+  console.log('Displaying HERE Maps route');
+  
+  // Clear existing route
+  if (routeGroup) {
+    map.removeObject(routeGroup);
+  }
+  
+  // Create route polyline
+  const polyline = route.sections[0].polyline;
+  const decodedPolyline = H.geo.LineString.fromFlexiblePolyline(polyline);
+  
+  const routeLine = new H.map.Polyline(decodedPolyline, {
+    style: {
+      strokeColor: '#007bff',
+      lineWidth: 6,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }
+  });
+  
+  routeGroup = new H.map.Group();
+  routeGroup.addObject(routeLine);
+  map.addObject(routeGroup);
+  
+  // Get route summary
+  const summary = route.sections[0].summary;
+  const distanceInMeters = summary.length;
+  const timeInSeconds = summary.duration;
+  
+  // Update travel time display
+  updateTravelTimeDisplay(timeInSeconds, distanceInMeters);
+  
+  console.log(`Route displayed: ${(distanceInMeters/1000).toFixed(1)} km, ${Math.round(timeInSeconds/60)} minutes`);
       group.addObject(currentLocationMarker);
       group.addObject(destinationMarker);
       map.getViewPort().setViewBounds(group.getBounds());
