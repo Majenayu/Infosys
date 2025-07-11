@@ -1,8 +1,6 @@
 // QR Scanner and Navigation functionality
 const API_KEYS = [
-    'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI',
-    'fh6EbgDQs0TfFNm6BRaNSUJLbSKlMpHXxvCvpgjjzNE',
-    'your-backup-key-here'
+    'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI'
 ];
 let currentApiKeyIndex = 0;
 let platform, defaultLayers, map, routingService, ui;
@@ -36,15 +34,15 @@ const initializeMap = () => {
 
 const initializeMapWithDelay = () => {
   try {
-    platform = new H.service.Platform({ 
-      'apikey': API_KEYS[currentApiKeyIndex],
-      'app_id': undefined,
-      'app_code': undefined
+    // Use same configuration as working QR generator
+    platform = new H.service.Platform({
+      'apikey': API_KEYS[currentApiKeyIndex]
     });
-    
-    defaultLayers = platform.createDefaultLayers({
-      tileSize: 256,
-      ppi: 320
+
+    // Get default layers but use minimal configuration to avoid rate limiting
+    const defaultLayers = platform.createDefaultLayers({
+      tileSize: 512,
+      ppi: 72
     });
 
     const mapContainer = document.getElementById('mapContainer');
@@ -52,18 +50,15 @@ const initializeMapWithDelay = () => {
       throw new Error('Map container not found');
     }
 
-    // Initialize map centered on Karnataka with raster layer
-    map = new H.Map(mapContainer, defaultLayers.raster.normal.map, {
+    // Initialize map with minimal tile requests
+    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
       zoom: 7,
       center: { lat: 15.3173, lng: 75.7139 }
     });
 
-    // Enable map events and behaviors
-    const mapEvents = new H.mapevents.MapEvents(map);
-    const behavior = new H.mapevents.Behavior(mapEvents);
-    ui = H.ui.UI.createDefault(map, defaultLayers);
-
-    // Note: Using direct API calls instead of deprecated routing service
+    // Enable map interaction
+    const behavior = new H.mapevents.Behavior();
+    ui = H.ui.UI.createDefault(map);
 
     // Resize map when window resizes
     window.addEventListener('resize', () => {
@@ -76,17 +71,18 @@ const initializeMapWithDelay = () => {
     showStatus('Scanner ready. Click Start Camera or use manual input.', 'success');
   } catch (error) {
     console.error('Failed to initialize map:', error);
-    showStatus('Map initialization failed. Please refresh the page.', 'error');
+    console.log('Backup map initialization...');
     
-    // Fallback: Try with vector layer
+    // Create minimal fallback map without tiles
     try {
-      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
-        zoom: 7,
-        center: { lat: 15.3173, lng: 75.7139 }
-      });
-      console.log('Fallback to vector map successful');
+      const mapContainer = document.getElementById('mapContainer');
+      if (mapContainer) {
+        mapContainer.innerHTML = '<div style="background: #f0f0f0; height: 100%; display: flex; align-items: center; justify-content: center; color: #666;">Map temporarily unavailable - QR scanning still functional</div>';
+      }
+      showStatus('Map unavailable but QR scanning works fine.', 'warning');
     } catch (fallbackError) {
-      console.error('Fallback map initialization failed:', fallbackError);
+      console.error('Fallback initialization failed:', fallbackError);
+      showStatus('Map unavailable but QR scanning works fine.', 'warning');
     }
   }
 };
@@ -443,16 +439,11 @@ const updateUserLocation = (userLocation) => {
   }
 };
 
-// Calculate route between user and destination
+// Calculate route between user and destination (from live location to destination)
 const calculateRoute = async (from, to) => {
-  if (!map) {
-    console.warn('Map not available');
-    return;
-  }
-
   try {
-    // Remove existing route line
-    if (routeLine) {
+    // Remove existing route line if map is available
+    if (map && routeLine) {
       map.removeObject(routeLine);
     }
 
@@ -465,16 +456,26 @@ const calculateRoute = async (from, to) => {
       const apiKey = API_KEYS[(currentApiKeyIndex + i) % API_KEYS.length];
       const routingUrl = `https://router.hereapi.com/v8/routes?apikey=${apiKey}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
       
-      response = await fetch(routingUrl);
-      
-      if (response.status !== 429) {
-        currentApiKeyIndex = (currentApiKeyIndex + i) % API_KEYS.length;
-        data = await response.json();
-        break;
+      try {
+        response = await fetch(routingUrl);
+        
+        if (response.status !== 429) {
+          currentApiKeyIndex = (currentApiKeyIndex + i) % API_KEYS.length;
+          data = await response.json();
+          break;
+        }
+        
+        if (response.status === 429) {
+          console.warn(`API key ${i + 1} rate limited, trying next key...`);
+          continue;
+        }
+      } catch (fetchError) {
+        console.warn(`API key ${i + 1} failed:`, fetchError.message);
+        continue;
       }
       
       if (i === API_KEYS.length - 1) {
-        throw new Error('All API keys rate limited');
+        throw new Error('All API keys exhausted or rate limited');
       }
     }
 
@@ -486,8 +487,8 @@ const calculateRoute = async (from, to) => {
 
     const route = data.routes[0];
     
-    // Decode polyline and create route line
-    if (route.sections && route.sections[0] && route.sections[0].polyline) {
+    // Decode polyline and create route line (only if map is available)
+    if (map && route.sections && route.sections[0] && route.sections[0].polyline) {
       const polyline = route.sections[0].polyline;
       const lineString = new H.geo.LineString();
       
@@ -497,22 +498,30 @@ const calculateRoute = async (from, to) => {
         lineString.pushLatLngAlt(point.lat, point.lng, 0);
       });
 
-      // Create route polyline
+      // Create route polyline - road route visualization
       routeLine = new H.map.Polyline(lineString, {
         style: { 
-          strokeColor: '#007bff', 
-          lineWidth: 4,
+          strokeColor: '#28a745', 
+          lineWidth: 6,
           lineDash: [0, 2]
         }
       });
 
       map.addObject(routeLine);
+      
+      // Auto-zoom to fit route
+      const routeBounds = routeLine.getBoundingBox();
+      map.getViewModel().setLookAtData({
+        bounds: routeBounds
+      });
     }
 
-    // Update route information
+    // Update route information - show road route details
     if (route.summary) {
       const distance = (route.summary.length / 1000).toFixed(2);
       const time = Math.round(route.summary.duration / 60);
+      
+      console.log(`Road route calculated: ${distance} km, ${time} minutes`);
       
       routeInfoDiv.innerHTML = `
         <div class="row">
