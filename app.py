@@ -128,7 +128,7 @@ def register_company():
 
 @app.route('/store-location', methods=['POST'])
 def store_location():
-    """Store QR location data with unique 4-digit ID and create MongoDB collection"""
+    """Store QR location data with unique 4-digit ID - collection created only when downloaded"""
     try:
         data = request.get_json()
         
@@ -152,7 +152,7 @@ def store_location():
             qr_id = str(random.randint(1000, 9999))
             attempts += 1
         
-        # Store location data in locations collection
+        # Store location data in locations collection (temporary storage)
         location_doc = {
             'qr_id': qr_id,
             'name': data.get('name', ''),
@@ -162,51 +162,90 @@ def store_location():
             'google_maps_url': data.get('google_maps_url', ''),
             'here_maps_url': data.get('here_maps_url', ''),
             'timestamp': datetime.utcnow(),
-            'qr_generated': True
+            'qr_generated': True,
+            'status': 'pending_download'  # Collection will be created when downloaded
         }
         
         # Insert into locations collection
         locations_collection = db.get_collection("locations")
         result = locations_collection.insert_one(location_doc)
-        
-        # Create new collection with the 4-digit ID name
-        qr_collection = db.get_collection(qr_id)
-        
-        # Insert complete location data in the QR-specific collection
-        qr_info_doc = {
-            'type': 'qr_info',
-            'qr_id': qr_id,
-            'location_name': data.get('name', ''),
-            'address': data.get('address', ''),
-            'coordinates': {
-                'lat': data.get('latitude'),
-                'lng': data.get('longitude')
-            },
-            'latitude': data.get('latitude'),
-            'longitude': data.get('longitude'),
-            'google_maps_url': data.get('google_maps_url', ''),
-            'here_maps_url': data.get('here_maps_url', ''),
-            'timestamp': datetime.utcnow(),
-            'created_at': datetime.utcnow(),
-            'qr_generated': True,
-            'status': 'active'
-        }
-        
-        qr_collection.insert_one(qr_info_doc)
-        app.logger.info(f"Complete QR location data stored in collection {qr_id} with coordinates lat: {data.get('latitude')}, lng: {data.get('longitude')}")
-        
-        app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')}")
+        app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')} (pending download)")
         
         return jsonify({
             'message': 'Location data stored successfully!',
             'qr_id': qr_id,
             'location_id': str(result.inserted_id),
-            'collection_created': qr_id
+            'status': 'pending_download'
         })
         
     except Exception as e:
         app.logger.error(f"Error storing location: {str(e)}")
         return jsonify({'message': 'Failed to store location'}), 500
+
+@app.route('/activate-qr/<qr_id>', methods=['POST'])
+def activate_qr(qr_id):
+    """Activate QR code and create QR-specific collection when downloaded"""
+    try:
+        if not qr_id or len(qr_id) != 4 or not qr_id.isdigit():
+            return jsonify({'message': 'Invalid QR ID format'}), 400
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        locations_collection = db.get_collection("locations")
+        
+        # Find the QR location data
+        qr_data = locations_collection.find_one({'qr_id': qr_id})
+        if not qr_data:
+            return jsonify({'message': 'QR code not found'}), 404
+        
+        # Create QR-specific collection with destination info (Coordinate A)
+        qr_collection = db.get_collection(qr_id)
+        
+        qr_info_doc = {
+            'type': 'qr_info',
+            'qr_id': qr_id,
+            'location_name': qr_data.get('name', ''),
+            'address': qr_data.get('address', ''),
+            'coordinates': {
+                'lat': qr_data.get('latitude'),
+                'lng': qr_data.get('longitude')
+            },
+            'latitude': qr_data.get('latitude'),
+            'longitude': qr_data.get('longitude'),
+            'google_maps_url': qr_data.get('google_maps_url', ''),
+            'here_maps_url': qr_data.get('here_maps_url', ''),
+            'timestamp': datetime.utcnow(),
+            'created_at': datetime.utcnow(),
+            'qr_generated': True,
+            'status': 'active',
+            'tracking_active': False
+        }
+        
+        qr_collection.insert_one(qr_info_doc)
+        
+        # Update status in locations collection
+        locations_collection.update_one(
+            {'qr_id': qr_id},
+            {'$set': {'status': 'active', 'activated_at': datetime.utcnow()}}
+        )
+        
+        app.logger.info(f"QR code {qr_id} activated and collection created")
+        
+        return jsonify({
+            'message': 'QR code activated successfully!',
+            'qr_id': qr_id,
+            'status': 'active'
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error activating QR code: {str(e)}")
+        return jsonify({'message': 'Failed to activate QR code'}), 500
 
 @app.route('/locations')
 def get_locations():
@@ -243,13 +282,16 @@ def get_companies():
 
 @app.route('/store-live-location', methods=['POST'])
 def store_live_location():
-    """Store live location data in individual user collection"""
+    """Store live location data - special handling for QR tracking"""
     try:
         data = request.get_json()
         
-        # Get user email from the request (check both keys for compatibility)
+        # Get user email and QR ID from request
         user_email = data.get('user_email') or data.get('email')
-        app.logger.info(f"Store live location request - user_email: {user_email}, data: {data}")
+        qr_id = data.get('qr_id')
+        is_qr_tracking = data.get('is_qr_tracking', False)
+        
+        app.logger.info(f"Store live location request - user_email: {user_email}, qr_id: {qr_id}, is_qr_tracking: {is_qr_tracking}")
         
         if not user_email:
             app.logger.error("User email is missing from request")
@@ -262,14 +304,9 @@ def store_live_location():
         if not mongo_client:
             return jsonify({'message': 'Database connection failed'}), 500
         
-        # Get user's individual collection
-        user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
-        user_collection = mongo_client.get_database("tracksmart").get_collection(user_collection_name)
+        db = mongo_client.get_database("tracksmart")
         
-        # Check if QR ID is provided for specific QR collection tracking
-        qr_id = data.get('qr_id')
-        
-        # Create location document to update/insert
+        # Create location document
         location_doc = {
             'latitude': data['latitude'],
             'longitude': data['longitude'],
@@ -278,50 +315,114 @@ def store_live_location():
             'user_email': user_email
         }
         
-        # Store in QR-specific collection if QR ID is provided
-        if qr_id:
-            # Update or insert in the QR-specific collection (only keep one current location per user)
-            qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
-            qr_location_doc = {
-                'latitude': data['latitude'],
-                'longitude': data['longitude'],
-                'timestamp': datetime.utcnow(),
-                'type': 'delivery_location',
-                'user_email': user_email,
-                'qr_id': qr_id
-            }
-            qr_result = qr_collection.update_one(
-                {'user_email': user_email, 'type': 'delivery_location'},
-                {'$set': qr_location_doc},
+        # Special handling for QR tracking
+        if is_qr_tracking and qr_id:
+            # During QR tracking, ONLY store in QR-specific collection
+            # Do NOT store in user's personal collection
+            try:
+                qr_collection = db.get_collection(qr_id)
+                
+                # Create delivery location document for QR collection (Coordinate B)
+                qr_location_doc = {
+                    'type': 'delivery_location',
+                    'latitude': data['latitude'],
+                    'longitude': data['longitude'],
+                    'timestamp': datetime.utcnow(),
+                    'user_email': user_email,
+                    'qr_id': qr_id
+                }
+                
+                # Store in QR collection (upsert based on user_email)
+                qr_collection.update_one(
+                    {'type': 'delivery_location', 'user_email': user_email},
+                    {'$set': qr_location_doc},
+                    upsert=True
+                )
+                
+                app.logger.info(f"QR tracking location stored in collection {qr_id} for user {user_email}")
+                
+                return jsonify({
+                    'message': 'QR tracking location stored successfully',
+                    'timestamp': datetime.utcnow().isoformat(),
+                    'user_email': user_email,
+                    'qr_id': qr_id,
+                    'tracking_mode': 'qr_only'
+                })
+                
+            except Exception as qr_error:
+                app.logger.error(f"Error storing QR tracking location: {str(qr_error)}")
+                return jsonify({'message': 'Failed to store QR tracking location'}), 500
+        
+        else:
+            # Normal location tracking - store in user's personal collection
+            user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
+            user_collection = db.get_collection(user_collection_name)
+            
+            # Update existing location data or insert new one (upsert)
+            user_collection.update_one(
+                {'user_email': user_email},
+                {'$set': location_doc},
                 upsert=True
             )
-            app.logger.info(f"QR location updated for {user_email} in collection '{qr_id}': {'updated' if qr_result.modified_count > 0 else 'inserted'}")
-            app.logger.info(f"QR collection name used: '{qr_id}' (this is the actual MongoDB collection name)")
-        
-        # Update or insert the current location (only keep one current location record)
-        result = user_collection.update_one(
-            {'type': 'current_location'},
-            {'$set': location_doc},
-            upsert=True
-        )
-        
-        app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}, QR: {qr_id or 'none'}")
-        
-        # Create detailed success message
-        success_message = f"Location stored in delivery collection"
-        if qr_id:
-            success_message += f" and QR collection {qr_id}"
-        
-        return jsonify({
-            'message': success_message,
-            'updated': result.modified_count > 0 or result.upserted_id is not None,
-            'qr_id': qr_id,
-            'collections_updated': 2 if qr_id else 1
-        })
+            
+            app.logger.info(f"Normal location stored for user {user_email}")
+            
+            return jsonify({
+                'message': 'Location stored successfully',
+                'timestamp': datetime.utcnow().isoformat(),
+                'user_email': user_email,
+                'tracking_mode': 'normal'
+            })
         
     except Exception as e:
         app.logger.error(f"Error storing live location: {str(e)}")
         return jsonify({'message': 'Failed to store live location'}), 500
+
+@app.route('/stop-qr-tracking', methods=['POST'])
+def stop_qr_tracking():
+    """Stop QR tracking when Done button pressed or someone else scans QR"""
+    try:
+        data = request.get_json()
+        qr_id = data.get('qr_id')
+        user_email = data.get('user_email')
+        reason = data.get('reason', 'done_button')  # 'done_button' or 'other_scan'
+        
+        if not qr_id or not user_email:
+            return jsonify({'message': 'QR ID and user email are required'}), 400
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        qr_collection = db.get_collection(qr_id)
+        
+        # Update tracking status
+        qr_collection.update_one(
+            {'type': 'qr_info'},
+            {'$set': {
+                'tracking_active': False,
+                'tracking_stopped_at': datetime.utcnow(),
+                'tracking_stopped_by': user_email,
+                'stop_reason': reason
+            }}
+        )
+        
+        app.logger.info(f"QR tracking stopped for {qr_id} by {user_email} - reason: {reason}")
+        
+        return jsonify({
+            'message': 'QR tracking stopped successfully',
+            'qr_id': qr_id,
+            'reason': reason,
+            'stopped_at': datetime.utcnow().isoformat()
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error stopping QR tracking: {str(e)}")
+        return jsonify({'message': 'Failed to stop QR tracking'}), 500
 
 @app.route('/list-collections')
 def list_collections():

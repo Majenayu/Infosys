@@ -482,7 +482,7 @@ const storeLocationData = async (data) => {
 const setupDownload = () => {
   if (!downloadBtn) return;
 
-  downloadBtn.addEventListener('click', () => {
+  downloadBtn.addEventListener('click', async () => {
     const canvas = qrContainer.querySelector('canvas');
     if (!canvas) {
       showStatus('No QR code to download', 'error');
@@ -490,8 +490,14 @@ const setupDownload = () => {
     }
 
     try {
-      const link = document.createElement('a');
       const qrId = currentLocation.qr_id || downloadBtn.getAttribute('data-qr-id') || 'XXXX';
+      
+      // Activate QR code when downloaded (create the collection)
+      if (qrId !== 'XXXX') {
+        await activateQRCode(qrId);
+      }
+      
+      const link = document.createElement('a');
       const locationName = currentLocation.name.replace(/[^a-zA-Z0-9]/g, '_');
       const filename = `QR_${qrId}_${locationName}_${Date.now()}.png`;
       link.download = filename;
@@ -499,12 +505,32 @@ const setupDownload = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      showStatus(`QR code downloaded! ID: ${qrId}`, 'success');
+      showStatus(`QR code downloaded and activated! ID: ${qrId}`, 'success');
     } catch (error) {
       console.error('Download error:', error);
       showStatus('Failed to download QR code', 'error');
     }
   });
+};
+
+// Activate QR code and create collection when downloaded
+const activateQRCode = async (qrId) => {
+  try {
+    const response = await fetch(`/activate-qr/${qrId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log('QR code activated successfully:', result);
+    } else {
+      const error = await response.json();
+      console.warn('Failed to activate QR code:', error.message);
+    }
+  } catch (error) {
+    console.warn('Error activating QR code:', error);
+  }
 };
 
 // Show status messages

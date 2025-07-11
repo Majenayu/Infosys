@@ -125,6 +125,12 @@ function onScanSuccess(decodedText, decodedResult) {
       // Start location tracking
       startLocationTracking();
       
+      // Show Done button when QR tracking starts
+      const doneBtn = document.getElementById('doneBtn');
+      if (doneBtn) {
+        doneBtn.style.display = 'block';
+      }
+      
       // Stop scanning after successful scan
       stopScanning();
       
@@ -232,7 +238,8 @@ async function sendLocationToServer(location) {
         latitude: location.lat,
         longitude: location.lng,
         user_email: userEmail,
-        qr_id: currentQRId
+        qr_id: currentQRId,
+        is_qr_tracking: currentQRId ? true : false  // Special flag for QR tracking
       })
     });
     
@@ -260,10 +267,84 @@ function startLocationTracking() {
   isTracking = true;
   
   if (trackingStatusSpan) {
-    trackingStatusSpan.textContent = 'Location tracking active';
+    trackingStatusSpan.textContent = 'QR tracking active - Every 3 seconds';
   }
   
-  showStatus('Location tracking started', 'success');
+  // Start 3-second interval tracking for QR codes
+  if (currentQRId) {
+    startQRTracking();
+  }
+  
+  showStatus('QR location tracking started - Every 3 seconds', 'success');
+}
+
+// Start QR-specific tracking every 3 seconds
+function startQRTracking() {
+  if (window.qrTrackingInterval) {
+    clearInterval(window.qrTrackingInterval);
+  }
+  
+  window.qrTrackingInterval = setInterval(() => {
+    if (navigator.geolocation && isTracking && currentQRId) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          userLocation = location;
+          updateLocationDisplay();
+          updateCurrentLocationMarker(location);
+          sendLocationToServer(location);
+        },
+        (error) => {
+          console.error('Error getting location for QR tracking:', error);
+        },
+        { enableHighAccuracy: true, timeout: 2000 }
+      );
+    }
+  }, 3000); // Every 3 seconds
+  
+  console.log('QR tracking started - sending location every 3 seconds');
+}
+
+// Stop QR tracking
+function stopQRTracking(reason = 'done_button') {
+  if (window.qrTrackingInterval) {
+    clearInterval(window.qrTrackingInterval);
+    window.qrTrackingInterval = null;
+  }
+  
+  if (currentQRId) {
+    // Notify server that tracking stopped
+    fetch('/stop-qr-tracking', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        qr_id: currentQRId,
+        user_email: localStorage.getItem('userEmail') || 'anonymous',
+        reason: reason
+      })
+    }).catch(error => console.error('Error stopping QR tracking:', error));
+  }
+  
+  isTracking = false;
+  currentQRId = null;
+  localStorage.removeItem('currentQRId');
+  
+  if (trackingStatusSpan) {
+    trackingStatusSpan.textContent = 'Tracking stopped';
+  }
+  
+  // Hide Done button when tracking stops
+  const doneBtn = document.getElementById('doneBtn');
+  if (doneBtn) {
+    doneBtn.style.display = 'none';
+  }
+  
+  showStatus('QR tracking stopped', 'success');
+  console.log('QR tracking stopped - reason:', reason);
 }
 
 // Handle file upload
