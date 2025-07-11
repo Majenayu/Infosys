@@ -1,5 +1,6 @@
 // QR Scanner and Navigation functionality
 const API_KEY = 'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI';
+const FALLBACK_API_KEY = 'fh6EbgDQs0TfFNm6BRaNSUJLbSKlMpHXxvCvpgjjzNE';
 let platform, defaultLayers, map, routingService, ui;
 let userMarker, destinationMarker, routeLine;
 let destination = null;
@@ -51,8 +52,7 @@ const initializeMap = () => {
     const behavior = new H.mapevents.Behavior(mapEvents);
     ui = H.ui.UI.createDefault(map, defaultLayers);
 
-    // Initialize routing service
-    routingService = platform.getRoutingService();
+    // Note: Using direct API calls instead of deprecated routing service
 
     // Resize map when window resizes
     window.addEventListener('resize', () => {
@@ -110,6 +110,13 @@ const checkCameraSupport = async () => {
 // Initialize QR Code Scanner
 const initializeScanner = async () => {
   try {
+    // Wait for Html5Qrcode to be available
+    if (typeof Html5Qrcode === 'undefined') {
+      console.warn('Html5Qrcode not loaded yet, waiting...');
+      setTimeout(initializeScanner, 1000);
+      return;
+    }
+    
     // Check camera support first
     const cameraSupported = await checkCameraSupport();
     if (!cameraSupported) {
@@ -438,10 +445,17 @@ const calculateRoute = async (from, to) => {
       map.removeObject(routeLine);
     }
 
-    // Use HERE Maps Routing API v8 directly
-    const routingUrl = `https://router.hereapi.com/v8/routes?apikey=${API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+    // Use HERE Maps Routing API v8 directly with fallback
+    let routingUrl = `https://router.hereapi.com/v8/routes?apikey=${API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
     
-    const response = await fetch(routingUrl);
+    let response = await fetch(routingUrl);
+    
+    // If rate limited, try with fallback API key
+    if (response.status === 429) {
+      routingUrl = `https://router.hereapi.com/v8/routes?apikey=${FALLBACK_API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+      response = await fetch(routingUrl);
+    }
+    
     const data = await response.json();
 
     if (!data.routes || data.routes.length === 0) {
@@ -625,37 +639,34 @@ const handleFileUpload = async (event) => {
       ctx.drawImage(img, 0, 0);
       
       try {
-        // Use Html5Qrcode library to decode the image
-        const html5QrCode = new Html5Qrcode("temp-reader");
-        const qrCodeData = await html5QrCode.scanFile(file, true);
-        
-        if (qrCodeData) {
-          showStatus('QR code detected from image!', 'success');
-          onScanSuccess(qrCodeData);
-        } else {
-          showStatus('No QR code found in the image', 'error');
+        // Try jsQR library first (more reliable for images)
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        if (typeof jsQR !== 'undefined') {
+          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          if (code) {
+            showStatus('QR code detected from image!', 'success');
+            onScanSuccess(code.data);
+            return;
+          }
         }
+        
+        // Fallback to Html5Qrcode library
+        if (typeof Html5Qrcode !== 'undefined') {
+          const html5QrCode = new Html5Qrcode("temp-reader");
+          const qrCodeData = await html5QrCode.scanFile(file, true);
+          
+          if (qrCodeData) {
+            showStatus('QR code detected from image!', 'success');
+            onScanSuccess(qrCodeData);
+            return;
+          }
+        }
+        
+        // No QR code found
+        showStatus('No QR code found in the image. Please try a clearer image.', 'error');
       } catch (error) {
         console.error('QR code decoding error:', error);
-        // Try alternative method using canvas and imageData
-        try {
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          // Use jsQR library as fallback
-          if (typeof jsQR !== 'undefined') {
-            const code = jsQR(imageData.data, imageData.width, imageData.height);
-            if (code) {
-              showStatus('QR code detected from image!', 'success');
-              onScanSuccess(code.data);
-            } else {
-              showStatus('No QR code found in the image. Please try a clearer image.', 'error');
-            }
-          } else {
-            showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
-          }
-        } catch (fallbackError) {
-          console.error('Fallback QR decoding error:', fallbackError);
-          showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
-        }
+        showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
       }
     };
     
