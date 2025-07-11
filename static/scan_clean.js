@@ -122,7 +122,7 @@ function onScanSuccess(decodedText, decodedResult) {
       // Initialize navigation features
       initializeNavigation();
       
-      // Start location tracking
+      // Start location tracking (role-based)
       startLocationTracking();
       
       // Show Done button when QR tracking starts
@@ -159,6 +159,23 @@ function updateDestinationInfo() {
 
 // Initialize location tracking
 function initializeLocationTracking() {
+  // Check delivery partner role before starting location tracking
+  const deliveryPartner = localStorage.getItem('deliveryPartner');
+  if (deliveryPartner) {
+    try {
+      const partnerData = JSON.parse(deliveryPartner);
+      const role = partnerData.role;
+      
+      if (role && ['captain', 'pilot', 'tc'].includes(role.toLowerCase())) {
+        console.log(`Role-based tracking: ${role} - Only role will be stored, no location tracking`);
+        showStatus(`Logged in as ${role.toUpperCase()} - Role-based tracking active`, 'info');
+        return; // Skip location tracking for these roles
+      }
+    } catch (error) {
+      console.error('Error parsing delivery partner data:', error);
+    }
+  }
+  
   if (navigator.geolocation) {
     console.log('Starting automatic location tracking...');
     
@@ -260,9 +277,71 @@ async function sendLocationToServer(location) {
   }
 }
 
+// Send role-only registration for Captain, Pilot, TC
+async function sendRoleOnlyRegistration(role) {
+  try {
+    const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('deliveryUserEmail') || 'anonymous';
+    
+    const response = await fetch('/store-live-location', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        latitude: 0,  // No real coordinates
+        longitude: 0,  // No real coordinates
+        user_email: userEmail,
+        qr_id: currentQRId,
+        is_qr_tracking: true,
+        role_only: true  // Special flag for role-only registration
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to send role registration to server');
+    }
+    
+    const result = await response.json();
+    console.log(`Role-only registration sent for ${role}:`, result);
+    
+  } catch (error) {
+    console.error('Error sending role registration to server:', error);
+  }
+}
+
 // Start location tracking
 function startLocationTracking() {
   if (isTracking) return;
+  
+  // Check delivery partner role
+  const deliveryPartner = localStorage.getItem('deliveryPartner');
+  if (deliveryPartner) {
+    try {
+      const partnerData = JSON.parse(deliveryPartner);
+      const role = partnerData.role;
+      
+      if (role && ['captain', 'pilot', 'tc'].includes(role.toLowerCase())) {
+        // For Captain, Pilot, TC - send role-only registration
+        sendRoleOnlyRegistration(role);
+        showStatus(`QR scanned by ${role.toUpperCase()} - Role registered`, 'success');
+        
+        // Update tracking status
+        if (trackingStatusSpan) {
+          trackingStatusSpan.textContent = `${role.toUpperCase()} - Role registered`;
+        }
+        
+        // Show Done button
+        const doneBtn = document.getElementById('doneBtn');
+        if (doneBtn) {
+          doneBtn.style.display = 'block';
+        }
+        
+        return; // Skip location tracking for these roles
+      }
+    } catch (error) {
+      console.error('Error parsing delivery partner data:', error);
+    }
+  }
   
   isTracking = true;
   

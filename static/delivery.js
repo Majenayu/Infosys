@@ -129,7 +129,7 @@ class DeliveryAuth {
         const confirmPassword = document.getElementById('registerConfirmPassword').value;
 
         // Validation
-        if (!name || !email || !phone || !address || !vehicleType || !license || !password || !confirmPassword) {
+        if (!name || !email || !phone || !address || !role || !vehicleType || !license || !password || !confirmPassword) {
             this.showMessage('Please fill in all fields', 'error');
             return;
         }
@@ -167,6 +167,7 @@ class DeliveryAuth {
                     email: email,
                     phone: phone,
                     address: address,
+                    role: role,
                     vehicleType: vehicleType,
                     license: license,
                     password: password

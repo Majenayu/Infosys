@@ -18,6 +18,7 @@ Updated: Removed QR scanner button from main navigation per user request
 Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB collection for each QR code
 Updated: Prioritized HERE Maps API key VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA as primary key across all JavaScript files
 Updated: Enhanced rate limiting handling in all map initialization functions with delays and graceful fallback
+Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
 
 ## System Architecture
 
@@ -185,6 +186,18 @@ Updated: Enhanced rate limiting handling in all map initialization functions wit
     - HERE Maps routing service integration with fallback to direct path
     - All features fully implemented and verified working in scan.html template
     - Status: Blue route navigation with distance/time calculation fully operational
+
+12. **Role-based Delivery Partner System** (COMPLETED - July 11, 2025)
+    - Added role selection during delivery partner registration with Captain, Pilot, TC, and Boy options
+    - Implemented special handling for aviation roles (Captain/Pilot/TC) that store only role name as coordinate B
+    - Aviation roles skip live location tracking and show "BOARDED AND ARRIVING" message in user dashboard
+    - Regular delivery partners (Boy role) maintain full live location tracking functionality
+    - Updated QR tracking API to return appropriate responses based on delivery partner role
+    - Enhanced user dashboard to display three states: interactive map, no delivery assignment, and boarded/arriving message
+    - All role-based logic integrated into existing MongoDB collections with backward compatibility
+    - Frontend JavaScript prevents location tracking for aviation roles and sends role-only registration
+    - Backend processes role_only flag to store aviation role information without coordinates
+    - Status: Role-based tracking system fully operational with specialized aviation role handling
 
 9. **Enhanced Map Navigation System** (IMPLEMENTED - July 11, 2025)
    - Added Google Maps-style navigation with live user location tracking

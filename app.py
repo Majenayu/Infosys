@@ -291,8 +291,9 @@ def store_live_location():
         user_email = data.get('user_email') or data.get('email')
         qr_id = data.get('qr_id')
         is_qr_tracking = data.get('is_qr_tracking', False)
+        role_only = data.get('role_only', False)
         
-        app.logger.info(f"Store live location request - user_email: {user_email}, qr_id: {qr_id}, is_qr_tracking: {is_qr_tracking}")
+        app.logger.info(f"Store live location request - user_email: {user_email}, qr_id: {qr_id}, is_qr_tracking: {is_qr_tracking}, role_only: {role_only}")
         
         if not user_email:
             app.logger.error("User email is missing from request")
@@ -323,22 +324,41 @@ def store_live_location():
             try:
                 qr_collection = db.get_collection(qr_id)
                 
-                # Get delivery partner's name from database
+                # Get delivery partner's info from database
                 partners_collection = db.get_collection("delivery_partners")
                 delivery_partner = partners_collection.find_one({'email': user_email})
                 partner_name = delivery_partner.get('name', 'Unknown Partner') if delivery_partner else 'Unknown Partner'
+                partner_role = delivery_partner.get('role', 'boy') if delivery_partner else 'boy'
                 
-                # Create delivery location document for QR collection (Coordinate B - Live Location)
-                qr_location_doc = {
-                    'type': 'delivery_location',  # This is Coordinate B - delivery partner's live location
-                    'latitude': data['latitude'],     # Current position of delivery partner
-                    'longitude': data['longitude'],   # Current position of delivery partner
-                    'timestamp': datetime.utcnow(),
-                    'user_email': user_email,
-                    'delivery_partner_name': partner_name,  # Include delivery partner's name
-                    'qr_id': qr_id,
-                    'coordinate_type': 'B'  # Mark as coordinate B (live location)
-                }
+                # Role-based location handling
+                if role_only or partner_role in ['captain', 'pilot', 'tc']:
+                    # For Captain, Pilot, TC - store only role information, no coordinates
+                    qr_location_doc = {
+                        'type': 'delivery_location',  # This is Coordinate B - role information
+                        'timestamp': datetime.utcnow(),
+                        'user_email': user_email,
+                        'delivery_partner_name': partner_role.upper(),  # Store role as name
+                        'role': partner_role,
+                        'qr_id': qr_id,
+                        'coordinate_type': 'B',  # Mark as coordinate B (role info)
+                        'location_type': 'role_only'  # No coordinates, just role
+                    }
+                    app.logger.info(f"Storing role-only data for {partner_role}: {partner_name} ({user_email})")
+                else:
+                    # For regular delivery partners - store full location data
+                    qr_location_doc = {
+                        'type': 'delivery_location',  # This is Coordinate B - delivery partner's live location
+                        'latitude': data['latitude'],     # Current position of delivery partner
+                        'longitude': data['longitude'],   # Current position of delivery partner
+                        'timestamp': datetime.utcnow(),
+                        'user_email': user_email,
+                        'delivery_partner_name': partner_name,  # Include delivery partner's name
+                        'role': partner_role,
+                        'qr_id': qr_id,
+                        'coordinate_type': 'B',  # Mark as coordinate B (live location)
+                        'location_type': 'coordinates'  # Full coordinates
+                    }
+                    app.logger.info(f"Storing live location data for {partner_role}: {partner_name} ({user_email})")
                 
                 # Store in QR collection (upsert based on user_email to keep only latest location)
                 qr_collection.update_one(
@@ -480,7 +500,7 @@ def delivery_register():
         data = request.get_json()
         
         # Validate required fields
-        required_fields = ['name', 'email', 'phone', 'address', 'vehicleType', 'license', 'password']
+        required_fields = ['name', 'email', 'phone', 'address', 'role', 'vehicleType', 'license', 'password']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'message': f'Missing required field: {field}'}), 400
@@ -511,6 +531,7 @@ def delivery_register():
                     'email': email,
                     'phone': data['phone'],
                     'address': data['address'],
+                    'role': data['role'],
                     'vehicle_type': data['vehicleType'],
                     'license': data['license'],
                     'password': data['password'],  # In production, hash this password
@@ -822,16 +843,17 @@ def get_qr_tracking_data(qr_id):
                 if not delivery_location:
                     return jsonify({'message': 'No delivery boy assigned'}), 200
                 
-                # Check for special delivery partner names (pilot, captain, tc)
-                partner_name = delivery_location.get('delivery_partner_name', 'Unknown').lower()
-                special_names = ['pilot', 'captain', 'tc']
+                # Check if this is a role-only entry (Captain, Pilot, TC)
+                location_type = delivery_location.get('location_type', 'coordinates')
+                partner_role = delivery_location.get('role', '')
                 
-                if any(name in partner_name for name in special_names):
-                    # Return special "boarded and arriving" message
+                if location_type == 'role_only' or partner_role in ['captain', 'pilot', 'tc']:
+                    # Return special "boarded and arriving" message for aviation roles
                     return jsonify({
                         'message': 'boarded_and_arriving',
                         'qr_id': qr_id,
                         'delivery_partner_name': delivery_location.get('delivery_partner_name', 'Unknown'),
+                        'role': partner_role,
                         'status': 'boarded_and_arriving'
                     }), 200
                 
