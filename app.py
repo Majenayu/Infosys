@@ -290,11 +290,12 @@ def store_live_location():
                 'user_email': user_email,
                 'qr_id': qr_id
             }
-            qr_collection.update_one(
+            qr_result = qr_collection.update_one(
                 {'user_email': user_email, 'type': 'delivery_location'},
                 {'$set': qr_location_doc},
                 upsert=True
             )
+            app.logger.info(f"QR location updated for {user_email} in collection {qr_id}: {'updated' if qr_result.modified_count > 0 else 'inserted'}")
         
         # Update or insert the current location (only keep one current location record)
         result = user_collection.update_one(
@@ -303,7 +304,7 @@ def store_live_location():
             upsert=True
         )
         
-        app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}")
+        app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}, QR: {qr_id or 'none'}")
         
         return jsonify({
             'message': 'Live location updated successfully!',

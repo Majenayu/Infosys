@@ -35,6 +35,8 @@ Updated: Enhanced rate limiting handling in all map initialization functions wit
 - **New Features Added**: QR tracking API endpoint (/api/qr-tracking/<qr_id>) for delivery status monitoring
 - **QR Location Storage**: ✓ ENHANCED - QR generation now stores complete location data (coordinates, address, maps URLs) in QR-specific MongoDB collections
 - **User Dashboard**: ✓ ENHANCED - Added location status panel showing coordinates, distance, travel time, speed, and delivery status
+- **Delivery Location Tracking**: ✓ ENHANCED - Delivery partner locations stored in both user collection and QR-specific collection with upsert operations to prevent duplicates
+- **HERE Maps Fixes**: ✓ RESOLVED - Fixed JavaScript errors in scan page with proper map layer initialization, custom marker icons, and error handling
 
 ### Frontend Architecture
 - **Template Engine**: Jinja2 (Flask's default)
