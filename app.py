@@ -455,29 +455,15 @@ def initialize_mongodb():
     global mongo_client, mongo_connected
     
     try:
-        # Clean approach to import pymongo
-        import importlib
-        
-        # Try multiple approaches to avoid bson conflicts
-        try:
-            # Remove any existing problematic modules
-            modules_to_remove = ['bson', 'bson.codec_options', 'bson.son']
-            for mod in modules_to_remove:
-                if mod in sys.modules:
-                    del sys.modules[mod]
-        except:
-            pass
-        
-        # Import pymongo directly
-        pymongo = importlib.import_module('pymongo')
-        MongoClient = pymongo.MongoClient
+        # Use pymongo 4.8.0 which should work with compatible bson
+        from pymongo import MongoClient
         
         # Create connection
         mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
         
         # Test connection
         mongo_client.admin.command('ping')
-        app.logger.info("MongoDB connected successfully")
+        app.logger.info("MongoDB connected successfully with pymongo 4.8.0")
         mongo_connected = True
         return True
         
@@ -492,5 +478,5 @@ def initialize_mongodb():
         mongo_connected = False
         return False
 
-# Initialize MongoDB on startup - temporarily disabled during migration
-# initialize_mongodb()
+# Initialize MongoDB on startup
+initialize_mongodb()
