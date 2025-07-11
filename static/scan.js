@@ -653,6 +653,42 @@ const processManualInput = () => {
   manualQRInput.value = ''; // Clear input
 };
 
+// Process manual QR data from the new text area
+const processManualQRData = () => {
+  const manualQRData = document.getElementById('manualQRData');
+  if (!manualQRData) return;
+  
+  const inputText = manualQRData.value.trim();
+  if (!inputText) {
+    showStatus('Please enter QR code data', 'error');
+    return;
+  }
+  
+  // Process the input as if it was scanned
+  onScanSuccess(inputText);
+  manualQRData.value = ''; // Clear input
+};
+
+// Load sample QR data for testing
+const loadSampleQRData = () => {
+  const manualQRData = document.getElementById('manualQRData');
+  if (!manualQRData) return;
+  
+  const sampleData = {
+    "name": "Bangalore City Center",
+    "address": "Bengaluru, Karnataka, India",
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "googleMapsUrl": "https://www.google.com/maps?q=12.9716,77.5946",
+    "hereMapsUrl": "https://wego.here.com/directions/mix/12.9716,77.5946",
+    "timestamp": "2025-07-11T10:21:00.000Z",
+    "qr_id": "7916"
+  };
+  
+  manualQRData.value = JSON.stringify(sampleData, null, 2);
+  showStatus('Sample QR data loaded! Click "Process Manual Data" to use it.', 'success');
+};
+
 // Test with sample location
 const testSampleLocation = () => {
   const sampleQRData = JSON.stringify({
@@ -683,21 +719,43 @@ const handleFileUpload = async (event) => {
   showStatus('Processing QR code image...', 'success');
   
   try {
-    // Create a canvas to process the image
+    // First try with Html5Qrcode library (better for file uploads)
+    try {
+      const html5QrCode = new Html5Qrcode("temp-reader");
+      const qrCodeData = await html5QrCode.scanFile(file, true);
+      
+      if (qrCodeData) {
+        showStatus('QR code detected from image!', 'success');
+        onScanSuccess(qrCodeData);
+        return;
+      }
+    } catch (html5Error) {
+      console.log('Html5Qrcode failed, trying jsQR...', html5Error);
+    }
+    
+    // Fallback to jsQR with canvas processing
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
     
     img.onload = async () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      
       try {
-        // Try jsQR library first (more reliable for images)
+        // Set canvas dimensions to match image
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // Draw image to canvas
+        ctx.drawImage(img, 0, 0);
+        
+        // Get image data for jsQR
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // Try jsQR
         if (typeof jsQR !== 'undefined') {
-          const code = jsQR(imageData.data, imageData.width, imageData.height);
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+          });
+          
           if (code) {
             showStatus('QR code detected from image!', 'success');
             onScanSuccess(code.data);
@@ -705,23 +763,33 @@ const handleFileUpload = async (event) => {
           }
         }
         
-        // Fallback to Html5Qrcode library
-        if (typeof Html5Qrcode !== 'undefined') {
-          const html5QrCode = new Html5Qrcode("temp-reader");
-          const qrCodeData = await html5QrCode.scanFile(file, true);
+        // Try with different image processing
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Enhance contrast
+        ctx.filter = 'contrast(150%) brightness(110%)';
+        ctx.drawImage(img, 0, 0);
+        
+        const enhancedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        if (typeof jsQR !== 'undefined') {
+          const enhancedCode = jsQR(enhancedImageData.data, enhancedImageData.width, enhancedImageData.height, {
+            inversionAttempts: "attemptBoth",
+          });
           
-          if (qrCodeData) {
-            showStatus('QR code detected from image!', 'success');
-            onScanSuccess(qrCodeData);
+          if (enhancedCode) {
+            showStatus('QR code detected from enhanced image!', 'success');
+            onScanSuccess(enhancedCode.data);
             return;
           }
         }
         
         // No QR code found
-        showStatus('No QR code found in the image. Please try a clearer image.', 'error');
+        showStatus('No QR code found in the image. Please try a clearer image or use the camera scanner.', 'error');
+        
       } catch (error) {
-        console.error('QR code decoding error:', error);
-        showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
+        console.error('Canvas processing error:', error);
+        showStatus('Error processing image. Please try a different image.', 'error');
       }
     };
     
