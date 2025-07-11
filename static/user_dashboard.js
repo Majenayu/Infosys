@@ -92,19 +92,33 @@ class UserDashboard {
       const data = await response.json();
 
       if (response.ok) {
-        this.showMessage('QR code found! Loading tracking information...', 'success');
-        
-        // Store QR code in localStorage for tracking history
-        localStorage.setItem('trackingQRCode', qrCode);
-        
-        // Add to tracking history
-        this.addToTrackingHistory(qrCode, data);
-        
-        // Display tracking results
-        this.displayTrackingResults(data);
-        
+        // Check if we have both coordinates for map display
+        if (data.coordinate_A && data.coordinate_B) {
+          this.showMessage('QR code found! Loading tracking information...', 'success');
+          
+          // Store QR code in localStorage for tracking history
+          localStorage.setItem('trackingQRCode', qrCode);
+          
+          // Add to tracking history
+          this.addToTrackingHistory(qrCode, data);
+          
+          // Display tracking results with map
+          this.displayTrackingResults(data);
+        } else {
+          // This shouldn't happen with our new API, but just in case
+          this.showMessage('QR code found but incomplete data', 'warning');
+        }
       } else {
-        this.showMessage(data.message || 'QR code not found in system', 'error');
+        // Handle specific error messages
+        if (data.message === 'No delivery boy assigned') {
+          this.showMessage('No delivery boy assigned', 'warning');
+          this.showNoDeliveryBoyMessage(qrCode);
+        } else if (data.message === 'No item exists') {
+          this.showMessage('No item exists', 'error');
+          this.showNoItemMessage();
+        } else {
+          this.showMessage(data.message || 'QR code not found in system', 'error');
+        }
       }
     } catch (error) {
       console.error('QR code lookup error:', error);
@@ -116,6 +130,90 @@ class UserDashboard {
     // Show tracking results section
     const trackingResults = document.getElementById('trackingResults');
     trackingResults.style.display = 'block';
+    
+    // Check if we have both coordinates for map display
+    if (trackingData.coordinate_A && trackingData.coordinate_B) {
+      // Display map with both coordinates
+      this.showMapWithBothCoordinates(trackingData);
+      
+      // Update delivery status
+      const statusIndicator = document.getElementById('statusIndicator');
+      const deliveryStatus = document.getElementById('deliveryStatus');
+      const lastUpdated = document.getElementById('lastUpdated');
+      
+      if (statusIndicator) {
+        statusIndicator.className = 'status-indicator active';
+        statusIndicator.textContent = '🚚';
+      }
+      
+      if (deliveryStatus) {
+        deliveryStatus.textContent = `Driver assigned: ${trackingData.coordinate_B.delivery_partner_name}`;
+      }
+      
+      if (lastUpdated) {
+        lastUpdated.textContent = `Last updated: ${new Date(trackingData.last_updated).toLocaleString()}`;
+      }
+      
+      // Update location status panel
+      this.updateLocationStatusPanel(trackingData);
+      
+    } else if (trackingData.coordinate_A && !trackingData.coordinate_B) {
+      // Show "No delivery boy assigned" message
+      const trackingResults = document.getElementById('trackingResults');
+      trackingResults.innerHTML = `
+        <div class="alert alert-warning">
+          <h5>No Delivery Boy Assigned</h5>
+          <p>QR Code: ${trackingData.qr_id}</p>
+          <p>Destination: ${trackingData.coordinate_A.name}</p>
+          <p>Address: ${trackingData.coordinate_A.address}</p>
+          <p>Status: Waiting for delivery partner assignment</p>
+        </div>
+      `;
+      
+    } else {
+      // Show "No item exists" message
+      const trackingResults = document.getElementById('trackingResults');
+      trackingResults.innerHTML = `
+        <div class="alert alert-danger">
+          <h5>No Item Exists</h5>
+          <p>QR Code not found or not activated</p>
+        </div>
+      `;
+    }
+  }
+
+  showNoDeliveryBoyMessage(qrCode) {
+    const trackingResults = document.getElementById('trackingResults');
+    if (trackingResults) {
+      trackingResults.style.display = 'block';
+      trackingResults.innerHTML = `
+        <div class="alert alert-warning">
+          <h5>No Delivery Boy Assigned</h5>
+          <p>QR Code: <strong>${qrCode}</strong></p>
+          <p>Status: Waiting for delivery partner assignment</p>
+          <p>The destination has been set, but no delivery partner has been assigned yet.</p>
+        </div>
+      `;
+    }
+  }
+
+  showNoItemMessage() {
+    const trackingResults = document.getElementById('trackingResults');
+    if (trackingResults) {
+      trackingResults.style.display = 'block';
+      trackingResults.innerHTML = `
+        <div class="alert alert-danger">
+          <h5>No Item Exists</h5>
+          <p>QR Code not found or not activated in the system</p>
+          <p>Please check the QR code and try again</p>
+        </div>
+      `;
+    }
+  }
+
+  showMapWithBothCoordinates(trackingData) {
+    // Initialize HERE Maps and display both coordinates
+    this.initializeTrackingMap(trackingData);
     
     // Update delivery status
     const statusIndicator = document.getElementById('statusIndicator');
@@ -175,6 +273,129 @@ class UserDashboard {
       const keysData = await keysResponse.json();
       const apiKey = keysData.keys[0]; // Use primary API key
       
+      // Initialize HERE Maps platform
+      const platform = new H.service.Platform({
+        'apikey': apiKey
+      });
+      
+      // Get default map layers
+      const defaultLayers = platform.createDefaultLayers();
+      
+      // Initialize the map
+      const mapContainer = document.getElementById('trackingMap');
+      if (!mapContainer) {
+        console.error('Map container not found');
+        return;
+      }
+      
+      // Get coordinates from tracking data
+      const destLat = trackingData.coordinate_A.latitude;
+      const destLng = trackingData.coordinate_A.longitude;
+      const deliveryLat = trackingData.coordinate_B.latitude;
+      const deliveryLng = trackingData.coordinate_B.longitude;
+      
+      // Create the map centered between both coordinates
+      const centerLat = (destLat + deliveryLat) / 2;
+      const centerLng = (destLng + deliveryLng) / 2;
+      
+      const map = new H.Map(
+        mapContainer,
+        defaultLayers.vector.normal.map,
+        {
+          zoom: 12,
+          center: { lat: centerLat, lng: centerLng }
+        }
+      );
+      
+      // Add map behavior and UI
+      const behavior = new H.mapevents.Behavior();
+      const ui = new H.ui.UI(map, defaultLayers);
+      
+      // Create destination marker (red)
+      const destMarker = new H.map.Marker(
+        { lat: destLat, lng: destLng },
+        { 
+          icon: new H.map.Icon('https://img.icons8.com/color/48/000000/marker.png', {size: {w: 32, h: 32}}) 
+        }
+      );
+      
+      // Create delivery partner marker (blue)
+      const deliveryMarker = new H.map.Marker(
+        { lat: deliveryLat, lng: deliveryLng },
+        { 
+          icon: new H.map.Icon('https://img.icons8.com/color/48/000000/delivery-truck.png', {size: {w: 32, h: 32}}) 
+        }
+      );
+      
+      // Add markers to map
+      map.addObject(destMarker);
+      map.addObject(deliveryMarker);
+      
+      // Create route between the two points
+      const routingService = platform.getRoutingService();
+      const routingParameters = {
+        'routingMode': 'fast',
+        'transportMode': 'car',
+        'origin': `${deliveryLat},${deliveryLng}`,
+        'destination': `${destLat},${destLng}`,
+        'return': 'polyline'
+      };
+      
+      routingService.calculateRoute(routingParameters, (result) => {
+        if (result.routes && result.routes.length > 0) {
+          const route = result.routes[0];
+          const routeShape = route.sections[0].polyline;
+          
+          // Create polyline for the route
+          const linestring = H.geo.LineString.fromFlexiblePolyline(routeShape);
+          const polyline = new H.map.Polyline(linestring, {
+            style: { strokeColor: '#007bff', lineWidth: 6 }
+          });
+          
+          // Add route to map
+          map.addObject(polyline);
+        }
+      }, (error) => {
+        console.warn('Route calculation failed, showing direct path');
+        
+        // Create direct path line
+        const linestring = new H.geo.LineString();
+        linestring.pushPoint({ lat: deliveryLat, lng: deliveryLng });
+        linestring.pushPoint({ lat: destLat, lng: destLng });
+        
+        const polyline = new H.map.Polyline(linestring, {
+          style: { strokeColor: '#007bff', lineWidth: 6 }
+        });
+        
+        map.addObject(polyline);
+      });
+      
+      // Fit the map to show both markers
+      const bbox = new H.geo.Rect(
+        Math.max(destLat, deliveryLat) + 0.01,
+        Math.min(destLng, deliveryLng) - 0.01,
+        Math.min(destLat, deliveryLat) - 0.01,
+        Math.max(destLng, deliveryLng) + 0.01
+      );
+      map.getViewPort().resize();
+      map.getViewPort().setViewBounds(bbox);
+      
+      // Calculate distance and display
+      const distance = this.calculateDistance(
+        { lat: destLat, lng: destLng },
+        { lat: deliveryLat, lng: deliveryLng }
+      );
+      
+      // Update location status panel
+      this.updateLocationStatusPanel(trackingData, distance);
+      
+      console.log('Tracking map initialized successfully');
+      
+    } catch (error) {
+      console.error('Error initializing tracking map:', error);
+      this.showMessage('Map initialization failed', 'error');
+    }
+  }
       // Initialize platform
       const platform = new H.service.Platform({
         'apikey': apiKey
@@ -312,38 +533,50 @@ class UserDashboard {
     }, 1000);
   }
 
-  updateLocationStatusPanel(trackingData) {
+  updateLocationStatusPanel(trackingData, distance = null) {
     const panel = document.getElementById('locationStatusPanel');
+    if (!panel) return;
+    
     panel.style.display = 'block';
     
-    // Update current location coordinates
-    if (trackingData.driver_location) {
-      const coords = `${trackingData.driver_location.latitude.toFixed(6)}, ${trackingData.driver_location.longitude.toFixed(6)}`;
-      document.getElementById('currentLocationCoords').textContent = coords;
+    // Update current location coordinates using new structure
+    if (trackingData.coordinate_B) {
+      const coords = `${trackingData.coordinate_B.latitude.toFixed(6)}, ${trackingData.coordinate_B.longitude.toFixed(6)}`;
+      const coordsElement = document.getElementById('currentLocationCoords');
+      if (coordsElement) coordsElement.textContent = coords;
     } else {
-      document.getElementById('currentLocationCoords').textContent = '--';
+      const coordsElement = document.getElementById('currentLocationCoords');
+      if (coordsElement) coordsElement.textContent = '--';
     }
     
     // Calculate and display route distance if both locations available
-    if (trackingData.driver_location && trackingData.destination.coordinates) {
-      const distance = this.calculateDistance(
-        trackingData.driver_location,
-        trackingData.destination.coordinates
-      );
-      document.getElementById('routeDistance').textContent = `${distance.toFixed(2)} km`;
+    if (trackingData.coordinate_A && trackingData.coordinate_B) {
+      if (!distance) {
+        distance = this.calculateDistance(
+          { lat: trackingData.coordinate_A.latitude, lng: trackingData.coordinate_A.longitude },
+          { lat: trackingData.coordinate_B.latitude, lng: trackingData.coordinate_B.longitude }
+        );
+      }
+      
+      const distanceElement = document.getElementById('routeDistance');
+      if (distanceElement) distanceElement.textContent = `${distance.toFixed(2)} km`;
       
       // Calculate estimated travel time (assuming average speed of 30 km/h)
       const travelTimeHours = distance / 30;
       const travelTimeMinutes = Math.round(travelTimeHours * 60);
-      document.getElementById('travelTime').textContent = `${travelTimeMinutes} min`;
+      const travelTimeElement = document.getElementById('travelTime');
+      if (travelTimeElement) travelTimeElement.textContent = `${travelTimeMinutes} min`;
     } else {
-      document.getElementById('routeDistance').textContent = '--';
-      document.getElementById('travelTime').textContent = '--';
+      const distanceElement = document.getElementById('routeDistance');
+      const travelTimeElement = document.getElementById('travelTime');
+      if (distanceElement) distanceElement.textContent = '--';
+      if (travelTimeElement) travelTimeElement.textContent = '--';
     }
     
     // Update destination status
-    const destinationText = trackingData.destination.name || 'Not set';
-    document.getElementById('destinationStatus').textContent = destinationText;
+    const destinationText = trackingData.coordinate_A?.name || 'Not set';
+    const destinationElement = document.getElementById('destinationStatus');
+    if (destinationElement) destinationElement.textContent = destinationText;
     
     // Update tracking status
     let statusText = 'Ready for QR scan';
@@ -354,18 +587,20 @@ class UserDashboard {
     } else {
       statusText = 'Waiting for driver';
     }
-    document.getElementById('trackingStatus').textContent = statusText;
+    const statusElement = document.getElementById('trackingStatus');
+    if (statusElement) statusElement.textContent = statusText;
     
     // Default speed display
-    document.getElementById('currentSpeed').textContent = '10.0 km/h';
+    const speedElement = document.getElementById('currentSpeed');
+    if (speedElement) speedElement.textContent = '10.0 km/h';
   }
   
   calculateDistance(point1, point2) {
     const R = 6371; // Earth's radius in kilometers
-    const dLat = this.toRadians(point2.lat - point1.latitude);
-    const dLng = this.toRadians(point2.lng - point1.longitude);
+    const dLat = this.toRadians(point2.lat - point1.lat);
+    const dLng = this.toRadians(point2.lng - point1.lng);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.toRadians(point1.latitude)) * Math.cos(this.toRadians(point2.lat)) *
+              Math.cos(this.toRadians(point1.lat)) * Math.cos(this.toRadians(point2.lat)) *
               Math.sin(dLng / 2) * Math.sin(dLng / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;

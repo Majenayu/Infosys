@@ -806,45 +806,46 @@ def get_qr_tracking_data(qr_id):
                 # Get QR-specific collection data
                 qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
                 
-                # Get QR location data
-                qr_location = qr_collection.find_one({'type': 'qr_info'})
+                # Get destination data (coordinate A)
+                destination_data = qr_collection.find_one({'type': 'destination_info'})
                 
-                if not qr_location:
-                    return jsonify({'message': 'QR code not found'}), 404
+                if not destination_data:
+                    return jsonify({'message': 'No item exists'}), 404
                 
-                # Get latest delivery location if exists
+                # Get latest delivery location if exists (coordinate B)
                 delivery_location = qr_collection.find_one(
                     {'type': 'delivery_location'}, 
                     sort=[('timestamp', -1)]
                 )
                 
-                # Prepare response data
+                # Case 1: Only destination exists (no delivery partner)
+                if not delivery_location:
+                    return jsonify({'message': 'No delivery boy assigned'}), 200
+                
+                # Case 2: Both coordinates exist - return map data
                 response_data = {
                     'qr_id': qr_id,
-                    'destination': {
-                        'name': qr_location.get('location_name', ''),
-                        'address': qr_location.get('address', ''),
-                        'coordinates': qr_location.get('coordinates', {})
+                    'status': 'tracking_active',
+                    'coordinate_A': {  # Destination
+                        'type': 'destination',
+                        'name': destination_data.get('location_name', ''),
+                        'address': destination_data.get('address', ''),
+                        'latitude': destination_data.get('latitude'),
+                        'longitude': destination_data.get('longitude'),
+                        'google_maps_url': destination_data.get('google_maps_url', ''),
+                        'here_maps_url': destination_data.get('here_maps_url', '')
                     },
-                    'delivery_status': 'nobody_received',
-                    'driver_location': None,
-                    'driver_info': None,
-                    'last_updated': None,
-                    'message': 'Nobody received the item or courier'
-                }
-                
-                if delivery_location:
-                    response_data['delivery_status'] = 'driver_assigned'
-                    response_data['driver_location'] = {
+                    'coordinate_B': {  # Delivery partner location
+                        'type': 'delivery_partner',
                         'latitude': delivery_location.get('latitude'),
-                        'longitude': delivery_location.get('longitude')
-                    }
-                    response_data['driver_info'] = {
-                        'email': delivery_location.get('user_email', ''),
-                        'last_seen': delivery_location.get('timestamp')
-                    }
-                    response_data['last_updated'] = delivery_location.get('timestamp')
-                    response_data['message'] = 'Driver assigned and tracking'
+                        'longitude': delivery_location.get('longitude'),
+                        'user_email': delivery_location.get('user_email', ''),
+                        'delivery_partner_name': delivery_location.get('delivery_partner_name', 'Unknown'),
+                        'timestamp': delivery_location.get('timestamp', '').isoformat() if delivery_location.get('timestamp') else None
+                    },
+                    'delivery_status': 'driver_assigned',
+                    'last_updated': delivery_location.get('timestamp', '').isoformat() if delivery_location.get('timestamp') else None
+                }
                 
                 app.logger.info(f"QR tracking data retrieved for ID: {qr_id}")
                 
