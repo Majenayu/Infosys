@@ -1,0 +1,32 @@
+QR Scanner initializing...
+QR Scanner script loaded successfully
+Page loaded, initializing QR scanner...
+API key failed: YaQ_t8pg3O... Cannot read properties of undefined (reading 's')
+API key failed: kv_bfKJ5Z4... Cannot read properties of undefined (reading 's')
+API key failed: AYBw5XcF2K... Cannot read properties of undefined (reading 's')
+API key failed: HGhfVR_kgq... Cannot read properties of undefined (reading 's')
+Error initializing map: 
+Error {}
+
+Initializing fallback map functionality
+Starting automatic location tracking...
+QR Scanner initialized successfully
+No delivery partner found in localStorage - using guest email
+Sending location data: 
+Object {latitude: 12.3460801, longitude: 76.6297076, timestamp: "2025-07-11T15:51:44.674Z", user_email: "guest@tracksmart.com", email: "guest@tracksmart.com", …}
+Live location updated successfully
+Tangram [error]: tile load error for tile with key 64/10/366/237/9 and id 151: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:56296
+Tangram [error]: tile load error for tile with key 41/10/366/237/9 and id 148: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/450feef9-3dca-48f1-bd8e-f8eabba15dab:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/450feef9-3dca-48f1-bd8e-f8eabba15dab:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/450feef9-3dca-48f1-bd8e-f8eabba15dab:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/450feef9-3dca-48f1-bd8e-f8eabba15dab:3:56296
+Tangram [error]: tile load error for tile with key 64/10/365/237/9 and id 150: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/287565c6-fcc1-4b03-be25-1c9c3f02933b:3:56296
