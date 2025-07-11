@@ -1,0 +1,53 @@
+QR Scanner initializing...
+scan_fixed.js:653 QR Scanner script loaded successfully
+scan_fixed.js:26 Page loaded, initializing QR scanner...
+scan_fixed.js:413 Error initializing map: TypeError: Cannot read properties of undefined (reading 's')
+    at new tn (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:1:357)
+    at initializeMap (scan_fixed.js:407:24)
+    at HTMLDocument.<anonymous> (scan_fixed.js:29:3)
+initializeMap @ scan_fixed.js:413Understand this error
+scan_fixed.js:167 Starting automatic location tracking...
+scan_fixed.js:47 QR Scanner initialized successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:247 Sending location data: Object
+scan_fixed.js:258 Live location updated successfully
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/366/237/9 and id 31: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/366/237/9 and id 39: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/237/9 and id 29: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/237/9 and id 34: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/236/9 and id 28: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/236/9 and id 32: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/dffc9d37-8fd3-4805-80bc-cf6a2ae8984c:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()

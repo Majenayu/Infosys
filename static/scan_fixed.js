@@ -234,7 +234,9 @@ async function sendLocationToServer(location) {
       email = partner.email;
       console.log('Found delivery partner:', email);
     } else {
-      console.log('No delivery partner found in localStorage');
+      console.log('No delivery partner found in localStorage - using guest email');
+      // Use a guest email when no delivery partner is logged in
+      email = 'guest@tracksmart.com';
     }
     
     const data = {
@@ -386,60 +388,104 @@ window.testSampleLocation = testSampleLocation;
 // Initialize HERE Maps
 function initializeMap() {
   try {
-    // Initialize HERE Maps platform
-    platform = new H.service.Platform({
-      'apikey': 'AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o'
-    });
+    // List of backup API keys
+    const apiKeys = [
+      'kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o',
+      'AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o',
+      'HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs'
+    ];
     
-    // Get default map layers
-    const defaultLayers = platform.createDefaultLayers();
-    
-    // Initialize map
-    const mapContainer = document.getElementById('mapContainer');
-    if (mapContainer) {
-      // Create map centered on Bangalore initially
-      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
-        zoom: 10,
-        center: { lat: 12.9716, lng: 77.5946 }
-      });
-      
-      // Make map interactive
-      const behavior = new H.mapevents.Behavior();
-      const ui = new H.ui.UI.createDefault(map);
-      
-      console.log('Navigation map initialized successfully');
+    // Try initializing with backup API keys
+    for (const apiKey of apiKeys) {
+      try {
+        // Initialize HERE Maps platform
+        platform = new H.service.Platform({
+          'apikey': apiKey
+        });
+        
+        // Get default map layers
+        const defaultLayers = platform.createDefaultLayers();
+        
+        // Initialize map
+        const mapContainer = document.getElementById('mapContainer');
+        if (mapContainer && typeof H !== 'undefined') {
+          // Create map centered on Bangalore initially
+          map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+            zoom: 10,
+            center: { lat: 12.9716, lng: 77.5946 }
+          });
+          
+          // Make map interactive
+          const behavior = new H.mapevents.Behavior();
+          const ui = new H.ui.UI.createDefault(map);
+          
+          console.log('Navigation map initialized successfully with API key:', apiKey.substring(0, 10) + '...');
+          return; // Success, exit the loop
+        }
+      } catch (keyError) {
+        console.log('API key failed:', apiKey.substring(0, 10) + '...', keyError.message);
+        continue; // Try next API key
+      }
     }
+    
+    // If all API keys failed
+    throw new Error('All HERE Maps API keys failed');
+    
   } catch (error) {
     console.error('Error initializing map:', error);
+    
+    // Create a fallback map container
     const mapContainer = document.getElementById('mapContainer');
     if (mapContainer) {
-      mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;"><div><h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5><p>QR Scanner is ready to use<br>Map will display destination after scanning</p></div></div>';
+      mapContainer.innerHTML = `
+        <div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;">
+          <div>
+            <h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5>
+            <p>QR Scanner is ready to use<br>Navigation will work after scanning QR code</p>
+            <small style="color: #999; margin-top: 10px; display: block;">Map service temporarily unavailable</small>
+            <div id="fallbackMapData" style="margin-top: 15px; padding: 10px; background: #fff; border-radius: 5px; display: none;">
+              <strong>Current Location:</strong> <span id="fallbackCurrentLocation">Getting location...</span><br>
+              <strong>Destination:</strong> <span id="fallbackDestination">Set by scanning QR code</span><br>
+              <button onclick="openExternalMap()" style="margin-top: 10px; padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">Open in Maps</button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Set up fallback map functionality
+      initializeFallbackMap();
     }
   }
 }
 
 // Initialize navigation after QR scan
 function initializeNavigation() {
-  if (!destination || !map) return;
+  if (!destination) return;
   
   console.log('Initializing navigation to:', destination);
   
-  // Clear existing markers and routes
-  if (currentLocationMarker) {
-    map.removeObject(currentLocationMarker);
+  // Check if we have a functioning map
+  if (map) {
+    // Clear existing markers and routes
+    if (currentLocationMarker) {
+      map.removeObject(currentLocationMarker);
+    }
+    if (destinationMarker) {
+      map.removeObject(destinationMarker);
+    }
+    if (routeGroup) {
+      map.removeObject(routeGroup);
+    }
+    
+    // Add destination marker
+    addDestinationMarker();
+    
+    // Get user's current location and set up navigation
+    getCurrentLocationAndNavigate();
+  } else if (window.fallbackMapMode) {
+    // Use fallback map functionality
+    initializeFallbackNavigation();
   }
-  if (destinationMarker) {
-    map.removeObject(destinationMarker);
-  }
-  if (routeGroup) {
-    map.removeObject(routeGroup);
-  }
-  
-  // Add destination marker
-  addDestinationMarker();
-  
-  // Get user's current location and set up navigation
-  getCurrentLocationAndNavigate();
 }
 
 // Add destination marker to map
@@ -649,5 +695,85 @@ function updateCurrentLocationMarker(newLocation) {
     calculateRoute();
   }
 }
+
+// Fallback map functions
+function initializeFallbackMap() {
+  console.log('Initializing fallback map functionality');
+  
+  // Show fallback map data when QR is scanned
+  window.fallbackMapMode = true;
+  
+  // Get current location for fallback display
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const fallbackCurrentLocation = document.getElementById('fallbackCurrentLocation');
+        if (fallbackCurrentLocation) {
+          fallbackCurrentLocation.textContent = `${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+        }
+        
+        // Store user location for fallback navigation
+        userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      },
+      (error) => {
+        console.log('Fallback location error:', error);
+      }
+    );
+  }
+}
+
+function initializeFallbackNavigation() {
+  console.log('Initializing fallback navigation');
+  
+  // Show fallback map data
+  const fallbackMapData = document.getElementById('fallbackMapData');
+  if (fallbackMapData) {
+    fallbackMapData.style.display = 'block';
+  }
+  
+  // Update destination in fallback view
+  const fallbackDestination = document.getElementById('fallbackDestination');
+  if (fallbackDestination && destination) {
+    fallbackDestination.textContent = `${destination.name} (${destination.lat.toFixed(4)}, ${destination.lng.toFixed(4)})`;
+  }
+  
+  // Get current location for navigation
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        
+        const fallbackCurrentLocation = document.getElementById('fallbackCurrentLocation');
+        if (fallbackCurrentLocation) {
+          fallbackCurrentLocation.textContent = `${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+        }
+      },
+      (error) => {
+        console.log('Error getting location for fallback navigation:', error);
+      }
+    );
+  }
+}
+
+function openExternalMap() {
+  if (userLocation && destination) {
+    const mapUrl = `https://www.google.com/maps/dir/${userLocation.lat},${userLocation.lng}/${destination.lat},${destination.lng}`;
+    window.open(mapUrl, '_blank');
+  } else if (destination) {
+    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${destination.lat},${destination.lng}`;
+    window.open(mapUrl, '_blank');
+  } else {
+    showStatus('Please scan a QR code first to set destination', 'error');
+  }
+}
+
+// Make functions available globally
+window.openExternalMap = openExternalMap;
 
 console.log('QR Scanner script loaded successfully');
