@@ -378,6 +378,91 @@ function testSampleLocation() {
   onScanSuccess(sampleQRData);
 }
 
+// ====== HELPER FUNCTIONS ======
+
+// Calculate distance between two points using Haversine formula
+function calculateDistance(point1, point2) {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = (point2.lat - point1.lat) * Math.PI / 180;
+  const dLon = (point2.lng - point1.lng) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(point1.lat * Math.PI / 180) * Math.cos(point2.lat * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // Distance in kilometers
+}
+
+// Calculate travel time based on distance and speed
+function calculateTravelTime(distanceInMeters, routeTimeInSeconds = null) {
+  if (routeTimeInSeconds) {
+    // Use actual route time if available
+    return routeTimeInSeconds;
+  }
+  
+  // Use current speed if available, otherwise default to 10 km/h
+  const speedKmH = window.currentSpeed || 10;
+  const distanceInKm = distanceInMeters / 1000;
+  const timeInHours = distanceInKm / speedKmH;
+  const timeInSeconds = timeInHours * 3600;
+  
+  return Math.round(timeInSeconds);
+}
+
+// Calculate current speed from location updates
+function calculateCurrentSpeed(oldLocation, newLocation) {
+  if (!oldLocation || !newLocation || !window.lastLocationUpdate) {
+    return 0;
+  }
+  
+  const distance = calculateDistance(oldLocation, newLocation); // in km
+  const timeElapsed = (Date.now() - window.lastLocationUpdate) / 1000; // in seconds
+  
+  if (timeElapsed === 0) return 0;
+  
+  const speedKmH = (distance / timeElapsed) * 3600; // convert to km/h
+  return Math.max(0, speedKmH);
+}
+
+// Update travel time display
+function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
+  const hours = Math.floor(timeInSeconds / 3600);
+  const minutes = Math.floor((timeInSeconds % 3600) / 60);
+  const distanceKm = (distanceInMeters / 1000).toFixed(1);
+  
+  let timeDisplay = '';
+  if (hours > 0) {
+    timeDisplay = `${hours}h ${minutes}m`;
+  } else {
+    timeDisplay = `${minutes}m`;
+  }
+  
+  // Update UI elements
+  const travelTimeSpan = document.getElementById('travelTime');
+  const distanceSpan = document.getElementById('distance');
+  
+  if (travelTimeSpan) {
+    travelTimeSpan.textContent = timeDisplay;
+  }
+  
+  if (distanceSpan) {
+    distanceSpan.textContent = `${distanceKm} km`;
+  }
+  
+  // Update status message
+  showStatus(`Route: ${distanceKm} km, ETA: ${timeDisplay}`, 'success');
+}
+
+// Update speed tracking
+function updateSpeedTracking(speedKmH) {
+  window.currentSpeed = speedKmH;
+  window.lastLocationUpdate = Date.now();
+  
+  const speedSpan = document.getElementById('currentSpeed');
+  if (speedSpan) {
+    speedSpan.textContent = `${speedKmH.toFixed(1)} km/h`;
+  }
+}
+
 // Make functions available globally
 window.processManualQRData = processManualQRData;
 window.loadSampleQRData = loadSampleQRData;
@@ -585,7 +670,7 @@ function displayRoute(route) {
     lineString.pushPoint(parseFloat(parts[0]), parseFloat(parts[1]));
   });
   
-  // Create route line
+  // Create route line in blue color
   const routeLine = new H.map.Polyline(lineString, {
     style: {
       strokeColor: '#007bff',
@@ -600,7 +685,17 @@ function displayRoute(route) {
   routeGroup.addObject(routeLine);
   map.addObject(routeGroup);
   
-  console.log('Route displayed on map');
+  // Calculate and display travel time
+  const routeDistance = route.summary.distance; // in meters
+  const routeTime = route.summary.travelTime; // in seconds
+  
+  // Calculate travel time based on route info or use default speed
+  const estimatedTime = calculateTravelTime(routeDistance, routeTime);
+  
+  // Update UI with travel time
+  updateTravelTimeDisplay(estimatedTime, routeDistance);
+  
+  console.log('Route displayed on map with travel time:', estimatedTime);
 }
 
 // Display direct path if routing fails
@@ -625,7 +720,14 @@ function displayDirectPath() {
   routeGroup.addObject(directLine);
   map.addObject(routeGroup);
   
-  console.log('Direct path displayed');
+  // Calculate straight-line distance for travel time estimation
+  const distance = calculateDistance(userLocation, destination);
+  const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
+  
+  // Update UI with estimated travel time
+  updateTravelTimeDisplay(estimatedTime, distance * 1000);
+  
+  console.log('Direct path displayed with estimated time:', estimatedTime);
 }
 
 // Update location display
@@ -645,6 +747,9 @@ function updateLocationDisplay() {
 function updateCurrentLocationMarker(newLocation) {
   if (!newLocation || !map) return;
   
+  // Calculate speed if we have previous location
+  const currentSpeed = calculateCurrentSpeed(userLocation, newLocation);
+  
   userLocation = newLocation;
   
   // Update marker position
@@ -655,9 +760,14 @@ function updateCurrentLocationMarker(newLocation) {
   // Update location display
   updateLocationDisplay();
   
-  // Recalculate route if needed
+  // Recalculate route if needed with updated speed
   if (destination) {
     calculateRoute();
+  }
+  
+  // Update speed tracking
+  if (currentSpeed > 0) {
+    updateSpeedTracking(currentSpeed);
   }
 }
 
