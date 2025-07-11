@@ -1,0 +1,65 @@
+QR Scanner initializing...
+scan.js:716 Backup map initialization...
+scan.js:37 Attempting to initialize map...
+scan.js:51 Platform initialized for routing
+scan.js:37 Attempting to initialize map...
+scan.js:51 Platform initialized for routing
+scan.js:82 Camera access confirmed
+scan.js:114 QR Scanner initialized successfully
+scan.js:700 QR Scanner initialization complete
+scan.js:214 QR Code detected: {"name":"Mysore Palace","address":"Mysore Palace","latitude":12.3052,"longitude":76.65532,"googleMapsUrl":"https://www.google.com/maps?q=12.3052,76.65532","hereMapsUrl":"https://wego.here.com/directions/mix/12.3052,76.65532","timestamp":"2025-07-11T07:00:12.701Z"}
+scan.js:260 Destination set: {lat: 12.3052, lng: 76.65532, name: 'Mysore Palace', address: 'Mysore Palace'}
+scan.js:383 User location updated: {lat: 12.3604961, lng: 76.5924249}
+scan.js:440 Route sections available: 1
+scan.js:473 Route calculated successfully
+scan.js:383 User location updated: {lat: 12.3604961, lng: 76.5924249}
+scan.js:440 Route sections available: 1
+scan.js:473 Route calculated successfully
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error
+scan.js:523  POST https://4dc23653-2c5c-4961-beb2-e3505e2bb841-00-m4kasqpuhj4d.spock.replit.dev/live-location 500 (Internal Server Error)
+sendLiveLocation @ scan.js:523
+(anonymous) @ scan.js:363Understand this error
+scan.js:535 Failed to send live location: Error: Failed to send location
+    at sendLiveLocation (scan.js:530:13)
+sendLiveLocation @ scan.js:535
+await in sendLiveLocation
+(anonymous) @ scan.js:363Understand this error

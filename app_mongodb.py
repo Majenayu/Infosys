@@ -208,7 +208,7 @@ def store_live_location():
     try:
         data = request.get_json()
         
-        if not live_locations_collection:
+        if live_locations_collection is None:
             return jsonify({'message': 'Database connection failed'}), 500
         
         # Create live location document
@@ -234,7 +234,7 @@ def store_live_location():
 def get_live_locations():
     """Get live location data from MongoDB"""
     try:
-        if not live_locations_collection:
+        if live_locations_collection is None:
             return jsonify({'message': 'Database connection failed'}), 500
         
         live_locations = list(live_locations_collection.find().sort('timestamp', -1).limit(100))

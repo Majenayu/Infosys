@@ -36,26 +36,39 @@ const initializeMapWithDelay = () => {
   try {
     console.log('Attempting to initialize map...');
     
-    // Skip complex HERE Maps initialization that's causing issues
-    // Focus on core functionality - route calculation can work without visual map
-    const mapContainer = document.getElementById('mapContainer');
-    if (mapContainer) {
-      mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center;">Map temporarily unavailable - QR scanning still functional<br><small>Route calculations work in background</small></div>';
-    }
-    
-    // Initialize HERE platform for routing only (no visual map)
+    // Initialize HERE platform and map with minimal setup
     platform = new H.service.Platform({
       'apikey': API_KEYS[currentApiKeyIndex]
     });
     
-    console.log('Platform initialized for routing');
-    showStatus('Scanner ready. Map display disabled to avoid errors.', 'success');
+    // Get default map layers
+    defaultLayers = platform.createDefaultLayers();
+    
+    // Initialize map container
+    const mapContainer = document.getElementById('mapContainer');
+    if (mapContainer) {
+      // Create HERE map with road view
+      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+        zoom: 10,
+        center: { lat: 12.3052, lng: 76.65532 } // Default center
+      });
+      
+      // Enable map interaction
+      const behavior = new H.mapevents.Behavior();
+      ui = H.ui.UI.createDefault(map);
+      
+      // Configure UI to show road map like Google Maps
+      ui.getControl('mapsettings').setAlignment('top-right');
+      
+      console.log('HERE Maps initialized successfully with road view');
+      showStatus('Scanner ready with road map visualization.', 'success');
+    }
     
   } catch (error) {
     console.error('Failed to initialize map:', error);
     console.log('Backup map initialization...');
     
-    // Even simpler fallback
+    // Fallback to simple display
     const mapContainer = document.getElementById('mapContainer');
     if (mapContainer) {
       mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center;">Map temporarily unavailable - QR scanning still functional</div>';
@@ -252,27 +265,37 @@ const onScanError = (error) => {
   console.debug('QR scan error:', error);
 };
 
-// Show destination info (no visual map needed)
+// Show destination on map with road visualization
 const showDestinationOnMap = (dest) => {
-  // Clear existing destination data
-  destinationMarker = null;
+  if (!map) return;
+
+  // Remove existing destination marker
+  if (destinationMarker) {
+    map.removeObject(destinationMarker);
+  }
+
+  // Create destination marker
+  const iconMarkup = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#28a745" viewBox="0 0 24 24">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+    </svg>
+  `;
   
-  console.log('Destination set:', dest);
-  
-  // Display destination info to user
-  const mapContainer = document.getElementById('mapContainer');
-  if (mapContainer) {
-    mapContainer.innerHTML = `
-      <div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center;">
-        <div>
-          <h5 style="color: #28a745; margin-bottom: 10px;">🎯 Destination Set</h5>
-          <strong>${dest.name}</strong><br>
-          <small>${dest.address}</small><br>
-          <small>Lat: ${dest.lat.toFixed(6)}, Lng: ${dest.lng.toFixed(6)}</small><br>
-          <small style="color: #007bff;">Route calculations work in background</small>
-        </div>
-      </div>
-    `;
+  const icon = new H.map.Icon('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconMarkup));
+  destinationMarker = new H.map.Marker({ lat: dest.lat, lng: dest.lng }, { icon });
+  map.addObject(destinationMarker);
+
+  // Center map on destination
+  map.setCenter({ lat: dest.lat, lng: dest.lng });
+  map.setZoom(12);
+
+  // Show info bubble
+  if (ui) {
+    const bubble = new H.ui.InfoBubble({ lat: dest.lat, lng: dest.lng }, { 
+      content: `<strong>${dest.name}</strong><br>${dest.address}` 
+    });
+    ui.addBubble(bubble);
+    setTimeout(() => ui.removeBubble(bubble), 5000);
   }
 };
 
@@ -375,12 +398,30 @@ const startContinuousTracking = () => {
   }, 3000);
 };
 
-// Update user location (no visual map needed)
+// Update user location on map
 const updateUserLocation = (userLocation) => {
+  if (!map) return;
+
+  // Remove existing user marker
+  if (userMarker) {
+    map.removeObject(userMarker);
+  }
+
+  // Create user marker
+  const userIconMarkup = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#007bff" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="#007bff"/>
+      <circle cx="12" cy="12" r="6" fill="#ffffff"/>
+      <circle cx="12" cy="12" r="2" fill="#007bff"/>
+    </svg>
+  `;
+  
+  const userIcon = new H.map.Icon('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(userIconMarkup));
+  userMarker = new H.map.Marker(userLocation, { icon: userIcon });
+  map.addObject(userMarker);
+
   // Update location display
   currentLocationSpan.textContent = `${userLocation.lat.toFixed(6)}, ${userLocation.lng.toFixed(6)}`;
-  
-  console.log('User location updated:', userLocation);
 
   // Calculate and display route if destination exists
   if (destination) {
@@ -394,6 +435,7 @@ const calculateRoute = async (from, to) => {
     // Remove existing route line if map is available
     if (map && routeLine) {
       map.removeObject(routeLine);
+      routeLine = null;
     }
 
     // Use HERE Maps Routing API v8 directly with fallback
@@ -436,7 +478,37 @@ const calculateRoute = async (from, to) => {
 
     const route = data.routes[0];
     
-    // Route calculation successful - no visual map needed
+    // Decode polyline and create route line for road visualization
+    if (map && route.sections && route.sections[0] && route.sections[0].polyline) {
+      const polyline = route.sections[0].polyline;
+      const lineString = new H.geo.LineString();
+      
+      // Decode HERE polyline format
+      const decoded = decodeHerePolyline(polyline);
+      decoded.forEach(point => {
+        lineString.pushLatLngAlt(point.lat, point.lng, 0);
+      });
+
+      // Create route polyline - road route like Google Maps
+      routeLine = new H.map.Polyline(lineString, {
+        style: { 
+          strokeColor: '#4285f4', 
+          lineWidth: 8,
+          lineDash: [0, 2],
+          lineCap: 'round'
+        }
+      });
+
+      map.addObject(routeLine);
+      
+      // Auto-zoom to fit route
+      const routeBounds = routeLine.getBoundingBox();
+      map.getViewModel().setLookAtData({
+        bounds: routeBounds,
+        margin: 50
+      });
+    }
+    
     console.log('Route sections available:', route.sections?.length || 0);
 
     // Update route information - show road route details
