@@ -399,7 +399,9 @@ const setupDownload = () => {
       const filename = `QR_${currentLocation.name.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.png`;
       link.download = filename;
       link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
       showStatus('QR code downloaded successfully!', 'success');
     } catch (error) {
       console.error('Download error:', error);

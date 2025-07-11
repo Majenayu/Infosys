@@ -55,6 +55,7 @@ class Location(db.Model):
 
 with app.app_context():
     db.create_all()
+    app.logger.info("Database tables created successfully")
 
 # Routes
 @app.route('/')
@@ -64,6 +65,10 @@ def index():
 @app.route('/qr')
 def qr_generator():
     return render_template('qr.html')
+
+@app.route('/scan')
+def qr_scanner():
+    return render_template('scan.html')
 
 @app.route('/register-company', methods=['POST'])
 def register_company():
@@ -187,6 +192,54 @@ def get_companies():
     except Exception as e:
         app.logger.error(f"Error fetching companies: {str(e)}")
         return jsonify({'message': 'Failed to fetch companies'}), 500
+
+# Live location model for tracking
+class LiveLocation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+@app.route('/live-location', methods=['POST'])
+def store_live_location():
+    try:
+        data = request.get_json()
+        
+        live_location = LiveLocation(
+            latitude=data['latitude'],
+            longitude=data['longitude']
+        )
+        
+        db.session.add(live_location)
+        db.session.commit()
+        
+        app.logger.info(f"Live location stored: {data['latitude']}, {data['longitude']}")
+        return jsonify({'message': 'Live location stored successfully!'})
+        
+    except Exception as e:
+        app.logger.error(f"Error storing live location: {str(e)}")
+        db.session.rollback()
+        return jsonify({'message': 'Failed to store live location'}), 500
+
+@app.route('/live-locations')
+def get_live_locations():
+    try:
+        live_locations = LiveLocation.query.order_by(LiveLocation.timestamp.desc()).limit(100).all()
+        locations_data = []
+        
+        for location in live_locations:
+            locations_data.append({
+                'id': location.id,
+                'latitude': location.latitude,
+                'longitude': location.longitude,
+                'timestamp': location.timestamp.isoformat()
+            })
+        
+        return jsonify(locations_data)
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching live locations: {str(e)}")
+        return jsonify({'message': 'Failed to fetch live locations'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
