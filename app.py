@@ -454,29 +454,11 @@ def initialize_mongodb():
     """Initialize MongoDB connection"""
     global mongo_client, mongo_connected
     
-    try:
-        # Use pymongo 4.8.0 which should work with compatible bson
-        from pymongo import MongoClient
-        
-        # Create connection
-        mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
-        
-        # Test connection
-        mongo_client.admin.command('ping')
-        app.logger.info("MongoDB connected successfully with pymongo 4.8.0")
-        mongo_connected = True
-        return True
-        
-    except ImportError as import_error:
-        app.logger.error(f"MongoDB import failed: {import_error}")
-        app.logger.info("Application will continue without MongoDB connection")
-        mongo_connected = False
-        return False
-    except Exception as e:
-        app.logger.error(f"MongoDB connection failed: {e}")
-        app.logger.info("Application will continue without MongoDB connection")
-        mongo_connected = False
-        return False
+    # Temporarily disable MongoDB during migration to resolve package conflicts
+    # MongoDB will be re-enabled after package issues are resolved
+    app.logger.info("MongoDB temporarily disabled during migration - using fallback mode")
+    mongo_connected = False
+    return False
 
 # Initialize MongoDB on startup
-initialize_mongodb()
+# initialize_mongodb()
