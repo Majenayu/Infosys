@@ -426,97 +426,129 @@ const updateUserLocation = (userLocation) => {
 };
 
 // Calculate route between user and destination
-const calculateRoute = (from, to) => {
-  if (!routingService || !map) {
-    console.warn('Routing service or map not available');
+const calculateRoute = async (from, to) => {
+  if (!map) {
+    console.warn('Map not available');
     return;
   }
 
   try {
-    const routingParams = {
-      'waypoint0': `geo!${from.lat},${from.lng}`,
-      'waypoint1': `geo!${to.lat},${to.lng}`,
-      'mode': 'fastest;car',
-      'representation': 'display',
-      'routeattributes': 'summary,shape'
-    };
+    // Remove existing route line
+    if (routeLine) {
+      map.removeObject(routeLine);
+    }
 
-    routingService.calculateRoute(routingParams, (result) => {
-      try {
-        if (routeLine) {
-          map.removeObject(routeLine);
+    // Use HERE Maps Routing API v8 directly
+    const routingUrl = `https://router.hereapi.com/v8/routes?apikey=${API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+    
+    const response = await fetch(routingUrl);
+    const data = await response.json();
+
+    if (!data.routes || data.routes.length === 0) {
+      console.warn('No route found in response');
+      routeInfoDiv.innerHTML = '<p class="text-warning">No route available between locations</p>';
+      return;
+    }
+
+    const route = data.routes[0];
+    
+    // Decode polyline and create route line
+    if (route.sections && route.sections[0] && route.sections[0].polyline) {
+      const polyline = route.sections[0].polyline;
+      const lineString = new H.geo.LineString();
+      
+      // Decode HERE polyline format
+      const decoded = decodeHerePolyline(polyline);
+      decoded.forEach(point => {
+        lineString.pushLatLngAlt(point.lat, point.lng, 0);
+      });
+
+      // Create route polyline
+      routeLine = new H.map.Polyline(lineString, {
+        style: { 
+          strokeColor: '#007bff', 
+          lineWidth: 4,
+          lineDash: [0, 2]
         }
+      });
 
-        if (!result.response || !result.response.route || result.response.route.length === 0) {
-          console.warn('No route found in response');
-          routeInfoDiv.innerHTML = '<p class="text-warning">No route available between locations</p>';
-          return;
-        }
+      map.addObject(routeLine);
+    }
 
-        const route = result.response.route[0];
-        const lineString = new H.geo.LineString();
+    // Update route information
+    if (route.summary) {
+      const distance = (route.summary.length / 1000).toFixed(2);
+      const time = Math.round(route.summary.duration / 60);
+      
+      routeInfoDiv.innerHTML = `
+        <div class="row">
+          <div class="col-6">
+            <strong>Distance:</strong> ${distance} km
+          </div>
+          <div class="col-6">
+            <strong>Time:</strong> ${time} min
+          </div>
+        </div>
+        <div class="mt-2">
+          <small class="text-muted">Route updated based on current location</small>
+        </div>
+      `;
+    }
 
-        // Build route line from shape
-        if (route.shape) {
-          route.shape.forEach(point => {
-            const [lat, lng] = point.split(',');
-            lineString.pushLatLngAlt(parseFloat(lat), parseFloat(lng), 0);
-          });
+    // Fit map to show both markers and route
+    if (userMarker && destinationMarker) {
+      const group = new H.map.Group();
+      group.addObject(userMarker);
+      group.addObject(destinationMarker);
+      if (routeLine) group.addObject(routeLine);
+      map.getViewModel().setLookAtData({ bounds: group.getBoundingBox() });
+    }
 
-          // Create route polyline
-          routeLine = new H.map.Polyline(lineString, {
-            style: { 
-              strokeColor: '#007bff', 
-              lineWidth: 4,
-              lineDash: [0, 2]
-            }
-          });
+    console.log('Route calculated successfully');
 
-          map.addObject(routeLine);
-        }
-
-        // Update route information
-        if (route.summary) {
-          const distance = (route.summary.distance / 1000).toFixed(2);
-          const time = Math.round(route.summary.travelTime / 60);
-          
-          routeInfoDiv.innerHTML = `
-            <div class="row">
-              <div class="col-6">
-                <strong>Distance:</strong> ${distance} km
-              </div>
-              <div class="col-6">
-                <strong>Time:</strong> ${time} min
-              </div>
-            </div>
-            <div class="mt-2">
-              <small class="text-muted">Route updated based on current location</small>
-            </div>
-          `;
-        }
-
-        // Fit map to show both markers and route
-        if (userMarker && destinationMarker) {
-          const group = new H.map.Group();
-          group.addObject(userMarker);
-          group.addObject(destinationMarker);
-          if (routeLine) group.addObject(routeLine);
-          map.getViewModel().setLookAtData({ bounds: group.getBoundingBox() });
-        }
-
-      } catch (routeError) {
-        console.error('Route processing error:', routeError);
-        routeInfoDiv.innerHTML = '<p class="text-danger">Error processing route</p>';
-      }
-
-    }, (error) => {
-      console.error('Route calculation error:', error);
-      routeInfoDiv.innerHTML = '<p class="text-danger">Route calculation failed</p>';
-    });
   } catch (error) {
-    console.error('Route setup error:', error);
-    routeInfoDiv.innerHTML = '<p class="text-danger">Route service unavailable</p>';
+    console.error('Route calculation error:', error);
+    routeInfoDiv.innerHTML = '<p class="text-danger">Route calculation failed. Please try again.</p>';
   }
+};
+
+// Decode HERE polyline format
+const decodeHerePolyline = (polyline) => {
+  const coordinates = [];
+  let lat = 0, lng = 0;
+  let index = 0;
+  
+  while (index < polyline.length) {
+    let b, shift = 0, result = 0;
+    
+    do {
+      b = polyline.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    
+    const dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lat += dlat;
+    
+    shift = 0;
+    result = 0;
+    
+    do {
+      b = polyline.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+    
+    const dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
+    lng += dlng;
+    
+    coordinates.push({
+      lat: lat / 1e5,
+      lng: lng / 1e5
+    });
+  }
+  
+  return coordinates;
 };
 
 // Send live location to server
@@ -605,7 +637,25 @@ const handleFileUpload = async (event) => {
         }
       } catch (error) {
         console.error('QR code decoding error:', error);
-        showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
+        // Try alternative method using canvas and imageData
+        try {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          // Use jsQR library as fallback
+          if (typeof jsQR !== 'undefined') {
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+            if (code) {
+              showStatus('QR code detected from image!', 'success');
+              onScanSuccess(code.data);
+            } else {
+              showStatus('No QR code found in the image. Please try a clearer image.', 'error');
+            }
+          } else {
+            showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
+          }
+        } catch (fallbackError) {
+          console.error('Fallback QR decoding error:', fallbackError);
+          showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
+        }
       }
     };
     

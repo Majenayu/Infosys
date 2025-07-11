@@ -11,7 +11,7 @@
   <!-- QR Code Scanner library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.10/html5-qrcode.min.js"></script>
   <!-- QR Code Reader for file uploads -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsqr/1.4.0/jsQR.js"></script>
 
   <!-- HERE Maps API -->
   <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
@@ -44,6 +44,14 @@
     </div>
 
     <div class="row g-3 p-3">
+      <!-- Status Alert -->
+      <div class="col-12">
+        <div id="statusAlert" class="alert alert-info alert-dismissible fade" role="alert" style="display: none;">
+          <span id="statusMessage"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+      
       <!-- Left Panel - QR Scanner -->
       <div class="col-lg-4">
         <div class="card">
