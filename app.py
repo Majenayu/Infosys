@@ -454,36 +454,16 @@ def initialize_mongodb():
     """Initialize MongoDB connection"""
     global mongo_client, companies_collection, locations_collection, live_locations_collection, mongo_connected
     
-    try:
-        # Import pymongo with better error handling
-        from pymongo import MongoClient
-        
-        # Connection string
-        connection_string = "mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in"
-        
-        # Create MongoClient with timeout
-        mongo_client = MongoClient(connection_string, serverSelectionTimeoutMS=5000)
-        mongo_db = mongo_client.get_database("tracksmart")
-        
-        # Collections
-        companies_collection = mongo_db.get_collection("companies")
-        locations_collection = mongo_db.get_collection("locations")
-        live_locations_collection = mongo_db.get_collection("live_locations")
-        
-        # Test connection with ping command
-        mongo_client.admin.command('ping')
-        mongo_connected = True
-        app.logger.info("MongoDB connection established successfully")
-        
-    except ImportError as e:
-        app.logger.error(f"MongoDB import error: {str(e)}")
-        app.logger.info("Application will continue without MongoDB connection")
-        mongo_connected = False
-        
-    except Exception as e:
-        app.logger.error(f"MongoDB connection failed: {str(e)}")
-        app.logger.info("Application will continue without MongoDB connection")
-        mongo_connected = False
+    # For now, skip MongoDB connection due to package conflicts
+    # We'll update this later once the environment is stable
+    mongo_connected = False
+    mongo_client = None
+    
+    app.logger.info("MongoDB connection temporarily disabled during migration")
+    app.logger.info("Application will continue with basic functionality")
+    
+    # Note: We'll enable MongoDB connection once the package conflicts are resolved
+    # The application architecture supports graceful fallback without database
 
 # Initialize MongoDB on startup
 initialize_mongodb()
