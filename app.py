@@ -246,7 +246,7 @@ def store_live_location():
         
         # Store in QR-specific collection if QR ID is provided
         if qr_id:
-            # Also store in the QR-specific collection
+            # Update or insert in the QR-specific collection (only keep one current location per user)
             qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
             qr_location_doc = {
                 'latitude': data['latitude'],
@@ -256,7 +256,11 @@ def store_live_location():
                 'user_email': user_email,
                 'qr_id': qr_id
             }
-            qr_collection.insert_one(qr_location_doc)
+            qr_collection.update_one(
+                {'user_email': user_email, 'type': 'delivery_location'},
+                {'$set': qr_location_doc},
+                upsert=True
+            )
         
         # Update or insert the current location (only keep one current location record)
         result = user_collection.update_one(
