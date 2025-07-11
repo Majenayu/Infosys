@@ -37,6 +37,11 @@ Updated: Enhanced rate limiting handling in all map initialization functions wit
 - **User Dashboard**: ✓ ENHANCED - Added location status panel showing coordinates, distance, travel time, speed, and delivery status
 - **Delivery Location Tracking**: ✓ ENHANCED - Delivery partner locations stored in both user collection and QR-specific collection with upsert operations to prevent duplicates
 - **HERE Maps Fixes**: ✓ RESOLVED - Fixed JavaScript errors in scan page with proper map layer initialization, custom marker icons, and error handling
+- **QR Tracking System**: ✓ COMPLETED - Fixed coordinate storage separation:
+  - Coordinate A (destination) stored as 'destination_info' type when QR is activated
+  - Coordinate B (delivery partner live location) stored as 'delivery_location' type with partner name every 3 seconds
+  - Special QR tracking mode stores only in QR-specific collections, not personal collections
+  - Added Done button and stop conditions for tracking control
 
 ### Frontend Architecture
 - **Template Engine**: Jinja2 (Flask's default)

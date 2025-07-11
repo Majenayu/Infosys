@@ -208,7 +208,7 @@ def activate_qr(qr_id):
         qr_collection = db.get_collection(qr_id)
         
         qr_info_doc = {
-            'type': 'qr_info',
+            'type': 'destination_info',  # This is Coordinate A - the destination
             'qr_id': qr_id,
             'location_name': qr_data.get('name', ''),
             'address': qr_data.get('address', ''),
@@ -216,15 +216,16 @@ def activate_qr(qr_id):
                 'lat': qr_data.get('latitude'),
                 'lng': qr_data.get('longitude')
             },
-            'latitude': qr_data.get('latitude'),
-            'longitude': qr_data.get('longitude'),
+            'latitude': qr_data.get('latitude'),      # Coordinate A - destination latitude
+            'longitude': qr_data.get('longitude'),    # Coordinate A - destination longitude
             'google_maps_url': qr_data.get('google_maps_url', ''),
             'here_maps_url': qr_data.get('here_maps_url', ''),
             'timestamp': datetime.utcnow(),
             'created_at': datetime.utcnow(),
             'qr_generated': True,
             'status': 'active',
-            'tracking_active': False
+            'tracking_active': False,
+            'coordinate_type': 'A'  # Mark as coordinate A (destination)
         }
         
         qr_collection.insert_one(qr_info_doc)
@@ -322,30 +323,39 @@ def store_live_location():
             try:
                 qr_collection = db.get_collection(qr_id)
                 
-                # Create delivery location document for QR collection (Coordinate B)
+                # Get delivery partner's name from database
+                partners_collection = db.get_collection("delivery_partners")
+                delivery_partner = partners_collection.find_one({'email': user_email})
+                partner_name = delivery_partner.get('name', 'Unknown Partner') if delivery_partner else 'Unknown Partner'
+                
+                # Create delivery location document for QR collection (Coordinate B - Live Location)
                 qr_location_doc = {
-                    'type': 'delivery_location',
-                    'latitude': data['latitude'],
-                    'longitude': data['longitude'],
+                    'type': 'delivery_location',  # This is Coordinate B - delivery partner's live location
+                    'latitude': data['latitude'],     # Current position of delivery partner
+                    'longitude': data['longitude'],   # Current position of delivery partner
                     'timestamp': datetime.utcnow(),
                     'user_email': user_email,
-                    'qr_id': qr_id
+                    'delivery_partner_name': partner_name,  # Include delivery partner's name
+                    'qr_id': qr_id,
+                    'coordinate_type': 'B'  # Mark as coordinate B (live location)
                 }
                 
-                # Store in QR collection (upsert based on user_email)
+                # Store in QR collection (upsert based on user_email to keep only latest location)
                 qr_collection.update_one(
                     {'type': 'delivery_location', 'user_email': user_email},
                     {'$set': qr_location_doc},
                     upsert=True
                 )
                 
-                app.logger.info(f"QR tracking location stored in collection {qr_id} for user {user_email}")
+                app.logger.info(f"QR tracking location (Coordinate B) stored in collection {qr_id} for {partner_name} ({user_email})")
                 
                 return jsonify({
                     'message': 'QR tracking location stored successfully',
                     'timestamp': datetime.utcnow().isoformat(),
                     'user_email': user_email,
+                    'delivery_partner_name': partner_name,
                     'qr_id': qr_id,
+                    'coordinate_type': 'B',
                     'tracking_mode': 'qr_only'
                 })
                 
