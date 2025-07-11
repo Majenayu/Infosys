@@ -134,6 +134,7 @@ def get_live_locations():
         return jsonify({'message': 'Failed to fetch live locations'}), 500
 
 # Initialize MongoDB connection after app is created
+@app.before_first_request
 def initialize_mongodb():
     """Initialize MongoDB connection"""
     global mongo_client, companies_collection, locations_collection, live_locations_collection
@@ -152,6 +153,3 @@ def initialize_mongodb():
     except Exception as e:
         app.logger.error(f"MongoDB connection failed: {e}")
         app.logger.info("Application will continue without MongoDB connection")
-
-# Try to initialize MongoDB on startup
-initialize_mongodb()
