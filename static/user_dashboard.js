@@ -116,6 +116,9 @@ class UserDashboard {
         } else if (data.message === 'No item exists') {
           this.showMessage('No item exists', 'error');
           this.showNoItemMessage();
+        } else if (data.message === 'boarded_and_arriving') {
+          this.showMessage('Item is boarded and arriving!', 'success');
+          this.showBoardedAndArrivingMessage(data);
         } else {
           this.showMessage(data.message || 'QR code not found in system', 'error');
         }
@@ -206,6 +209,24 @@ class UserDashboard {
           <h5>No Item Exists</h5>
           <p>QR Code not found or not activated in the system</p>
           <p>Please check the QR code and try again</p>
+        </div>
+      `;
+    }
+  }
+
+  showBoardedAndArrivingMessage(data) {
+    const trackingResults = document.getElementById('trackingResults');
+    if (trackingResults) {
+      trackingResults.style.display = 'block';
+      trackingResults.innerHTML = `
+        <div class="alert alert-success text-center" style="padding: 2rem;">
+          <h2 class="display-4 mb-4">🚀 BOARDED AND ARRIVING</h2>
+          <h4 class="mb-3">Your item is on its way!</h4>
+          <p class="lead">QR Code: <strong>${data.qr_id}</strong></p>
+          <p class="lead">Delivery Partner: <strong>${data.delivery_partner_name}</strong></p>
+          <hr class="my-4">
+          <p class="mb-0">Your package has been boarded and is currently en route to the destination.</p>
+          <p class="text-muted">You will receive updates as it progresses.</p>
         </div>
       `;
     }
@@ -394,64 +415,6 @@ class UserDashboard {
     } catch (error) {
       console.error('Error initializing tracking map:', error);
       this.showMessage('Map initialization failed', 'error');
-    }
-  }
-      // Initialize platform
-      const platform = new H.service.Platform({
-        'apikey': apiKey
-      });
-      
-      // Initialize map
-      const defaultMapTypes = platform.createDefaultMapTypes();
-      const mapContainer = document.getElementById('trackingMap');
-      
-      // Clear any existing content
-      mapContainer.innerHTML = '';
-      
-      const map = new H.Map(
-        mapContainer,
-        defaultMapTypes.vector.normal.map,
-        {
-          zoom: 12,
-          center: trackingData.destination.coordinates
-        }
-      );
-      
-      // Enable map interaction
-      const behavior = new H.mapevents.Behavior();
-      const ui = new H.ui.UI.createDefault(map, defaultMapTypes);
-      
-      // Add destination marker (red)
-      const destinationMarker = new H.map.Marker(trackingData.destination.coordinates, {
-        icon: new H.map.Icon('https://maps.google.com/mapfiles/ms/icons/red-dot.png', {size: {w: 32, h: 32}})
-      });
-      
-      map.addObject(destinationMarker);
-      
-      // Add driver marker if available (blue)
-      if (trackingData.delivery_status === 'driver_assigned' && trackingData.driver_location) {
-        const driverMarker = new H.map.Marker(trackingData.driver_location, {
-          icon: new H.map.Icon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png', {size: {w: 32, h: 32}})
-        });
-        
-        map.addObject(driverMarker);
-        
-        // Create a group to fit both markers in view
-        const group = new H.map.Group();
-        group.addObject(destinationMarker);
-        group.addObject(driverMarker);
-        map.getViewPort().setViewBounds(group.getBoundingBox());
-      } else {
-        // Center on destination only
-        map.getViewPort().setCenter(trackingData.destination.coordinates);
-        map.getViewPort().setZoom(15);
-      }
-      
-      console.log('Tracking map initialized successfully');
-      
-    } catch (error) {
-      console.error('Error initializing tracking map:', error);
-      document.getElementById('trackingMap').innerHTML = '<div style="text-align: center; padding: 20px;">Map unavailable</div>';
     }
   }
 

@@ -822,6 +822,19 @@ def get_qr_tracking_data(qr_id):
                 if not delivery_location:
                     return jsonify({'message': 'No delivery boy assigned'}), 200
                 
+                # Check for special delivery partner names (pilot, captain, tc)
+                partner_name = delivery_location.get('delivery_partner_name', 'Unknown').lower()
+                special_names = ['pilot', 'captain', 'tc']
+                
+                if any(name in partner_name for name in special_names):
+                    # Return special "boarded and arriving" message
+                    return jsonify({
+                        'message': 'boarded_and_arriving',
+                        'qr_id': qr_id,
+                        'delivery_partner_name': delivery_location.get('delivery_partner_name', 'Unknown'),
+                        'status': 'boarded_and_arriving'
+                    }), 200
+                
                 # Case 2: Both coordinates exist - return map data
                 response_data = {
                     'qr_id': qr_id,
