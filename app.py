@@ -633,6 +633,75 @@ def get_qr_code_data(qr_id):
         app.logger.error(f"Error retrieving QR code data: {str(e)}")
         return jsonify({'message': 'Failed to retrieve QR code data'}), 500
 
+@app.route('/api/qr-tracking/<qr_id>')
+def get_qr_tracking_data(qr_id):
+    """Get QR tracking data including delivery location if assigned"""
+    try:
+        if not qr_id or len(qr_id) != 4 or not qr_id.isdigit():
+            return jsonify({'message': 'Invalid QR ID format. Must be 4 digits.'}), 400
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get QR-specific collection data
+                qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
+                
+                # Get QR location data
+                qr_location = qr_collection.find_one({'type': 'qr_info'})
+                
+                if not qr_location:
+                    return jsonify({'message': 'QR code not found'}), 404
+                
+                # Get latest delivery location if exists
+                delivery_location = qr_collection.find_one(
+                    {'type': 'delivery_location'}, 
+                    sort=[('timestamp', -1)]
+                )
+                
+                # Prepare response data
+                response_data = {
+                    'qr_id': qr_id,
+                    'destination': {
+                        'name': qr_location.get('location_name', ''),
+                        'address': qr_location.get('address', ''),
+                        'coordinates': qr_location.get('coordinates', {})
+                    },
+                    'delivery_status': 'no_driver_assigned',
+                    'driver_location': None,
+                    'driver_info': None,
+                    'last_updated': None
+                }
+                
+                if delivery_location:
+                    response_data['delivery_status'] = 'driver_assigned'
+                    response_data['driver_location'] = {
+                        'latitude': delivery_location.get('latitude'),
+                        'longitude': delivery_location.get('longitude')
+                    }
+                    response_data['driver_info'] = {
+                        'email': delivery_location.get('user_email', ''),
+                        'last_seen': delivery_location.get('timestamp')
+                    }
+                    response_data['last_updated'] = delivery_location.get('timestamp')
+                
+                app.logger.info(f"QR tracking data retrieved for ID: {qr_id}")
+                
+                return jsonify(response_data)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error retrieving QR tracking {qr_id}: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot retrieve QR tracking data")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error retrieving QR tracking data: {str(e)}")
+        return jsonify({'message': 'Failed to retrieve QR tracking data'}), 500
+
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():
     """Initialize MongoDB connection"""

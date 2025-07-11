@@ -81,8 +81,8 @@ class UserDashboard {
     }
 
     try {
-      // Check if QR code exists in the system
-      const response = await fetch(`/api/qr-code/${qrCode}`, {
+      // Get tracking data for the QR code
+      const response = await fetch(`/api/qr-tracking/${qrCode}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -92,19 +92,16 @@ class UserDashboard {
       const data = await response.json();
 
       if (response.ok) {
-        this.showMessage('QR code found! Redirecting to tracking page...', 'success');
+        this.showMessage('QR code found! Loading tracking information...', 'success');
         
-        // Store QR code in localStorage for tracking page
+        // Store QR code in localStorage for tracking history
         localStorage.setItem('trackingQRCode', qrCode);
-        localStorage.setItem('trackingData', JSON.stringify(data));
         
         // Add to tracking history
         this.addToTrackingHistory(qrCode, data);
         
-        // Redirect to scan page with the QR code data
-        setTimeout(() => {
-          window.location.href = `/scan?qr=${qrCode}`;
-        }, 1000);
+        // Display tracking results
+        this.displayTrackingResults(data);
         
       } else {
         this.showMessage(data.message || 'QR code not found in system', 'error');
@@ -115,13 +112,126 @@ class UserDashboard {
     }
   }
 
+  displayTrackingResults(trackingData) {
+    // Show tracking results section
+    const trackingResults = document.getElementById('trackingResults');
+    trackingResults.style.display = 'block';
+    
+    // Update delivery status
+    const statusIndicator = document.getElementById('statusIndicator');
+    const deliveryStatus = document.getElementById('deliveryStatus');
+    const lastUpdated = document.getElementById('lastUpdated');
+    
+    if (trackingData.delivery_status === 'driver_assigned') {
+      statusIndicator.className = 'status-indicator status-assigned';
+      deliveryStatus.textContent = 'Driver Assigned - En Route';
+      if (trackingData.last_updated) {
+        const updateTime = new Date(trackingData.last_updated).toLocaleString();
+        lastUpdated.textContent = `Last updated: ${updateTime}`;
+      }
+      
+      // Show driver section
+      const driverSection = document.getElementById('driverSection');
+      const driverInfo = document.getElementById('driverInfo');
+      const driverLocation = document.getElementById('driverLocation');
+      
+      driverSection.style.display = 'block';
+      driverInfo.textContent = trackingData.driver_info?.email || 'Driver assigned';
+      
+      if (trackingData.driver_location) {
+        driverLocation.textContent = `Lat: ${trackingData.driver_location.latitude.toFixed(4)}, Lng: ${trackingData.driver_location.longitude.toFixed(4)}`;
+      }
+    } else {
+      statusIndicator.className = 'status-indicator status-no-driver';
+      deliveryStatus.textContent = 'No Driver Assigned';
+      lastUpdated.textContent = 'Waiting for driver assignment';
+      
+      // Hide driver section
+      document.getElementById('driverSection').style.display = 'none';
+    }
+    
+    // Update destination info
+    document.getElementById('destinationName').textContent = trackingData.destination.name || 'Unknown Location';
+    document.getElementById('destinationAddress').textContent = trackingData.destination.address || 'Address not available';
+    
+    // Initialize map
+    this.initializeTrackingMap(trackingData);
+  }
+
+  async initializeTrackingMap(trackingData) {
+    try {
+      // Get HERE Maps API keys
+      const keysResponse = await fetch('/api/here-keys');
+      const keysData = await keysResponse.json();
+      const apiKey = keysData.keys[0]; // Use primary API key
+      
+      // Initialize platform
+      const platform = new H.service.Platform({
+        'apikey': apiKey
+      });
+      
+      // Initialize map
+      const defaultMapTypes = platform.createDefaultMapTypes();
+      const mapContainer = document.getElementById('trackingMap');
+      
+      // Clear any existing content
+      mapContainer.innerHTML = '';
+      
+      const map = new H.Map(
+        mapContainer,
+        defaultMapTypes.vector.normal.map,
+        {
+          zoom: 12,
+          center: trackingData.destination.coordinates
+        }
+      );
+      
+      // Enable map interaction
+      const behavior = new H.mapevents.Behavior();
+      const ui = new H.ui.UI.createDefault(map, defaultMapTypes);
+      
+      // Add destination marker (red)
+      const destinationMarker = new H.map.Marker(trackingData.destination.coordinates, {
+        icon: new H.map.Icon('https://maps.google.com/mapfiles/ms/icons/red-dot.png', {size: {w: 32, h: 32}})
+      });
+      
+      map.addObject(destinationMarker);
+      
+      // Add driver marker if available (blue)
+      if (trackingData.delivery_status === 'driver_assigned' && trackingData.driver_location) {
+        const driverMarker = new H.map.Marker(trackingData.driver_location, {
+          icon: new H.map.Icon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png', {size: {w: 32, h: 32}})
+        });
+        
+        map.addObject(driverMarker);
+        
+        // Create a group to fit both markers in view
+        const group = new H.map.Group();
+        group.addObject(destinationMarker);
+        group.addObject(driverMarker);
+        map.getViewPort().setViewBounds(group.getBoundingBox());
+      } else {
+        // Center on destination only
+        map.getViewPort().setCenter(trackingData.destination.coordinates);
+        map.getViewPort().setZoom(15);
+      }
+      
+      console.log('Tracking map initialized successfully');
+      
+    } catch (error) {
+      console.error('Error initializing tracking map:', error);
+      document.getElementById('trackingMap').innerHTML = '<div style="text-align: center; padding: 20px;">Map unavailable</div>';
+    }
+  }
+
   addToTrackingHistory(qrCode, data) {
     try {
       let history = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
       
       const newEntry = {
         qrCode: qrCode,
-        locationName: data.location_name || 'Unknown Location',
+        locationName: data.destination?.name || data.location_name || 'Unknown Location',
+        deliveryStatus: data.delivery_status || 'unknown',
         timestamp: new Date().toISOString(),
         address: data.address || ''
       };
@@ -190,6 +300,33 @@ class UserDashboard {
     setTimeout(() => {
       window.location.href = '/user';
     }, 1000);
+  }
+
+  async refreshTrackingData(qrCode) {
+    if (!qrCode) return;
+    
+    this.showMessage('Refreshing tracking data...', 'info');
+    
+    try {
+      const response = await fetch(`/api/qr-tracking/${qrCode}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        this.displayTrackingResults(data);
+        this.showMessage('Tracking data refreshed!', 'success');
+      } else {
+        this.showMessage(data.message || 'Failed to refresh tracking data', 'error');
+      }
+    } catch (error) {
+      console.error('Error refreshing tracking data:', error);
+      this.showMessage('Network error. Please try again.', 'error');
+    }
   }
 
   showMessage(message, type) {
