@@ -155,31 +155,70 @@ def delivery_register():
         if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', data['email']):
             return jsonify({'message': 'Invalid email format'}), 400
         
-        # Create delivery partner document
-        delivery_partner = {
-            'name': data['name'],
-            'email': data['email'].lower(),
-            'phone': data['phone'],
-            'address': data['address'],
-            'vehicle_type': data['vehicleType'],
-            'license': data['license'],
-            'password': data['password'],  # In production, hash this password
-            'created_at': datetime.utcnow(),
-            'active': True,
-            'deliveries': []
-        }
+        email = data['email'].lower()
         
-        app.logger.info(f"Delivery partner registration: {data['name']} ({data['email']})")
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
         
-        # Create individual collection for this delivery partner
-        collection_name = f"delivery_{data['email'].replace('@', '_').replace('.', '_')}"
-        
-        return jsonify({
-            'message': 'Delivery partner registered successfully!',
-            'partner_id': data['email'],
-            'collection': collection_name,
-            'note': 'Registration successful. Database storage will be activated once MongoDB connection is established.'
-        })
+        if mongo_client:
+            try:
+                # Check if delivery partner already exists
+                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
+                existing_partner = partners_collection.find_one({'email': email})
+                
+                if existing_partner:
+                    return jsonify({'message': 'Email already registered'}), 400
+                
+                # Create delivery partner document
+                delivery_partner = {
+                    'name': data['name'],
+                    'email': email,
+                    'phone': data['phone'],
+                    'address': data['address'],
+                    'vehicle_type': data['vehicleType'],
+                    'license': data['license'],
+                    'password': data['password'],  # In production, hash this password
+                    'created_at': datetime.utcnow(),
+                    'active': True,
+                    'deliveries': []
+                }
+                
+                # Store in main delivery partners collection
+                result = partners_collection.insert_one(delivery_partner)
+                
+                # Create individual collection for this delivery partner
+                collection_name = f"delivery_{email.replace('@', '_').replace('.', '_')}"
+                partner_collection = mongo_client.get_database("tracksmart").get_collection(collection_name)
+                
+                # Initialize partner collection with profile
+                partner_collection.insert_one({
+                    'type': 'profile',
+                    'partner_id': str(result.inserted_id),
+                    'name': data['name'],
+                    'email': email,
+                    'phone': data['phone'],
+                    'address': data['address'],
+                    'vehicle_type': data['vehicleType'],
+                    'license': data['license'],
+                    'created_at': datetime.utcnow(),
+                    'active': True
+                })
+                
+                app.logger.info(f"Delivery partner registered: {data['name']} ({email}) - Collection: {collection_name}")
+                
+                return jsonify({
+                    'message': 'Delivery partner registered successfully!',
+                    'partner_id': str(result.inserted_id),
+                    'collection': collection_name
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error during registration: {str(db_error)}")
+                return jsonify({'message': 'Database error during registration'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot register delivery partner")
+            return jsonify({'message': 'Database connection failed'}), 500
         
     except Exception as e:
         app.logger.error(f"Error registering delivery partner: {str(e)}")
@@ -199,22 +238,54 @@ def delivery_login():
         
         app.logger.info(f"Delivery partner login attempt: {email}")
         
-        # Mock user data for now - in production, verify against database
-        user_data = {
-            'name': 'Demo Partner',
-            'email': email,
-            'phone': '1234567890',
-            'vehicle_type': 'bike',
-            'license': 'DL123456',
-            'active': True
-        }
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
         
-        return jsonify({
-            'message': 'Login successful!',
-            'user': user_data,
-            'collection': f"delivery_{email.replace('@', '_').replace('.', '_')}",
-            'note': 'Login successful. Database verification will be activated once MongoDB connection is established.'
-        })
+        if mongo_client:
+            try:
+                # Find delivery partner in database
+                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
+                partner = partners_collection.find_one({'email': email})
+                
+                if not partner:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check password (in production, use hashed passwords)
+                if partner['password'] != password:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check if partner is active
+                if not partner.get('active', False):
+                    return jsonify({'message': 'Account is deactivated'}), 401
+                
+                # Prepare user data for response
+                user_data = {
+                    'id': str(partner['_id']),
+                    'name': partner['name'],
+                    'email': partner['email'],
+                    'phone': partner['phone'],
+                    'vehicle_type': partner['vehicle_type'],
+                    'license': partner['license'],
+                    'active': partner['active']
+                }
+                
+                collection_name = f"delivery_{email.replace('@', '_').replace('.', '_')}"
+                
+                app.logger.info(f"Delivery partner login successful: {partner['name']} ({email})")
+                
+                return jsonify({
+                    'message': 'Login successful!',
+                    'user': user_data,
+                    'collection': collection_name
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error during login: {str(db_error)}")
+                return jsonify({'message': 'Database error during login'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot login delivery partner")
+            return jsonify({'message': 'Database connection failed'}), 500
         
     except Exception as e:
         app.logger.error(f"Error logging in delivery partner: {str(e)}")
@@ -235,10 +306,14 @@ def initialize_mongodb():
         locations_collection = mongo_db.get_collection("locations")
         live_locations_collection = mongo_db.get_collection("live_locations")
         
+        # Test connection
+        mongo_client.admin.command('ping')
         app.logger.info("MongoDB connected successfully")
+        return True
     except Exception as e:
         app.logger.error(f"MongoDB connection failed: {e}")
         app.logger.info("Application will continue without MongoDB connection")
+        return False
 
 # Try to initialize MongoDB on startup
-initialize_mongodb()
+mongo_connected = initialize_mongodb()
