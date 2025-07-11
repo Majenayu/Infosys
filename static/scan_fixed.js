@@ -388,8 +388,9 @@ window.testSampleLocation = testSampleLocation;
 // Initialize HERE Maps
 function initializeMap() {
   try {
-    // List of backup API keys
+    // Use the same working API key from QR generation page
     const apiKeys = [
+      'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI',
       'kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o',
       'AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o',
       'HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs'

@@ -1,0 +1,765 @@
+QR Scanner initializing...
+scan_fixed.js:779 QR Scanner script loaded successfully
+scan_fixed.js:26 Page loaded, initializing QR scanner...
+scan_fixed.js:426 API key failed: kv_bfKJ5Z4... Cannot read properties of undefined (reading 's')
+scan_fixed.js:426 API key failed: AYBw5XcF2K... Cannot read properties of undefined (reading 's')
+scan_fixed.js:426 API key failed: HGhfVR_kgq... Cannot read properties of undefined (reading 's')
+scan_fixed.js:435 Error initializing map: Error: All HERE Maps API keys failed
+    at initializeMap (scan_fixed.js:432:11)
+    at HTMLDocument.<anonymous> (scan_fixed.js:29:3)
+initializeMap @ scan_fixed.js:435Understand this error
+scan_fixed.js:701 Initializing fallback map functionality
+scan_fixed.js:167 Starting automatic location tracking...
+scan_fixed.js:47 QR Scanner initialized successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/236/9 and id 186: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/367/236/9 and id 202: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/366/237/9 and id 147: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/366/237/9 and id 210: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/366/237/9 and id 196: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/365/236/9 and id 144: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/365/236/9 and id 207: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/367/236/9 and id 148: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/367/236/9 and id 211: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/367/237/9 and id 204: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/365/236/9 and id 150: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/365/236/9 and id 213: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/366/236/9 and id 146: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/366/236/9 and id 152: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/366/236/9 and id 209: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/366/236/9 and id 215: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/366/236/9 and id 194: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/365/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=kv_bfKJ5Z4mLAJjvzCJcUNRLFYKL0pQgxJTaJF7HYkv_o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/365/237/9 and id 145: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 18/10/365/237/9 and id 188: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/804045d1-885e-4f97-a701-2f890ded9d9b:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/365/237/9 and id 208: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/365/237/9 and id 151: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/365/237/9 and id 214: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/236/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/367/236/9 and id 154: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/367/236/9 and id 217: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/367/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/9/366/237/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/367/237/9 and id 155: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/367/237/9 and id 218: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/366/237/9 and id 153: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/367/237/9 and id 149: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/10/366/237/9 and id 216: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 41/10/367/237/9 and id 212: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/3460d1e9-0db6-42a5-a20f-bdebd0a2b5bb:3:56296
+log @ mapsjs-core.js:457Understand this error
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:97 QR Code detected: {"name":"Mangaluru, Karnataka, India","address":"Mangaluru, Karnataka, India","latitude":12.89789,"longitude":74.8454,"googleMapsUrl":"https://www.google.com/maps?q=12.89789,74.8454","hereMapsUrl":"https://wego.here.com/directions/mix/12.89789,74.8454","timestamp":"2025-07-11T10:36:01.280Z","qr_id":"9957"}
+scan_fixed.js:108 QR ID stored for location tracking: 9957
+scan_fixed.js:465 Initializing navigation to: Object
+scan_fixed.js:512 Destination marker added
+scan_fixed.js:529 Current location obtained: Object
+scan_fixed.js:566 Current location marker added
+scan_fixed.js:573 Calculating route from Object to Object
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+scan_fixed.js:573 Calculating route from Object to Object
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603Understand this error
+route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+mapsjs-core.js:80 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+scan_fixed.js:260 Live location updated successfully
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465Understand this warning
+vector.hereapi.com/v2/vectortiles/base/mc/11/1449/949/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/949/11 and id 249: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/11/1448/950/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/950/11 and id 246: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/11/1449/950/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/950/11 and id 252: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/11/1450/950/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/950/11 and id 277: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/950/11 and id 262: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/949/11 and id 276: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/950/11 and id 275: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603Understand this error
+route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+mapsjs-core.js:80 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/11/1450/949/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/949/11 and id 259: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+vector.hereapi.com/v2/vectortiles/base/mc/11/1448/949/omv?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&content=default%2Ctransit:1  Failed to load resource: the server responded with a status of 401 ()Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/949/11 and id 242: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457Understand this error
+scan_fixed.js:573 Calculating route from Object to Object
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603Understand this error
+route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display:1  Failed to load resource: net::ERR_FAILEDUnderstand this error
+mapsjs-core.js:80 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+scan_fixed.js:573 Calculating route from {lat: 12.3460801, lng: 76.6297076} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+Zq @ VM13:151
+W.Ma @ VM13:15
+W.tu @ VM13:153
+calculateRoute @ scan_fixed.js:576
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: {latitude: 12.3460801, longitude: 76.6297076, timestamp: '2025-07-11T15:49:26.538Z', user_email: 'a@gmail.com', email: 'a@gmail.com', …}
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/949/11 and id 280: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/950/11 and id 281: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/949/11 and id 282: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/950/11 and id 279: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/950/11 and id 283: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/949/11 and id 278: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan_fixed.js:260 Live location updated successfully
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/949/11 and id 286: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/950/11 and id 287: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:184  GET https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display net::ERR_FAILED 401 (Unauthorized)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/949/11 and id 288: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:39 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+D @ mapsjs-core.js:39
+Ic @ mapsjs-core.js:51
+Gf @ mapsjs-core.js:118
+K.vg @ mapsjs-core.js:120
+displayDirectPath @ scan_fixed.js:647
+(anonymous) @ scan_fixed.js:605
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/950/11 and id 285: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/950/11 and id 289: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/949/11 and id 284: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan_fixed.js:573 Calculating route from {lat: 12.3460801, lng: 76.6297076} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+Zq @ VM13:151
+W.Ma @ VM13:15
+W.tu @ VM13:153
+calculateRoute @ scan_fixed.js:576
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: {latitude: 12.3460801, longitude: 76.6297076, timestamp: '2025-07-11T15:49:31.542Z', user_email: 'a@gmail.com', email: 'a@gmail.com', …}
+scan_fixed.js:260 Live location updated successfully
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/949/11 and id 292: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1449/950/11 and id 293: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/949/11 and id 294: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1450/950/11 and id 295: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/950/11 and id 291: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: tile load error for tile with key 64/12/1448/949/11 and id 290: Error: Unimplemented type: 3
+    at Pbf.skip (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:7547)
+    at Pbf.readFields (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:4939)
+    at new e (blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:53725)
+    at blob:https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev/a79775dc-d490-4e29-8575-a0a4e297f6ae:3:56296
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:184  GET https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display net::ERR_FAILED 401 (Unauthorized)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:39 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+D @ mapsjs-core.js:39
+Ic @ mapsjs-core.js:51
+Gf @ mapsjs-core.js:118
+K.vg @ mapsjs-core.js:120
+displayDirectPath @ scan_fixed.js:647
+(anonymous) @ scan_fixed.js:605
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+scan_fixed.js:573 Calculating route from {lat: 12.3460801, lng: 76.6297076} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+VM13:2 H.service.RoutingService is deprecated and will be removed soon. Use HERE Routing API v8 instead.
+to @ VM13:2
+Zq @ VM13:151
+W.Ma @ VM13:15
+W.tu @ VM13:153
+calculateRoute @ scan_fixed.js:576
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: {latitude: 12.3460801, longitude: 76.6297076, timestamp: '2025-07-11T15:49:36.549Z', user_email: 'a@gmail.com', email: 'a@gmail.com', …}
+scan_fixed.js:260 Live location updated successfully
+scan:1 Access to XMLHttpRequest at 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display' from origin 'https://8e53b689-08c3-4189-8dce-ba53c4612f1a-00-2el24o48k1ihv.sisko.replit.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.Understand this error
+scan_fixed.js:603 Error calculating route: Error: https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display request failed
+    at Ko (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:20:25)
+    at eval (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:19:420)
+(anonymous) @ scan_fixed.js:603
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:184  GET https://route.ls.hereapi.com/routing/7.2/calculateroute.json?xnlp=CL_JSMv3.1.66.0&apikey=HGhfVR_kgqOHLEWrFq5iXNLIYQJ8mSYqtJwEqtR_qLs&mode=fastest%3Bcar&start=12.3460801%2C76.6297076&destination=12.89789%2C74.8454&representation=display net::ERR_FAILED 401 (Unauthorized)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
+mapsjs-core.js:39 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+D @ mapsjs-core.js:39
+Ic @ mapsjs-core.js:51
+Gf @ mapsjs-core.js:118
+K.vg @ mapsjs-core.js:120
+displayDirectPath @ scan_fixed.js:647
+(anonymous) @ scan_fixed.js:605
+eval @ VM13:19
+Promise.then
+eval @ VM13:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM13:19
+Zq.$g @ VM13:151
+calculateRoute @ scan_fixed.js:587
+updateCurrentLocationMarker @ scan_fixed.js:695
+(anonymous) @ scan_fixed.js:199Understand this error
