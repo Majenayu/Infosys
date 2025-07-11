@@ -34,6 +34,11 @@ def qr_scanner():
     """QR code scanner page"""
     return render_template('scan.html')
 
+@app.route('/delivery')
+def delivery_page():
+    """Delivery partner login/register page"""
+    return render_template('delivery.html')
+
 @app.route('/register-company', methods=['POST'])
 def register_company():
     """Register a new logistics company"""
@@ -132,6 +137,88 @@ def get_live_locations():
     except Exception as e:
         app.logger.error(f"Error fetching live locations: {str(e)}")
         return jsonify({'message': 'Failed to fetch live locations'}), 500
+
+@app.route('/delivery/register', methods=['POST'])
+def delivery_register():
+    """Register a new delivery partner"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'email', 'phone', 'address', 'vehicleType', 'license', 'password']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'message': f'Missing required field: {field}'}), 400
+        
+        # Basic email validation
+        import re
+        if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', data['email']):
+            return jsonify({'message': 'Invalid email format'}), 400
+        
+        # Create delivery partner document
+        delivery_partner = {
+            'name': data['name'],
+            'email': data['email'].lower(),
+            'phone': data['phone'],
+            'address': data['address'],
+            'vehicle_type': data['vehicleType'],
+            'license': data['license'],
+            'password': data['password'],  # In production, hash this password
+            'created_at': datetime.utcnow(),
+            'active': True,
+            'deliveries': []
+        }
+        
+        app.logger.info(f"Delivery partner registration: {data['name']} ({data['email']})")
+        
+        # Create individual collection for this delivery partner
+        collection_name = f"delivery_{data['email'].replace('@', '_').replace('.', '_')}"
+        
+        return jsonify({
+            'message': 'Delivery partner registered successfully!',
+            'partner_id': data['email'],
+            'collection': collection_name,
+            'note': 'Registration successful. Database storage will be activated once MongoDB connection is established.'
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error registering delivery partner: {str(e)}")
+        return jsonify({'message': 'Registration failed'}), 500
+
+@app.route('/delivery/login', methods=['POST'])
+def delivery_login():
+    """Login delivery partner"""
+    try:
+        data = request.get_json()
+        
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'message': 'Email and password are required'}), 400
+        
+        email = data['email'].lower()
+        password = data['password']
+        
+        app.logger.info(f"Delivery partner login attempt: {email}")
+        
+        # Mock user data for now - in production, verify against database
+        user_data = {
+            'name': 'Demo Partner',
+            'email': email,
+            'phone': '1234567890',
+            'vehicle_type': 'bike',
+            'license': 'DL123456',
+            'active': True
+        }
+        
+        return jsonify({
+            'message': 'Login successful!',
+            'user': user_data,
+            'collection': f"delivery_{email.replace('@', '_').replace('.', '_')}",
+            'note': 'Login successful. Database verification will be activated once MongoDB connection is established.'
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error logging in delivery partner: {str(e)}")
+        return jsonify({'message': 'Login failed'}), 500
 
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():

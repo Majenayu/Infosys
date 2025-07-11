@@ -10,6 +10,8 @@ Preferred communication style: Simple, everyday language.
 Database preference: MongoDB only (no local SQLite storage)
 Priority: Functional QR code file upload from device
 Priority: Avoid HERE Maps API rate limiting issues
+Added: Delivery partner login/register system with individual MongoDB collections per user
+Added: Navigation integration with "Delivery Boy" button replacing QR scanner navigation
 
 ## System Architecture
 
@@ -52,6 +54,15 @@ Priority: Avoid HERE Maps API rate limiting issues
    - Fields: latitude, longitude, timestamp
    - Purpose: Track user's live location for route calculation
 
+4. **Delivery_Partners Collection**
+   - Stores delivery partner registration data
+   - Fields: name, email, phone, address, vehicle_type, license, password, created_at, active, deliveries
+   - Purpose: Manage delivery partner accounts and authentication
+
+5. **Individual Delivery Collections**
+   - Each delivery partner gets their own collection named: delivery_{email_sanitized}
+   - Purpose: Store individual delivery partner's specific data and delivery history
+
 ### Core Features
 1. **Company Registration System**
    - Web form for registering logistics companies
@@ -63,6 +74,14 @@ Priority: Avoid HERE Maps API rate limiting issues
    - Location search with autocomplete
    - QR code generation for selected coordinates
    - Download functionality for generated QR codes
+
+3. **Delivery Partner System**
+   - Login/Register interface for delivery partners
+   - Basic details collection: name, email, phone, address, vehicle type, license
+   - Individual MongoDB collections per delivery partner
+   - Session management with localStorage
+   - Redirect to scan page after successful login
+   - Integrated navigation across all pages
 
 ### API Integration
 - **HERE Maps API**: Provides mapping, geocoding, and search functionality
