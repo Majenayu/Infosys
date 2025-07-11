@@ -19,6 +19,7 @@ const routeInfoDiv = document.getElementById('routeInfo');
 const manualQRInput = document.getElementById('manualQRInput');
 const processManualBtn = document.getElementById('processManualBtn');
 const testSampleBtn = document.getElementById('testSampleBtn');
+const qrFileInput = document.getElementById('qrFileInput');
 
 // Initialize HERE Maps
 const initializeMap = () => {
@@ -568,6 +569,63 @@ const testSampleLocation = () => {
   showStatus('Sample location loaded successfully!', 'success');
 };
 
+// Handle file upload for QR code images
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  if (!file.type.startsWith('image/')) {
+    showStatus('Please select a valid image file', 'error');
+    return;
+  }
+  
+  showStatus('Processing QR code image...', 'success');
+  
+  try {
+    // Create a canvas to process the image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = async () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      
+      try {
+        // Use Html5Qrcode library to decode the image
+        const html5QrCode = new Html5Qrcode("temp-reader");
+        const qrCodeData = await html5QrCode.scanFile(file, true);
+        
+        if (qrCodeData) {
+          showStatus('QR code detected from image!', 'success');
+          onScanSuccess(qrCodeData);
+        } else {
+          showStatus('No QR code found in the image', 'error');
+        }
+      } catch (error) {
+        console.error('QR code decoding error:', error);
+        showStatus('Could not decode QR code from image. Please try a clearer image.', 'error');
+      }
+    };
+    
+    img.onerror = () => {
+      showStatus('Failed to load image. Please try a different file.', 'error');
+    };
+    
+    // Load the image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    
+  } catch (error) {
+    console.error('File processing error:', error);
+    showStatus('Error processing file. Please try again.', 'error');
+  }
+};
+
 // Show status messages
 const showStatus = (message, type) => {
   const alertElement = document.getElementById('statusAlert');
@@ -620,6 +678,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   if (testSampleBtn) {
     testSampleBtn.addEventListener('click', testSampleLocation);
+  }
+  
+  if (qrFileInput) {
+    qrFileInput.addEventListener('change', handleFileUpload);
   }
   
   console.log('QR Scanner initialization complete');
