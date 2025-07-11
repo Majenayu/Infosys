@@ -455,16 +455,14 @@ def initialize_mongodb():
     global mongo_client, companies_collection, locations_collection, live_locations_collection, mongo_connected
     
     try:
-        # Try to import pymongo without conflicting bson
-        import sys
-        
-        # Remove any conflicting bson module if present
-        if 'bson' in sys.modules:
-            del sys.modules['bson']
-        
-        # Clean import of pymongo
+        # Import pymongo with better error handling
         from pymongo import MongoClient
-        mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
+        
+        # Connection string
+        connection_string = "mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in"
+        
+        # Create MongoClient with timeout
+        mongo_client = MongoClient(connection_string, serverSelectionTimeoutMS=5000)
         mongo_db = mongo_client.get_database("tracksmart")
         
         # Collections
@@ -472,16 +470,20 @@ def initialize_mongodb():
         locations_collection = mongo_db.get_collection("locations")
         live_locations_collection = mongo_db.get_collection("live_locations")
         
-        # Test connection
+        # Test connection with ping command
         mongo_client.admin.command('ping')
-        app.logger.info("MongoDB connected successfully")
         mongo_connected = True
-        return True
-    except Exception as e:
-        app.logger.error(f"MongoDB connection failed: {e}")
+        app.logger.info("MongoDB connection established successfully")
+        
+    except ImportError as e:
+        app.logger.error(f"MongoDB import error: {str(e)}")
         app.logger.info("Application will continue without MongoDB connection")
         mongo_connected = False
-        return False
+        
+    except Exception as e:
+        app.logger.error(f"MongoDB connection failed: {str(e)}")
+        app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
 
-# Try to initialize MongoDB on startup
+# Initialize MongoDB on startup
 initialize_mongodb()
