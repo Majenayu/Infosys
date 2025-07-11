@@ -7,12 +7,16 @@ TrackSmart is a web application designed for registering logistics companies and
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Database preference: MongoDB only (no local SQLite storage)
+Priority: Functional QR code file upload from device
+Priority: Avoid HERE Maps API rate limiting issues
 
 ## System Architecture
 
 ### Backend Architecture
 - **Framework**: Flask (Python web framework)
-- **Database**: SQLAlchemy ORM with SQLite as default (configurable via DATABASE_URL environment variable)
+- **Database**: MongoDB only (using PyMongo driver)
+- **Connection**: mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in
 - **Configuration**: Environment-based configuration with fallback defaults
 - **Deployment**: Configured with ProxyFix middleware for production deployment behind reverse proxies
 
@@ -32,16 +36,21 @@ Preferred communication style: Simple, everyday language.
 
 ## Key Components
 
-### Database Models
-1. **Company Model**
+### Database Collections (MongoDB)
+1. **Companies Collection**
    - Stores logistics company information
    - Fields: name, contact_person, email, phone, api_url, api_key, address, created_at
    - Purpose: Central registry for logistics companies
 
-2. **Location Model**
+2. **Locations Collection**
    - Stores QR-generated location data
-   - Fields: name, address, latitude, longitude, created_at
+   - Fields: name, address, latitude, longitude, google_maps_url, here_maps_url, timestamp, qr_generated
    - Purpose: Track locations where QR codes have been generated
+
+3. **Live_Locations Collection**
+   - Stores real-time location tracking data
+   - Fields: latitude, longitude, timestamp
+   - Purpose: Track user's live location for route calculation
 
 ### Core Features
 1. **Company Registration System**
@@ -90,7 +99,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Python Packages
 - Flask: Web framework
-- SQLAlchemy: Database ORM
+- PyMongo: MongoDB driver
 - Werkzeug: WSGI utilities and middleware
 
 ## Deployment Strategy

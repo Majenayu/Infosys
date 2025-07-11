@@ -28,6 +28,13 @@ const qrFileInput = document.getElementById('qrFileInput');
 
 // Initialize HERE Maps
 const initializeMap = () => {
+  // Add rate limiting delay to prevent API abuse
+  setTimeout(() => {
+    initializeMapWithDelay();
+  }, 1000);
+};
+
+const initializeMapWithDelay = () => {
   try {
     platform = new H.service.Platform({ 
       'apikey': API_KEYS[currentApiKeyIndex],
