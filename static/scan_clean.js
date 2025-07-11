@@ -501,7 +501,13 @@ async function initializeMap() {
     const defaultLayers = platform.createDefaultLayers();
     
     // Use vector.normal.map which is more reliable than raster layers
-    const mapLayer = defaultLayers.vector.normal.map;
+    let mapLayer;
+    try {
+      mapLayer = defaultLayers.vector.normal.map;
+    } catch (e) {
+      console.log('Vector maps not available, using raster fallback');
+      mapLayer = defaultLayers.raster.normal.map;
+    }
     
     // Create map
     map = new H.Map(mapContainer, mapLayer, {
@@ -584,7 +590,12 @@ function addDestinationMarker() {
   
   // Remove existing destination marker if present
   if (destinationMarker) {
-    map.removeObject(destinationMarker);
+    try {
+      map.removeObject(destinationMarker);
+    } catch (e) {
+      console.log('Destination marker already removed or not found');
+    }
+    destinationMarker = null;
   }
   
   try {
@@ -593,11 +604,9 @@ function addDestinationMarker() {
     
     console.log('Creating marker with coordinates:', { lat, lng });
     
-    // Create red destination marker using HERE's default marker
-    destinationMarker = new H.map.Marker({ lat: lat, lng: lng });
-    
-    // Set marker color to red for destination
-    destinationMarker.getIcon().setColor('#ff0000');
+    // Create red destination marker with custom icon
+    const redIcon = new H.map.Icon('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="red"/><circle cx="12" cy="12" r="3" fill="white"/></svg>', {size: {w: 24, h: 24}});
+    destinationMarker = new H.map.Marker({ lat: lat, lng: lng }, { icon: redIcon });
     
     map.addObject(destinationMarker);
     console.log('Destination marker added successfully');
@@ -626,7 +635,12 @@ function addCurrentLocationMarker() {
   
   // Remove existing current location marker if present
   if (currentLocationMarker) {
-    map.removeObject(currentLocationMarker);
+    try {
+      map.removeObject(currentLocationMarker);
+    } catch (e) {
+      console.log('Current location marker already removed or not found');
+    }
+    currentLocationMarker = null;
   }
   
   try {
@@ -635,11 +649,9 @@ function addCurrentLocationMarker() {
     
     console.log('Creating current location marker with coordinates:', { lat, lng });
     
-    // Create blue current location marker using HERE's default marker
-    currentLocationMarker = new H.map.Marker({ lat: lat, lng: lng });
-    
-    // Set marker color to blue for current location
-    currentLocationMarker.getIcon().setColor('#0000ff');
+    // Create blue current location marker with custom icon
+    const blueIcon = new H.map.Icon('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="blue"/><circle cx="12" cy="12" r="3" fill="white"/></svg>', {size: {w: 24, h: 24}});
+    currentLocationMarker = new H.map.Marker({ lat: lat, lng: lng }, { icon: blueIcon });
     
     map.addObject(currentLocationMarker);
     console.log('Current location marker added successfully');
