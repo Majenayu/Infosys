@@ -16,21 +16,31 @@ const currentLocationSpan = document.getElementById('currentLocation');
 const destinationInfoSpan = document.getElementById('destinationInfo');
 const trackingStatusSpan = document.getElementById('trackingStatus');
 const routeInfoDiv = document.getElementById('routeInfo');
+const manualQRInput = document.getElementById('manualQRInput');
+const processManualBtn = document.getElementById('processManualBtn');
+const testSampleBtn = document.getElementById('testSampleBtn');
 
 // Initialize HERE Maps
 const initializeMap = () => {
   try {
-    platform = new H.service.Platform({ apikey: API_KEY });
-    defaultLayers = platform.createDefaultLayers();
-    routingService = platform.getRoutingService(null, 8);
+    platform = new H.service.Platform({ 
+      'apikey': API_KEY,
+      'app_id': undefined,
+      'app_code': undefined
+    });
+    
+    defaultLayers = platform.createDefaultLayers({
+      tileSize: 256,
+      ppi: 320
+    });
 
     const mapContainer = document.getElementById('mapContainer');
     if (!mapContainer) {
       throw new Error('Map container not found');
     }
 
-    // Initialize map centered on Karnataka
-    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+    // Initialize map centered on Karnataka with raster layer
+    map = new H.Map(mapContainer, defaultLayers.raster.normal.map, {
       zoom: 7,
       center: { lat: 15.3173, lng: 75.7139 }
     });
@@ -38,7 +48,10 @@ const initializeMap = () => {
     // Enable map events and behaviors
     const mapEvents = new H.mapevents.MapEvents(map);
     const behavior = new H.mapevents.Behavior(mapEvents);
-    ui = H.ui.UI.createDefault(map);
+    ui = H.ui.UI.createDefault(map, defaultLayers);
+
+    // Initialize routing service
+    routingService = platform.getRoutingService();
 
     // Resize map when window resizes
     window.addEventListener('resize', () => {
@@ -48,21 +61,71 @@ const initializeMap = () => {
     });
 
     console.log('Scanner map initialized successfully');
-    showStatus('Scanner ready. Start camera to scan QR codes.', 'success');
+    showStatus('Scanner ready. Click Start Camera or use manual input.', 'success');
   } catch (error) {
     console.error('Failed to initialize map:', error);
     showStatus('Map initialization failed. Please refresh the page.', 'error');
+    
+    // Fallback: Try with vector layer
+    try {
+      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+        zoom: 7,
+        center: { lat: 15.3173, lng: 75.7139 }
+      });
+      console.log('Fallback to vector map successful');
+    } catch (fallbackError) {
+      console.error('Fallback map initialization failed:', fallbackError);
+    }
+  }
+};
+
+// Check camera support
+const checkCameraSupport = async () => {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      console.warn('Camera API not supported - using manual input only');
+      return false;
+    }
+    
+    // Skip device enumeration as it may fail in some environments
+    // Instead, try to request camera access directly
+    try {
+      const testStream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      testStream.getTracks().forEach(track => track.stop());
+      console.log('Camera access confirmed');
+      return true;
+    } catch (accessError) {
+      console.warn('Camera access test failed:', accessError.message);
+      return false;
+    }
+  } catch (error) {
+    console.warn('Camera support check failed:', error.message);
+    return false;
   }
 };
 
 // Initialize QR Code Scanner
-const initializeScanner = () => {
+const initializeScanner = async () => {
   try {
+    // Check camera support first
+    const cameraSupported = await checkCameraSupport();
+    if (!cameraSupported) {
+      startScanBtn.disabled = true;
+      startScanBtn.textContent = '⚠️ Camera Not Available';
+      showStatus('Camera not available. Use manual input below.', 'error');
+      return;
+    }
+    
     html5QrcodeScanner = new Html5Qrcode("reader");
-    console.log('QR Scanner initialized');
+    console.log('QR Scanner initialized successfully');
+    showStatus('QR Scanner ready. Click "Start Camera" to begin.', 'success');
   } catch (error) {
     console.error('Failed to initialize QR scanner:', error);
-    showStatus('QR Scanner initialization failed', 'error');
+    showStatus('QR Scanner initialization failed. Use manual input.', 'error');
+    startScanBtn.disabled = true;
+    startScanBtn.textContent = '⚠️ Scanner Error';
   }
 };
 
@@ -74,18 +137,45 @@ const startScanning = async () => {
     startScanBtn.disabled = true;
     startScanBtn.textContent = '🔄 Starting Camera...';
 
+    // First check for camera permissions
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('Camera not supported by this browser');
+    }
+
+    // Request camera permission first
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      stream.getTracks().forEach(track => track.stop()); // Stop the test stream
+    } catch (permError) {
+      console.error('Camera permission error:', permError);
+      if (permError.name === 'NotAllowedError') {
+        throw new Error('Camera access denied. Please allow camera permission and reload.');
+      } else if (permError.name === 'NotSecureError' || permError.message.includes('secure')) {
+        throw new Error('Camera requires HTTPS. Please access via secure connection.');
+      } else {
+        throw new Error(`Camera not available: ${permError.message}`);
+      }
+    }
+
     const config = {
       fps: 10,
       qrbox: { width: 250, height: 250 },
-      aspectRatio: 1.0
+      aspectRatio: 1.0,
+      showTorchButtonIfSupported: true,
+      showZoomSliderIfSupported: true,
+      defaultZoomValueIfSupported: 2
     };
 
-    await html5QrcodeScanner.start(
-      { facingMode: "environment" },
-      config,
-      onScanSuccess,
-      onScanError
-    );
+    // Try environment camera first, fallback to user camera
+    let cameraConfig = { facingMode: "environment" };
+    
+    try {
+      await html5QrcodeScanner.start(cameraConfig, config, onScanSuccess, onScanError);
+    } catch (envError) {
+      console.warn('Environment camera failed, trying user camera:', envError);
+      cameraConfig = { facingMode: "user" };
+      await html5QrcodeScanner.start(cameraConfig, config, onScanSuccess, onScanError);
+    }
 
     isScanning = true;
     startScanBtn.textContent = '📹 Camera Active';
@@ -93,7 +183,17 @@ const startScanning = async () => {
     showStatus('Camera started. Point at a QR code to scan.', 'success');
   } catch (error) {
     console.error('Failed to start scanning:', error);
-    showStatus('Failed to start camera. Please check permissions.', 'error');
+    let errorMessage = 'Failed to start camera. ';
+    
+    if (error.message.includes('permission')) {
+      errorMessage += 'Please allow camera access and try again.';
+    } else if (error.message.includes('not supported')) {
+      errorMessage += 'Camera not supported by this browser.';
+    } else {
+      errorMessage += 'Please check camera permissions and try again.';
+    }
+    
+    showStatus(errorMessage, 'error');
     startScanBtn.disabled = false;
     startScanBtn.textContent = '📹 Start Camera';
   }
@@ -326,77 +426,96 @@ const updateUserLocation = (userLocation) => {
 
 // Calculate route between user and destination
 const calculateRoute = (from, to) => {
-  if (!routingService) return;
+  if (!routingService || !map) {
+    console.warn('Routing service or map not available');
+    return;
+  }
 
-  const routingParams = {
-    mode: 'fastest;car',
-    representation: 'display',
-    waypoint0: `geo!${from.lat},${from.lng}`,
-    waypoint1: `geo!${to.lat},${to.lng}`,
-    routeattributes: 'summary'
-  };
+  try {
+    const routingParams = {
+      'waypoint0': `geo!${from.lat},${from.lng}`,
+      'waypoint1': `geo!${to.lat},${to.lng}`,
+      'mode': 'fastest;car',
+      'representation': 'display',
+      'routeattributes': 'summary,shape'
+    };
 
-  routingService.calculateRoute(routingParams, (result) => {
-    if (routeLine) {
-      map.removeObject(routeLine);
-    }
+    routingService.calculateRoute(routingParams, (result) => {
+      try {
+        if (routeLine) {
+          map.removeObject(routeLine);
+        }
 
-    if (!result.response.route || result.response.route.length === 0) {
-      console.warn('No route found');
-      return;
-    }
+        if (!result.response || !result.response.route || result.response.route.length === 0) {
+          console.warn('No route found in response');
+          routeInfoDiv.innerHTML = '<p class="text-warning">No route available between locations</p>';
+          return;
+        }
 
-    const route = result.response.route[0];
-    const lineString = new H.geo.LineString();
+        const route = result.response.route[0];
+        const lineString = new H.geo.LineString();
 
-    // Build route line
-    route.shape.forEach(point => {
-      const [lat, lng] = point.split(',');
-      lineString.pushLatLngAlt(parseFloat(lat), parseFloat(lng), 0);
-    });
+        // Build route line from shape
+        if (route.shape) {
+          route.shape.forEach(point => {
+            const [lat, lng] = point.split(',');
+            lineString.pushLatLngAlt(parseFloat(lat), parseFloat(lng), 0);
+          });
 
-    // Create route polyline
-    routeLine = new H.map.Polyline(lineString, {
-      style: { 
-        strokeColor: '#007bff', 
-        lineWidth: 5,
-        lineDash: [0, 2]
+          // Create route polyline
+          routeLine = new H.map.Polyline(lineString, {
+            style: { 
+              strokeColor: '#007bff', 
+              lineWidth: 4,
+              lineDash: [0, 2]
+            }
+          });
+
+          map.addObject(routeLine);
+        }
+
+        // Update route information
+        if (route.summary) {
+          const distance = (route.summary.distance / 1000).toFixed(2);
+          const time = Math.round(route.summary.travelTime / 60);
+          
+          routeInfoDiv.innerHTML = `
+            <div class="row">
+              <div class="col-6">
+                <strong>Distance:</strong> ${distance} km
+              </div>
+              <div class="col-6">
+                <strong>Time:</strong> ${time} min
+              </div>
+            </div>
+            <div class="mt-2">
+              <small class="text-muted">Route updated based on current location</small>
+            </div>
+          `;
+        }
+
+        // Fit map to show both markers and route
+        if (userMarker && destinationMarker) {
+          const group = new H.map.Group();
+          group.addObject(userMarker);
+          group.addObject(destinationMarker);
+          if (routeLine) group.addObject(routeLine);
+          map.getViewModel().setLookAtData({ bounds: group.getBoundingBox() });
+        }
+
+      } catch (routeError) {
+        console.error('Route processing error:', routeError);
+        routeInfoDiv.innerHTML = '<p class="text-danger">Error processing route</p>';
       }
+
+    }, (error) => {
+      console.error('Route calculation error:', error);
+      routeInfoDiv.innerHTML = '<p class="text-danger">Route calculation failed</p>';
     });
-
-    map.addObject(routeLine);
-
-    // Update route information
-    if (route.summary) {
-      const distance = (route.summary.distance / 1000).toFixed(2);
-      const time = Math.round(route.summary.travelTime / 60);
-      
-      routeInfoDiv.innerHTML = `
-        <div class="row">
-          <div class="col-6">
-            <strong>Distance:</strong> ${distance} km
-          </div>
-          <div class="col-6">
-            <strong>Time:</strong> ${time} min
-          </div>
-        </div>
-        <div class="mt-2">
-          <small class="text-muted">Route updated based on current location</small>
-        </div>
-      `;
-    }
-
-    // Fit map to show both markers and route
-    const group = new H.map.Group();
-    group.addObject(userMarker);
-    group.addObject(destinationMarker);
-    group.addObject(routeLine);
-    map.getViewModel().setLookAtData({ bounds: group.getBoundingBox() });
-
-  }, (error) => {
-    console.error('Route calculation error:', error);
-    showStatus('Failed to calculate route', 'error');
-  });
+  } catch (error) {
+    console.error('Route setup error:', error);
+    routeInfoDiv.innerHTML = '<p class="text-danger">Route service unavailable</p>';
+  }
 };
 
 // Send live location to server
@@ -416,6 +535,37 @@ const sendLiveLocation = async (locationData) => {
   } catch (error) {
     console.error('Failed to send live location:', error);
   }
+};
+
+// Process manual QR input
+const processManualInput = () => {
+  if (!manualQRInput) return;
+  
+  const inputText = manualQRInput.value.trim();
+  if (!inputText) {
+    showStatus('Please enter QR code data', 'error');
+    return;
+  }
+  
+  // Process the input as if it was scanned
+  onScanSuccess(inputText);
+  manualQRInput.value = ''; // Clear input
+};
+
+// Test with sample location
+const testSampleLocation = () => {
+  const sampleQRData = JSON.stringify({
+    name: "Bangalore City Center",
+    address: "Bangalore, Karnataka, India",
+    latitude: 12.9716,
+    longitude: 77.5946,
+    googleMapsUrl: "https://www.google.com/maps?q=12.9716,77.5946",
+    hereMapsUrl: "https://wego.here.com/directions/mix/12.9716,77.5946",
+    timestamp: new Date().toISOString()
+  });
+  
+  onScanSuccess(sampleQRData);
+  showStatus('Sample location loaded successfully!', 'success');
 };
 
 // Show status messages
@@ -444,12 +594,12 @@ const showStatus = (message, type) => {
 };
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('QR Scanner initializing...');
   
   // Initialize components
   initializeMap();
-  initializeScanner();
+  await initializeScanner();
   
   // Setup event listeners
   if (startScanBtn) {
@@ -464,7 +614,15 @@ document.addEventListener('DOMContentLoaded', () => {
     trackLocationBtn.addEventListener('click', startLocationTracking);
   }
   
-  console.log('QR Scanner initialized successfully');
+  if (processManualBtn) {
+    processManualBtn.addEventListener('click', processManualInput);
+  }
+  
+  if (testSampleBtn) {
+    testSampleBtn.addEventListener('click', testSampleLocation);
+  }
+  
+  console.log('QR Scanner initialization complete');
 });
 
 // Cleanup on page unload
