@@ -532,27 +532,27 @@ function initializeNavigation() {
   
   console.log('Initializing navigation to:', destination);
   
-  // Clear existing markers
-  if (currentLocationMarker) {
-    map.removeObject(currentLocationMarker);
-  }
-  if (destinationMarker) {
-    map.removeObject(destinationMarker);
-  }
+  // Clear existing route (but keep markers visible)
   if (routeGroup) {
     map.removeObject(routeGroup);
   }
   
-  // Add destination marker
+  // Add destination marker first
   addDestinationMarker();
   
   // Get current location and set up navigation
   if (userLocation) {
     addCurrentLocationMarker();
-    calculateAndDisplayRoute(); // Use real routing instead of direct path
     
-    // Fit map to show both locations
-    fitMapToMarkers();
+    // Small delay to ensure markers are rendered before routing
+    setTimeout(() => {
+      calculateAndDisplayRoute();
+      fitMapToMarkers();
+    }, 500);
+  } else {
+    // If no current location, just center map on destination
+    map.setCenter({ lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) });
+    map.setZoom(15);
   }
 }
 
@@ -560,38 +560,52 @@ function initializeNavigation() {
 function addDestinationMarker() {
   if (!destination || !map) return;
   
-  // Create red destination marker
+  console.log('Adding destination marker at:', destination);
+  
+  // Remove existing destination marker if present
+  if (destinationMarker) {
+    map.removeObject(destinationMarker);
+  }
+  
+  // Create red destination marker with larger size
   const destIcon = new H.map.Icon(
-    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#dc3545"/></svg>',
-    { size: { w: 24, h: 24 } }
+    '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#dc3545"/></svg>',
+    { size: { w: 32, h: 32 }, anchor: { x: 16, y: 32 } }
   );
   
   destinationMarker = new H.map.Marker(
-    { lat: destination.lat, lng: destination.lng },
+    { lat: parseFloat(destination.lat), lng: parseFloat(destination.lng) },
     { icon: destIcon }
   );
   
   map.addObject(destinationMarker);
-  console.log('Destination marker added');
+  console.log('Destination marker added successfully');
 }
 
 // Add current location marker
 function addCurrentLocationMarker() {
   if (!userLocation || !map) return;
   
-  // Create blue current location marker
+  console.log('Adding current location marker at:', userLocation);
+  
+  // Remove existing current location marker if present
+  if (currentLocationMarker) {
+    map.removeObject(currentLocationMarker);
+  }
+  
+  // Create blue current location marker with larger size
   const currentIcon = new H.map.Icon(
-    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="#007bff" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>',
-    { size: { w: 20, h: 20 } }
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#007bff" stroke="#fff" stroke-width="3"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg>',
+    { size: { w: 24, h: 24 }, anchor: { x: 12, y: 12 } }
   );
   
   currentLocationMarker = new H.map.Marker(
-    { lat: userLocation.lat, lng: userLocation.lng },
+    { lat: parseFloat(userLocation.lat), lng: parseFloat(userLocation.lng) },
     { icon: currentIcon }
   );
   
   map.addObject(currentLocationMarker);
-  console.log('Current location marker added');
+  console.log('Current location marker added successfully');
 }
 
 // Calculate and display route using HERE Maps API
@@ -668,6 +682,16 @@ function displayHereRoute(route) {
   routeGroup.addObject(routeLine);
   map.addObject(routeGroup);
   
+  // Ensure markers are visible above the route by re-adding them
+  if (destinationMarker) {
+    map.removeObject(destinationMarker);
+    map.addObject(destinationMarker);
+  }
+  if (currentLocationMarker) {
+    map.removeObject(currentLocationMarker);
+    map.addObject(currentLocationMarker);
+  }
+  
   // Get route summary
   const summary = section.summary;
   const distanceInMeters = summary.length;
@@ -719,6 +743,16 @@ function displayDirectPath() {
   routeGroup.addObject(routeLine);
   map.addObject(routeGroup);
   
+  // Ensure markers are visible above the route by re-adding them
+  if (destinationMarker) {
+    map.removeObject(destinationMarker);
+    map.addObject(destinationMarker);
+  }
+  if (currentLocationMarker) {
+    map.removeObject(currentLocationMarker);
+    map.addObject(currentLocationMarker);
+  }
+  
   // Calculate and display travel info
   const distance = calculateDistance(userLocation, destination);
   const estimatedTime = calculateTravelTime(distance * 1000);
@@ -766,16 +800,15 @@ function fitMapToRoute() {
 function updateCurrentLocationMarker(newLocation) {
   if (!map) return;
   
-  if (currentLocationMarker) {
-    map.removeObject(currentLocationMarker);
-  }
-  
   userLocation = newLocation;
   addCurrentLocationMarker();
   
   // Update route if destination exists
   if (destination) {
-    calculateAndDisplayRoute(); // Use real routing
+    // Small delay to ensure marker is updated before routing
+    setTimeout(() => {
+      calculateAndDisplayRoute();
+    }, 100);
   }
 }
 
