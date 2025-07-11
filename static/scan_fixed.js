@@ -824,32 +824,23 @@ function displayRoute(route) {
   updateTravelTimeDisplay(timeInSeconds, distanceInMeters);
   
   console.log(`Route displayed: ${(distanceInMeters/1000).toFixed(1)} km, ${Math.round(timeInSeconds/60)} minutes`);
-      group.addObject(currentLocationMarker);
-      group.addObject(destinationMarker);
-      map.getViewPort().setViewBounds(group.getBounds());
-    } catch (error) {
-      console.log('Map viewport adjustment failed:', error);
-    }
-  }
 }
 
-// Display route on map
-function displayRoute(route) {
-  if (!route || !map) return;
+// Display direct path between two points
+function displayDirectPath() {
+  if (!userLocation || !destination || !map) return;
+  
+  console.log('Drawing direct path between locations');
   
   // Remove existing route if present
   if (routeGroup) {
     map.removeObject(routeGroup);
   }
   
-  // Create route polyline
-  const routeShape = route.shape;
+  // Create a direct line between current location and destination
   const lineString = new H.geo.LineString();
-  
-  routeShape.forEach((point) => {
-    const parts = point.split(',');
-    lineString.pushPoint(parseFloat(parts[0]), parseFloat(parts[1]));
-  });
+  lineString.pushPoint(userLocation.lat, userLocation.lng);
+  lineString.pushPoint(destination.lat, destination.lng);
   
   // Create route line in blue color with enhanced styling
   const routeLine = new H.map.Polyline(lineString, {
@@ -868,70 +859,78 @@ function displayRoute(route) {
   routeGroup.addObject(routeLine);
   map.addObject(routeGroup);
   
-  // Calculate and display travel time
-  const routeDistance = route.summary.distance; // in meters
-  const routeTime = route.summary.travelTime; // in seconds
-  
-  // Calculate travel time based on route info or use default speed
-  const estimatedTime = calculateTravelTime(routeDistance, routeTime);
-  
-  // Update UI with travel time
-  updateTravelTimeDisplay(estimatedTime, routeDistance);
-  
-  console.log('Blue route displayed on map with travel time:', estimatedTime, 'seconds');
-  showStatus(`Blue route generated successfully - ${(routeDistance/1000).toFixed(1)} km route`, 'success');
-}
-
-// Display direct path if routing fails
-function displayDirectPath() {
-  console.log('displayDirectPath called with:', { userLocation, destination, map: !!map, fallbackMode: window.fallbackMode });
-  
-  if (!userLocation || !destination) {
-    console.error('Missing required data for direct path:', { userLocation, destination });
-    return;
-  }
-  
-  // Parse and validate coordinates
-  const fromLat = parseFloat(userLocation.lat);
-  const fromLng = parseFloat(userLocation.lng);
-  const toLat = parseFloat(destination.lat);
-  const toLng = parseFloat(destination.lng);
-  
-  console.log('Parsed coordinates:', { fromLat, fromLng, toLat, toLng });
-  
-  if (isNaN(fromLat) || isNaN(fromLng) || isNaN(toLat) || isNaN(toLng)) {
-    console.error('Invalid coordinates for direct path:', { fromLat, fromLng, toLat, toLng });
-    return;
-  }
-  
-  // Calculate distance and travel time
-  const distance = calculateDistance(
-    { lat: fromLat, lng: fromLng },
-    { lat: toLat, lng: toLng }
-  );
-  
-  const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
+  // Calculate distance between the two points  
+  const distance = calculateDistance(userLocation, destination);
+  const estimatedTime = calculateTravelTime(distance * 1000);
   
   // Update UI with travel time
   updateTravelTimeDisplay(estimatedTime, distance * 1000);
   
-  // Check if we're in fallback mode
-  if (window.fallbackMode && window.mapCanvas && window.mapContext) {
-    drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance);
-  } else if (map) {
-    // Try to use HERE Maps
-    try {
-      // Remove existing route if present
-      if (routeGroup) {
-        map.removeObject(routeGroup);
-      }
-      
-      // Create direct line with validated coordinates
-      const lineString = new H.geo.LineString();
-      lineString.pushPoint(fromLat, fromLng);
-      lineString.pushPoint(toLat, toLng);
-      
-      // Create blue direct line
+  console.log('Direct path displayed on map');
+  showStatus(`Direct route: ${distance.toFixed(1)} km`, 'success');
+  
+  // Fit map to show both points
+  try {
+    const group = new H.map.Group();
+    group.addObject(currentLocationMarker);
+    group.addObject(destinationMarker);
+    map.getViewModel().setLookAtData({
+      bounds: group.getBoundingBox()
+    });
+  } catch (error) {
+    console.log('Map viewport adjustment failed:', error);
+  }
+}
+
+// Fallback function for when HERE Maps is not available
+function drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance) {
+  console.log('Drawing fallback route on canvas');
+  
+  const canvas = window.mapCanvas;
+  const ctx = window.mapContext;
+  
+  if (!canvas || !ctx) return;
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw a simple map representation
+  ctx.fillStyle = '#f0f0f0';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Calculate positions for markers (simplified)
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const offsetX = 100;
+  const offsetY = 50;
+  
+  // Draw destination marker (red)
+  ctx.fillStyle = '#dc3545';
+  ctx.beginPath();
+  ctx.arc(centerX - offsetX, centerY - offsetY, 8, 0, 2 * Math.PI);
+  ctx.fill();
+  
+  // Draw current location marker (blue)
+  ctx.fillStyle = '#007bff';
+  ctx.beginPath();
+  ctx.arc(centerX + offsetX, centerY + offsetY, 8, 0, 2 * Math.PI);
+  ctx.fill();
+  
+  // Draw route line (blue)
+  ctx.strokeStyle = '#007bff';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(centerX - offsetX, centerY - offsetY);
+  ctx.lineTo(centerX + offsetX, centerY + offsetY);
+  ctx.stroke();
+  
+  // Add labels
+  ctx.fillStyle = '#333';
+  ctx.font = '14px Arial';
+  ctx.fillText('Destination', centerX - offsetX - 40, centerY - offsetY - 15);
+  ctx.fillText('Current Location', centerX + offsetX - 50, centerY + offsetY + 25);
+  
+  console.log('Fallback route drawn on canvas');
       const directLine = new H.map.Polyline(lineString, {
         style: {
           strokeColor: '#007bff',
