@@ -213,9 +213,12 @@ def store_live_location():
     try:
         data = request.get_json()
         
-        # Get user email from the request
-        user_email = data.get('user_email')
+        # Get user email from the request (check both keys for compatibility)
+        user_email = data.get('user_email') or data.get('email')
+        app.logger.info(f"Store live location request - user_email: {user_email}, data: {data}")
+        
         if not user_email:
+            app.logger.error("User email is missing from request")
             return jsonify({'message': 'User email is required'}), 400
         
         # Try to initialize MongoDB if not connected

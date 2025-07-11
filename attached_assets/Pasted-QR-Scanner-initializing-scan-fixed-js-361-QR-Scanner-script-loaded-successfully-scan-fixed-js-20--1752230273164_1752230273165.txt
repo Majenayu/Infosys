@@ -1,0 +1,76 @@
+QR Scanner initializing...
+scan_fixed.js:361 QR Scanner script loaded successfully
+scan_fixed.js:20 Page loaded, initializing QR scanner...
+scan_fixed.js:161 Starting automatic location tracking...
+scan_fixed.js:44 QR Scanner initialized successfully
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+scan_fixed.js:94 QR Code detected: {"name":"Mangaluru, Karnataka, India","address":"Mangaluru, Karnataka, India","latitude":12.89789,"longitude":74.8454,"googleMapsUrl":"https://www.google.com/maps?q=12.89789,74.8454","hereMapsUrl":"https://wego.here.com/directions/mix/12.89789,74.8454","timestamp":"2025-07-11T10:36:01.280Z","qr_id":"9957"}
+scan_fixed.js:105 QR ID stored for location tracking: 9957
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+store-live-location:1  Failed to load resource: the server responded with a status of 400 (Bad Request)Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239Understand this error
+scan_fixed.js:228  POST https://3e491948-0996-4036-b823-123981961aba-00-1cx5tpo1m87db.sisko.replit.dev/store-live-location 400 (Bad Request)
+sendLocationToServer @ scan_fixed.js:228
+(anonymous) @ scan_fixed.js:193Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239
+await in sendLocationToServer
+(anonymous) @ scan_fixed.js:193Understand this error
+scan_fixed.js:228  POST https://3e491948-0996-4036-b823-123981961aba-00-1cx5tpo1m87db.sisko.replit.dev/store-live-location 400 (Bad Request)
+sendLocationToServer @ scan_fixed.js:228
+(anonymous) @ scan_fixed.js:193Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239
+await in sendLocationToServer
+(anonymous) @ scan_fixed.js:193Understand this error
+scan_fixed.js:228  POST https://3e491948-0996-4036-b823-123981961aba-00-1cx5tpo1m87db.sisko.replit.dev/store-live-location 400 (Bad Request)
+sendLocationToServer @ scan_fixed.js:228
+(anonymous) @ scan_fixed.js:193Understand this error
+scan_fixed.js:239 Failed to update live location
+sendLocationToServer @ scan_fixed.js:239
+await in sendLocationToServer
+(anonymous) @ scan_fixed.js:193Understand this error

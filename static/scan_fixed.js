@@ -217,13 +217,19 @@ async function sendLocationToServer(location) {
     if (deliveryPartner) {
       const partner = JSON.parse(deliveryPartner);
       email = partner.email;
+      console.log('Found delivery partner:', email);
+    } else {
+      console.log('No delivery partner found in localStorage');
     }
     
     const data = {
       ...location,
-      email: email,
+      user_email: email,
+      email: email, // Keep both for compatibility
       qr_id: currentQRId
     };
+    
+    console.log('Sending location data:', data);
     
     const response = await fetch('/store-live-location', {
       method: 'POST',
@@ -236,7 +242,9 @@ async function sendLocationToServer(location) {
     if (response.ok) {
       console.log('Live location updated successfully');
     } else {
-      console.error('Failed to update live location');
+      console.error('Failed to update live location - Status:', response.status);
+      const errorText = await response.text();
+      console.error('Error details:', errorText);
     }
     
   } catch (error) {
