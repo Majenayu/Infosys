@@ -338,7 +338,8 @@ const generateQR = (name, address, coords) => {
     longitude: coords.lng,
     googleMapsUrl: `https://www.google.com/maps?q=${coords.lat},${coords.lng}`,
     hereMapsUrl: `https://wego.here.com/directions/mix/${coords.lat},${coords.lng}`,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    qr_id: null // Will be set after server response
   };
 
   try {
@@ -393,6 +394,23 @@ const storeLocationData = async (data) => {
           currentLocation.qr_id = result.qr_id;
           downloadBtn.setAttribute('data-qr-id', result.qr_id);
         }
+        
+        // Regenerate QR code with the QR ID included
+        const updatedData = {
+          ...data,
+          qr_id: result.qr_id
+        };
+        
+        // Clear and regenerate QR code with updated data
+        qrContainer.innerHTML = '';
+        currentQR = new QRCode(qrContainer, {
+          text: JSON.stringify(updatedData),
+          width: 200,
+          height: 200,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
       }
     } else {
       const error = await response.json();

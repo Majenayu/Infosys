@@ -229,13 +229,31 @@ def store_live_location():
         user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
         user_collection = mongo_client.get_database("tracksmart").get_collection(user_collection_name)
         
+        # Check if QR ID is provided for specific QR collection tracking
+        qr_id = data.get('qr_id')
+        
         # Create location document to update/insert
         location_doc = {
             'latitude': data['latitude'],
             'longitude': data['longitude'],
             'timestamp': datetime.utcnow(),
-            'type': 'current_location'
+            'type': 'current_location',
+            'user_email': user_email
         }
+        
+        # Store in QR-specific collection if QR ID is provided
+        if qr_id:
+            # Also store in the QR-specific collection
+            qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
+            qr_location_doc = {
+                'latitude': data['latitude'],
+                'longitude': data['longitude'],
+                'timestamp': datetime.utcnow(),
+                'type': 'delivery_location',
+                'user_email': user_email,
+                'qr_id': qr_id
+            }
+            qr_collection.insert_one(qr_location_doc)
         
         # Update or insert the current location (only keep one current location record)
         result = user_collection.update_one(

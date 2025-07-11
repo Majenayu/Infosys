@@ -241,6 +241,12 @@ const onScanSuccess = (decodedText, decodedResult) => {
         address: locationData.address || 'Unknown Address'
       };
 
+      // Store QR ID for location tracking
+      if (locationData.qr_id) {
+        localStorage.setItem('currentQRId', locationData.qr_id);
+        console.log('QR ID stored for location tracking:', locationData.qr_id);
+      }
+
       // Update destination info
       destinationInfoSpan.textContent = `${destination.name} - ${destination.address}`;
       
@@ -253,7 +259,8 @@ const onScanSuccess = (decodedText, decodedResult) => {
       // Stop scanning after successful scan
       stopScanning();
       
-      showStatus(`QR code scanned successfully! Destination: ${destination.name}`, 'success');
+      const qrIdMessage = locationData.qr_id ? ` (QR ID: ${locationData.qr_id})` : '';
+      showStatus(`QR code scanned successfully! Destination: ${destination.name}${qrIdMessage}`, 'success');
     } else {
       throw new Error('Invalid location data in QR code');
     }
@@ -604,11 +611,15 @@ const sendLiveLocation = async (locationData) => {
       return;
     }
     
+    // Get current QR ID if available (from scanned QR code)
+    const currentQRId = localStorage.getItem('currentQRId');
+    
     const data = {
       latitude: locationData.latitude,
       longitude: locationData.longitude,
       timestamp: new Date().toISOString(),
-      user_email: userEmail
+      user_email: userEmail,
+      qr_id: currentQRId // Include QR ID if available
     };
     
     const response = await fetch('/store-live-location', {
@@ -651,7 +662,8 @@ const testSampleLocation = () => {
     longitude: 77.5946,
     googleMapsUrl: "https://www.google.com/maps?q=12.9716,77.5946",
     hereMapsUrl: "https://wego.here.com/directions/mix/12.9716,77.5946",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    qr_id: "1234" // Sample QR ID for testing
   });
   
   onScanSuccess(sampleQRData);

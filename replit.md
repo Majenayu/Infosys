@@ -107,7 +107,15 @@ Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB colle
    - QR ID displayed to user and included in download filename
    - Location data stored in both main locations collection and individual QR collection
    - Prevents duplicate ID generation with collision detection
+   - QR ID now embedded in QR code JSON data for proper scanning
    - Status: Fully functional with MongoDB collection creation and unique ID management
+
+6. **Live Location Tracking in QR Collections** (FULLY IMPLEMENTED & WORKING)
+   - Driver location data now stored in QR-specific collections when QR code is scanned
+   - QR ID extracted from scanned QR code and stored in localStorage
+   - Location updates sent to both user's delivery collection and QR-specific collection
+   - Enables tracking delivery progress for specific QR codes
+   - Status: Fully functional with dual collection storage system
 
 ### API Integration
 - **HERE Maps API**: Provides mapping, geocoding, and search functionality
