@@ -17,6 +17,7 @@ mongo_client = None
 companies_collection = None
 locations_collection = None
 live_locations_collection = None
+mongo_connected = False
 
 # Routes
 @app.route('/')
@@ -120,9 +121,16 @@ def store_live_location():
         if not user_email:
             return jsonify({'message': 'User email is required'}), 400
         
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
         # Get user's individual collection
         user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
-        user_collection = db[user_collection_name]
+        user_collection = mongo_client.get_database("tracksmart").get_collection(user_collection_name)
         
         # Create location document to update/insert
         location_doc = {
@@ -307,7 +315,7 @@ def delivery_login():
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():
     """Initialize MongoDB connection"""
-    global mongo_client, companies_collection, locations_collection, live_locations_collection
+    global mongo_client, companies_collection, locations_collection, live_locations_collection, mongo_connected
     
     try:
         from pymongo import MongoClient
@@ -322,11 +330,13 @@ def initialize_mongodb():
         # Test connection
         mongo_client.admin.command('ping')
         app.logger.info("MongoDB connected successfully")
+        mongo_connected = True
         return True
     except Exception as e:
         app.logger.error(f"MongoDB connection failed: {e}")
         app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
         return False
 
 # Try to initialize MongoDB on startup
-mongo_connected = initialize_mongodb()
+initialize_mongodb()
