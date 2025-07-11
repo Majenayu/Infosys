@@ -55,6 +55,16 @@ def delivery_page():
     """Delivery partner login/register page"""
     return render_template('delivery.html')
 
+@app.route('/user')
+def user_page():
+    """User login/register page"""
+    return render_template('user.html')
+
+@app.route('/user/dashboard')
+def user_dashboard():
+    """User dashboard page"""
+    return render_template('user_dashboard.html')
+
 @app.route('/register-company', methods=['POST'])
 def register_company():
     """Register a new logistics company"""
@@ -448,6 +458,180 @@ def delivery_login():
     except Exception as e:
         app.logger.error(f"Error logging in delivery partner: {str(e)}")
         return jsonify({'message': 'Login failed'}), 500
+
+@app.route('/user/register', methods=['POST'])
+def user_register():
+    """Register a new user"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'email', 'phone', 'address', 'password']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'message': f'Missing required field: {field}'}), 400
+        
+        # Basic email validation
+        import re
+        if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', data['email']):
+            return jsonify({'message': 'Invalid email format'}), 400
+        
+        email = data['email'].lower()
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Check if user already exists
+                users_collection = mongo_client.get_database("tracksmart").get_collection("users")
+                existing_user = users_collection.find_one({'email': email})
+                
+                if existing_user:
+                    return jsonify({'message': 'Email already registered'}), 400
+                
+                # Create user document
+                user = {
+                    'name': data['name'],
+                    'email': email,
+                    'phone': data['phone'],
+                    'address': data['address'],
+                    'password': data['password'],  # In production, hash this password
+                    'created_at': datetime.utcnow(),
+                    'active': True,
+                    'tracking_history': []
+                }
+                
+                # Store in users collection
+                result = users_collection.insert_one(user)
+                
+                app.logger.info(f"User registered: {data['name']} ({email})")
+                
+                return jsonify({
+                    'message': 'User registered successfully!',
+                    'user_id': str(result.inserted_id)
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error during user registration: {str(db_error)}")
+                return jsonify({'message': 'Database error during registration'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot register user")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error registering user: {str(e)}")
+        return jsonify({'message': 'Registration failed'}), 500
+
+@app.route('/user/login', methods=['POST'])
+def user_login():
+    """Login user"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'message': 'Email and password are required'}), 400
+        
+        email = data['email'].lower()
+        password = data['password']
+        
+        app.logger.info(f"User login attempt: {email}")
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Find user in database
+                users_collection = mongo_client.get_database("tracksmart").get_collection("users")
+                user = users_collection.find_one({'email': email})
+                
+                if not user:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check password (in production, use hashed passwords)
+                if user['password'] != password:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check if user is active
+                if not user.get('active', False):
+                    return jsonify({'message': 'Account is deactivated'}), 401
+                
+                # Prepare user data for response
+                user_data = {
+                    'id': str(user['_id']),
+                    'name': user['name'],
+                    'email': user['email'],
+                    'phone': user['phone'],
+                    'address': user['address'],
+                    'active': user['active']
+                }
+                
+                app.logger.info(f"User login successful: {user['name']} ({email})")
+                
+                return jsonify({
+                    'message': 'Login successful!',
+                    'user': user_data
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error during user login: {str(db_error)}")
+                return jsonify({'message': 'Database error during login'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot login user")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error logging in user: {str(e)}")
+        return jsonify({'message': 'Login failed'}), 500
+
+@app.route('/api/qr-code/<qr_id>')
+def get_qr_code_data(qr_id):
+    """Get QR code data by 4-digit ID"""
+    try:
+        if not qr_id or len(qr_id) != 4 or not qr_id.isdigit():
+            return jsonify({'message': 'Invalid QR code format. Must be 4 digits.'}), 400
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Look for QR code in the specific collection named after the QR ID
+                qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
+                qr_data = qr_collection.find_one({'type': 'qr_info'})
+                
+                if not qr_data:
+                    return jsonify({'message': 'QR code not found'}), 404
+                
+                # Return QR code information
+                response_data = {
+                    'qr_id': qr_data.get('qr_id', qr_id),
+                    'location_name': qr_data.get('location_name', ''),
+                    'address': qr_data.get('address', ''),
+                    'coordinates': qr_data.get('coordinates', {}),
+                    'created_at': qr_data.get('created_at'),
+                    'status': qr_data.get('status', 'active')
+                }
+                
+                app.logger.info(f"QR code data retrieved for ID: {qr_id}")
+                
+                return jsonify(response_data)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error retrieving QR code {qr_id}: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot retrieve QR code data")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error retrieving QR code data: {str(e)}")
+        return jsonify({'message': 'Failed to retrieve QR code data'}), 500
 
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - TrackSmart</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  
+  <!-- Bootstrap CSS with Replit dark theme -->
+  <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <div class="text-center mb-4">
+          <h1 class="display-4 mb-3">🎯 User Dashboard</h1>
+          <p class="lead">Enter 4-digit QR code to track delivery</p>
+        </div>
+        
+        <!-- User Info -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 class="card-title mb-1">Welcome, <span id="userName">User</span>!</h5>
+                <p class="card-text text-muted mb-0">
+                  <span id="userEmail">user@example.com</span> | 
+                  <span id="userPhone">+1234567890</span>
+                </p>
+              </div>
+              <div>
+                <button id="logoutBtn" class="btn btn-outline-danger">Logout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert for messages -->
+        <div id="alertContainer" class="mb-4" style="display: none;">
+          <div id="alert" class="alert alert-dismissible fade show" role="alert">
+            <span id="alertMessage"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+
+        <!-- QR Code Entry -->
+        <div class="card shadow">
+          <div class="card-header">
+            <h3 class="card-title mb-0">🔍 Track Your Delivery</h3>
+          </div>
+          <div class="card-body">
+            <form id="qrCodeForm">
+              <div class="row g-3">
+                <div class="col-md-8">
+                  <label for="qrCodeInput" class="form-label">4-Digit QR Code</label>
+                  <input type="text" class="form-control form-control-lg" id="qrCodeInput" 
+                         placeholder="Enter 4-digit code (e.g., 1234)" 
+                         pattern="[0-9]{4}" 
+                         maxlength="4" 
+                         required>
+                  <div class="form-text">Enter the 4-digit code from your QR code</div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                  <button type="submit" class="btn btn-primary btn-lg w-100">
+                    Go 🚀
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Recent Tracking History (if any) -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h5 class="card-title mb-0">📋 Recent Tracking</h5>
+          </div>
+          <div class="card-body">
+            <div id="trackingHistory">
+              <p class="text-muted text-center">No recent tracking history available</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+            ← Back to Home
+          </a>
+          <a href="{{ url_for('qr_generator') }}" class="btn btn-outline-info">
+            QR Generator
+          </a>
+          <a href="{{ url_for('qr_scanner') }}" class="btn btn-outline-warning">
+            QR Scanner
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- User Dashboard Script -->
+  <script src="{{ url_for('static', filename='user_dashboard.js') }}"></script>
+</body>
+</html>
