@@ -76,6 +76,7 @@ class DeliveryAuth {
                 
                 // Store user data in localStorage
                 localStorage.setItem('deliveryPartner', JSON.stringify(data.user));
+                localStorage.setItem('deliveryUserEmail', data.user.email);
                 
                 // Redirect to scan page after a short delay
                 setTimeout(() => {

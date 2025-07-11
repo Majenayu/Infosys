@@ -111,16 +111,39 @@ def get_companies():
 
 @app.route('/store-live-location', methods=['POST'])
 def store_live_location():
-    """Store live location data"""
+    """Store live location data in individual user collection"""
     try:
         data = request.get_json()
         
-        # For now, just return success without database operations
-        app.logger.info(f"Live location storage request: {data.get('latitude', 'Unknown')}, {data.get('longitude', 'Unknown')}")
+        # Get user email from the request
+        user_email = data.get('user_email')
+        if not user_email:
+            return jsonify({'message': 'User email is required'}), 400
+        
+        # Get user's individual collection
+        user_collection_name = f"delivery_{user_email.replace('@', '_at_').replace('.', '_dot_')}"
+        user_collection = db[user_collection_name]
+        
+        # Create location document to update/insert
+        location_doc = {
+            'latitude': data['latitude'],
+            'longitude': data['longitude'],
+            'timestamp': datetime.utcnow(),
+            'type': 'current_location'
+        }
+        
+        # Update or insert the current location (only keep one current location record)
+        result = user_collection.update_one(
+            {'type': 'current_location'},
+            {'$set': location_doc},
+            upsert=True
+        )
+        
+        app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}")
         
         return jsonify({
-            'message': 'Live location data received successfully!',
-            'note': 'Database storage will be activated once MongoDB connection is established'
+            'message': 'Live location updated successfully!',
+            'updated': result.modified_count > 0 or result.upserted_id is not None
         })
         
     except Exception as e:

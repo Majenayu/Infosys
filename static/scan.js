@@ -14,7 +14,6 @@ let isTracking = false;
 // DOM Elements
 const startScanBtn = document.getElementById('startScanBtn');
 const stopScanBtn = document.getElementById('stopScanBtn');
-const trackLocationBtn = document.getElementById('trackLocationBtn');
 const currentLocationSpan = document.getElementById('currentLocation');
 const destinationInfoSpan = document.getElementById('destinationInfo');
 const trackingStatusSpan = document.getElementById('trackingStatus');
@@ -86,23 +85,22 @@ const checkCameraSupport = async () => {
       return false;
     }
     
-    // First try to get camera devices
+    // Test basic camera access
     try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const hasCamera = devices.some(device => device.kind === 'videoinput');
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          facingMode: { ideal: 'environment' }
+        } 
+      });
       
-      if (!hasCamera) {
-        console.warn('No camera devices found');
-        return false;
-      }
+      // Stop the stream immediately after testing
+      stream.getTracks().forEach(track => track.stop());
+      console.log('Camera access confirmed');
+      return true;
       
-      console.log('Camera devices found, permission test skipped for better UX');
-      return true; // Return true if cameras are available, let user grant permission when needed
-      
-    } catch (enumError) {
-      console.warn('Could not enumerate devices:', enumError.message);
-      // Fall back to basic support check
-      return true; // Still try to use camera
+    } catch (accessError) {
+      console.warn('Camera access denied or unavailable:', accessError.message);
+      return false;
     }
   } catch (error) {
     console.warn('Camera support check failed:', error.message);
@@ -598,17 +596,32 @@ const decodeHerePolyline = (polyline) => {
 // Send live location to server
 const sendLiveLocation = async (locationData) => {
   try {
-    const response = await fetch('/live-location', {
+    // Get user email from localStorage (set during login)
+    const userEmail = localStorage.getItem('deliveryUserEmail');
+    
+    if (!userEmail) {
+      console.warn('No user email found, cannot store location');
+      return;
+    }
+    
+    const data = {
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+      timestamp: new Date().toISOString(),
+      user_email: userEmail
+    };
+    
+    const response = await fetch('/store-live-location', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(locationData)
+      body: JSON.stringify(data)
     });
 
     if (!response.ok) {
       throw new Error('Failed to send location');
     }
 
-    console.log('Live location sent successfully');
+    console.log('Live location updated successfully');
   } catch (error) {
     console.error('Failed to send live location:', error);
   }
@@ -759,8 +772,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     stopScanBtn.addEventListener('click', stopScanning);
   }
   
-  if (trackLocationBtn) {
-    trackLocationBtn.addEventListener('click', startLocationTracking);
+  // Auto-start location tracking when page loads
+  initializeLocationTracking();
+
+  // Initialize location tracking function
+  function initializeLocationTracking() {
+    if (navigator.geolocation) {
+      console.log('Starting automatic location tracking...');
+      
+      // Get initial location
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const locationData = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          
+          // Update UI
+          if (currentLocationSpan) {
+            currentLocationSpan.textContent = `${locationData.latitude.toFixed(6)}, ${locationData.longitude.toFixed(6)}`;
+          }
+          
+          // Send to server
+          sendLiveLocation(locationData);
+          
+          if (trackingStatusSpan) {
+            trackingStatusSpan.textContent = 'Location tracking active';
+          }
+        },
+        (error) => {
+          console.error('Error getting initial location:', error);
+          if (trackingStatusSpan) {
+            trackingStatusSpan.textContent = 'Location access denied';
+          }
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+      
+      // Watch position changes
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const locationData = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          
+          // Update UI
+          if (currentLocationSpan) {
+            currentLocationSpan.textContent = `${locationData.latitude.toFixed(6)}, ${locationData.longitude.toFixed(6)}`;
+          }
+          
+          // Send to server
+          sendLiveLocation(locationData);
+        },
+        (error) => {
+          console.error('Error watching location:', error);
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 30000 }
+      );
+      
+      // Store watchId for cleanup
+      trackingInterval = watchId;
+    } else {
+      console.warn('Geolocation not supported');
+      if (trackingStatusSpan) {
+        trackingStatusSpan.textContent = 'Geolocation not supported';
+      }
+    }
   }
   
   if (processManualBtn) {

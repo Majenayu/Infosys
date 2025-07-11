@@ -12,6 +12,8 @@ Priority: Functional QR code file upload from device
 Priority: Avoid HERE Maps API rate limiting issues
 Added: Delivery partner login/register system with individual MongoDB collections per user
 Added: Navigation integration with "Delivery Boy" button replacing QR scanner navigation
+Added: Automatic location tracking instead of manual "Track Location" button
+Added: Location data stored in individual user collections, not common collection
 
 ## System Architecture
 
@@ -87,6 +89,15 @@ Added: Navigation integration with "Delivery Boy" button replacing QR scanner na
    - Successful login redirects to scan page
    - Integrated navigation across all pages with "Delivery Boy" button
    - Status: Fully functional with verified database operations
+
+4. **Automatic Location Tracking** (FULLY IMPLEMENTED & WORKING)
+   - Removed manual "Track Location" button from QR scanner page
+   - Automatic location tracking starts when scan page loads
+   - Location data stored in individual user collections (not common collection)
+   - Uses delivery partner email for collection targeting
+   - Updates existing location data instead of creating multiple entries
+   - Camera access improvements for better QR scanning experience
+   - Status: Fully functional with MongoDB individual collection storage
 
 ### API Integration
 - **HERE Maps API**: Provides mapping, geocoding, and search functionality
