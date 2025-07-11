@@ -26,10 +26,13 @@ const qrFileInput = document.getElementById('qrFileInput');
 
 // Initialize HERE Maps
 const initializeMap = () => {
-  // Add rate limiting delay to prevent API abuse
-  setTimeout(() => {
-    initializeMapWithDelay();
-  }, 2000); // Increased delay to ensure scripts load
+  // Skip HERE Maps for now and use fallback
+  console.log('Skipping HERE Maps initialization, using fallback...');
+  const mapContainer = document.getElementById('mapContainer');
+  if (mapContainer) {
+    mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;"><div><h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5><p>QR Scanner is ready to use<br>Map will display destination after scanning</p></div></div>';
+    showStatus('Scanner ready - Map will show after QR scan.', 'success');
+  }
 };
 
 const initializeMapWithDelay = () => {
@@ -41,7 +44,7 @@ const initializeMapWithDelay = () => {
       throw new Error('HERE Maps API not loaded');
     }
     
-    // Initialize HERE platform and map with minimal setup
+    // Initialize HERE platform with minimal setup
     platform = new H.service.Platform({
       'apikey': API_KEYS[currentApiKeyIndex]
     });
@@ -52,23 +55,14 @@ const initializeMapWithDelay = () => {
     // Initialize map container
     const mapContainer = document.getElementById('mapContainer');
     if (mapContainer) {
-      // Create HERE map with road view
+      // Create HERE map with minimal configuration
       map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
         zoom: 10,
         center: { lat: 12.3052, lng: 76.65532 } // Default center
       });
       
-      // Enable map interaction
-      const behavior = new H.mapevents.Behavior(map);
-      ui = H.ui.UI.createDefault(map);
-      
-      // Configure UI to show road map like Google Maps
-      if (ui.getControl('mapsettings')) {
-        ui.getControl('mapsettings').setAlignment('top-right');
-      }
-      
-      console.log('HERE Maps initialized successfully with road view');
-      showStatus('Scanner ready with road map visualization.', 'success');
+      console.log('HERE Maps initialized successfully (basic mode)');
+      showStatus('Scanner ready with map visualization.', 'success');
     }
     
   } catch (error) {
@@ -794,36 +788,16 @@ window.addEventListener('beforeunload', () => {
   }
 });
 
-// Window load backup
+// Window load backup - simplified
 window.addEventListener('load', () => {
-  // Wait for HERE Maps to be available
-  let attempts = 0;
-  const maxAttempts = 10;
+  console.log('Page loaded, ensuring UI is ready...');
   
-  const checkAndInitialize = () => {
-    attempts++;
-    
-    if (typeof H !== 'undefined' && !map) {
-      console.log('HERE Maps available, initializing...');
-      initializeMapWithDelay();
-    } else if (attempts < maxAttempts) {
-      console.log(`Waiting for HERE Maps... (${attempts}/${maxAttempts})`);
-      setTimeout(checkAndInitialize, 1000);
-    } else {
-      console.log('HERE Maps not available after 10 attempts, using fallback');
-      const mapContainer = document.getElementById('mapContainer');
-      if (mapContainer) {
-        mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center;">Map service temporarily unavailable<br>QR scanning is still functional</div>';
-      }
-    }
-  };
-  
-  checkAndInitialize();
-  
-  // Ensure map is properly sized
+  // Ensure status message is shown
   setTimeout(() => {
-    if (map && map.getViewPort) {
-      map.getViewPort().resize();
+    const statusAlert = document.getElementById('statusAlert');
+    if (statusAlert) {
+      statusAlert.style.display = 'block';
+      statusAlert.classList.add('show');
     }
-  }, 3000);
+  }, 1000);
 });
