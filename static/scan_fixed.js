@@ -514,25 +514,41 @@ async function initializeMap() {
     // Initialize HERE Maps platform
     platform = new H.service.Platform({ apikey: API_KEY });
     
-    // Initialize layers with error handling
-    let defaultLayers;
-    try {
-      defaultLayers = platform.createDefaultLayers();
-    } catch (layerError) {
-      console.warn('Vector layers failed, trying fallback approach:', layerError);
-      showStatus('Map loading with reduced functionality due to rate limits', 'warning');
-      initializeFallbackMap();
-      return;
-    }
-    
     const mapContainer = document.getElementById('mapContainer');
     if (!mapContainer) {
       throw new Error('Map container not found');
     }
     
-    // Initialize map with fallback layer selection
-    const mapLayer = defaultLayers.vector?.normal?.map || defaultLayers.raster?.normal?.map;
-    if (!mapLayer) {
+    // Initialize layers with enhanced error handling
+    let defaultLayers;
+    try {
+      defaultLayers = platform.createDefaultLayers({
+        tileSize: 512,
+        ppi: 320
+      });
+    } catch (layerError) {
+      console.warn('Standard layers failed, trying alternative approach:', layerError);
+      try {
+        // Try with minimal configuration
+        defaultLayers = platform.createDefaultLayers();
+      } catch (secondError) {
+        console.error('All layer creation attempts failed:', secondError);
+        showStatus('Map loading with reduced functionality due to rate limits', 'warning');
+        initializeFallbackMap();
+        return;
+      }
+    }
+    
+    // Select map layer with multiple fallback options
+    let mapLayer;
+    if (defaultLayers.vector?.normal?.map) {
+      mapLayer = defaultLayers.vector.normal.map;
+    } else if (defaultLayers.raster?.normal?.map) {
+      mapLayer = defaultLayers.raster.normal.map;
+    } else if (defaultLayers.raster?.terrain?.map) {
+      mapLayer = defaultLayers.raster.terrain.map;
+    } else {
+      console.error('No map layers available:', defaultLayers);
       throw new Error('No map layers available');
     }
     
@@ -738,14 +754,24 @@ function displayRoute(route) {
 
 // Display direct path if routing fails
 function displayDirectPath() {
+  console.log('displayDirectPath called with:', { userLocation, destination, map: !!map });
+  
   if (!userLocation || !destination || !map) {
-    console.error('Missing required data for direct path:', { userLocation, destination, map });
+    console.error('Missing required data for direct path:', { userLocation, destination, map: !!map });
     return;
   }
   
-  // Validate coordinates
-  if (!userLocation.lat || !userLocation.lng || !destination.lat || !destination.lng) {
-    console.error('Invalid coordinates for direct path:', { userLocation, destination });
+  // Parse and validate coordinates
+  const fromLat = parseFloat(userLocation.lat);
+  const fromLng = parseFloat(userLocation.lng);
+  const toLat = parseFloat(destination.lat);
+  const toLng = parseFloat(destination.lng);
+  
+  console.log('Parsed coordinates:', { fromLat, fromLng, toLat, toLng });
+  
+  if (isNaN(fromLat) || isNaN(fromLng) || isNaN(toLat) || isNaN(toLng)) {
+    console.error('Invalid coordinates for direct path:', { fromLat, fromLng, toLat, toLng });
+    console.error('Original coordinates:', { userLocation, destination });
     return;
   }
   
@@ -754,41 +780,53 @@ function displayDirectPath() {
     map.removeObject(routeGroup);
   }
   
-  // Create direct line with validated coordinates
-  const lineString = new H.geo.LineString();
-  lineString.pushPoint(parseFloat(userLocation.lat), parseFloat(userLocation.lng));
-  lineString.pushPoint(parseFloat(destination.lat), parseFloat(destination.lng));
-  
-  // Create blue direct line - solid line since this is our primary routing method
-  const directLine = new H.map.Polyline(lineString, {
-    style: {
-      strokeColor: '#007bff',
-      lineWidth: 6,
-      lineCap: 'round',
-      lineJoin: 'round'
-    }
-  });
-  
-  routeGroup = new H.map.Group();
-  routeGroup.addObject(directLine);
-  map.addObject(routeGroup);
-  
-  // Calculate straight-line distance for travel time estimation
-  const distance = calculateDistance(userLocation, destination);
-  const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
-  
-  // Update UI with estimated travel time
-  updateTravelTimeDisplay(estimatedTime, distance * 1000);
-  
-  console.log('Blue route displayed with estimated time:', estimatedTime, 'seconds');
-  console.log('Route details:', {
-    distance: distance.toFixed(2) + ' km',
-    time: Math.round(estimatedTime / 60) + ' minutes',
-    from: userLocation,
-    to: destination
-  });
-  
-  showStatus(`Blue route generated - ${distance.toFixed(1)} km route with ${Math.round(estimatedTime / 60)} min ETA`, 'success');
+  try {
+    // Create direct line with validated coordinates
+    const lineString = new H.geo.LineString();
+    lineString.pushPoint(fromLat, fromLng);
+    lineString.pushPoint(toLat, toLng);
+    
+    // Create blue direct line - solid line since this is our primary routing method
+    const directLine = new H.map.Polyline(lineString, {
+      style: {
+        strokeColor: '#007bff',
+        lineWidth: 6,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }
+    });
+    
+    routeGroup = new H.map.Group();
+    routeGroup.addObject(directLine);
+    map.addObject(routeGroup);
+    
+    console.log('Blue route line added to map successfully');
+    
+    // Calculate straight-line distance for travel time estimation
+    const distance = calculateDistance(
+      { lat: fromLat, lng: fromLng },
+      { lat: toLat, lng: toLng }
+    );
+    
+    const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
+    
+    // Update UI with estimated travel time
+    updateTravelTimeDisplay(estimatedTime, distance * 1000);
+    
+    console.log('Blue route displayed with estimated time:', estimatedTime, 'seconds');
+    console.log('Route details:', {
+      distance: distance.toFixed(2) + ' km',
+      time: Math.round(estimatedTime / 60) + ' minutes',
+      from: { lat: fromLat, lng: fromLng },
+      to: { lat: toLat, lng: toLng }
+    });
+    
+    showStatus(`Blue route generated - ${distance.toFixed(1)} km route with ${Math.round(estimatedTime / 60)} min ETA`, 'success');
+    
+  } catch (error) {
+    console.error('Error creating blue route line:', error);
+    showStatus('Error generating blue route - see console for details', 'error');
+  }
 }
 
 // Update location display

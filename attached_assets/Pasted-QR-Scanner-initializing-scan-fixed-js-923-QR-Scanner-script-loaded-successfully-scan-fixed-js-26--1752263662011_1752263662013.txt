@@ -1,0 +1,54 @@
+QR Scanner initializing...
+scan_fixed.js:923 QR Scanner script loaded successfully
+scan_fixed.js:26 Page loaded, initializing QR scanner...
+scan_fixed.js:509 Initializing navigation map with prioritized API key
+scan_fixed.js:167 Starting automatic location tracking...
+scan_fixed.js:47 QR Scanner initialized successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:556 Error initializing map: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (scan_fixed.js:547:18)
+initializeMap @ scan_fixed.js:556Understand this error
+scan_fixed.js:845 Initializing fallback map functionality
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:97 QR Code detected: {"name":"Mangaluru, Karnataka, India","address":"Mangaluru, Karnataka, India","latitude":12.89789,"longitude":74.8454,"googleMapsUrl":"https://www.google.com/maps?q=12.89789,74.8454","hereMapsUrl":"https://wego.here.com/directions/mix/12.89789,74.8454","timestamp":"2025-07-11T10:36:01.280Z","qr_id":"9957"}
+scan_fixed.js:108 QR ID stored for location tracking: 9957
+scan_fixed.js:566 Initializing navigation to: Object
+scan_fixed.js:613 Destination marker added
+scan_fixed.js:630 Current location obtained: Object
+scan_fixed.js:667 Current location marker added
+scan_fixed.js:674 Calculating route from Object to Object
+scan_fixed.js:678 Using direct path due to API limitations
+mapsjs-core.js:51 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465Understand this warning
+scan_fixed.js:674 Calculating route from Object to Object
+scan_fixed.js:678 Using direct path due to API limitations
+mapsjs-core.js:51 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+mapsjs-core.js:465 Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently
+isTainting @ mapsjs-core.js:465Understand this warning
+scan_fixed.js:674 Calculating route from Object to Object
+scan_fixed.js:678 Using direct path due to API limitations
+mapsjs-core.js:51 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+scan_fixed.js:674 Calculating route from Object to Object
+scan_fixed.js:678 Using direct path due to API limitations
+mapsjs-core.js:51 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)Understand this error
+scan_fixed.js:674 Calculating route from {lat: 12.3381254, lng: 76.6193194} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+scan_fixed.js:678 Using direct path due to API limitations
+mapsjs-core.js:39 Uncaught InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+D @ mapsjs-core.js:39
+Ic @ mapsjs-core.js:51
+Gf @ mapsjs-core.js:118
+K.vg @ mapsjs-core.js:120
+displayDirectPath @ scan_fixed.js:759
+calculateRoute @ scan_fixed.js:679
+updateCurrentLocationMarker @ scan_fixed.js:834
+(anonymous) @ scan_fixed.js:199Understand this error
