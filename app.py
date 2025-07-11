@@ -21,6 +21,7 @@ mongo_connected = False
 
 # HERE Maps API keys for better reliability - prioritized order
 HERE_API_KEYS = [
+    "VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA",
     "qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI",
     "fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE", 
     "KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ",

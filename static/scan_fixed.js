@@ -473,7 +473,7 @@ window.testSampleLocation = testSampleLocation;
 // Initialize HERE Maps with rate limiting handling
 async function initializeMap() {
   try {
-    const API_KEY = 'qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI';
+    const API_KEY = 'VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA';
     console.log('Initializing navigation map with prioritized API key');
     
     // Add delay to avoid rate limiting
