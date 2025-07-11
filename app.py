@@ -306,9 +306,16 @@ def store_live_location():
         
         app.logger.info(f"Live location updated for user {user_email}: {data['latitude']}, {data['longitude']}, QR: {qr_id or 'none'}")
         
+        # Create detailed success message
+        success_message = f"Location stored in delivery collection"
+        if qr_id:
+            success_message += f" and QR collection {qr_id}"
+        
         return jsonify({
-            'message': 'Live location updated successfully!',
-            'updated': result.modified_count > 0 or result.upserted_id is not None
+            'message': success_message,
+            'updated': result.modified_count > 0 or result.upserted_id is not None,
+            'qr_id': qr_id,
+            'collections_updated': 2 if qr_id else 1
         })
         
     except Exception as e:

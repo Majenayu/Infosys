@@ -240,7 +240,13 @@ async function sendLocationToServer(location) {
       throw new Error('Failed to send location to server');
     }
     
-    console.log('Location sent to server successfully');
+    const result = await response.json();
+    console.log('Location sent to server successfully:', result);
+    
+    // Show notification popup for live location update
+    if (result.message) {
+      showLocationUpdateNotification(result.message, currentQRId);
+    }
     
   } catch (error) {
     console.error('Error sending location to server:', error);
@@ -337,6 +343,98 @@ function showStatus(message, type) {
   setTimeout(() => {
     alertElement.style.display = 'none';
   }, 5000);
+}
+
+// Show location update notification popup
+function showLocationUpdateNotification(message, qrId) {
+  // Create notification popup
+  const notification = document.createElement('div');
+  notification.className = 'location-notification';
+  notification.innerHTML = `
+    <div class="notification-content">
+      <div class="notification-icon">📍</div>
+      <div class="notification-text">
+        <strong>Live Location Updated</strong><br>
+        ${message}<br>
+        ${qrId ? `QR ID: ${qrId}` : 'No QR active'}
+      </div>
+      <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+    </div>
+  `;
+  
+  // Add styles
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28a745;
+    color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 9999;
+    max-width: 300px;
+    animation: slideIn 0.3s ease-out;
+  `;
+  
+  // Add CSS animations if not already present
+  if (!document.querySelector('#notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.innerHTML = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+      .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .notification-icon {
+        font-size: 20px;
+      }
+      .notification-text {
+        flex: 1;
+        font-size: 14px;
+      }
+      .notification-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // Add to page
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 4 seconds
+  setTimeout(() => {
+    if (notification && notification.parentElement) {
+      notification.style.animation = 'slideOut 0.3s ease-in';
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, 300);
+    }
+  }, 4000);
+  
+  console.log(`Location notification shown: ${message}, QR: ${qrId || 'none'}`);
 }
 
 // Test with sample location
