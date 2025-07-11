@@ -1,0 +1,106 @@
+QR Scanner initializing...
+scan_fixed.js:961 QR Scanner script loaded successfully
+scan_fixed.js:26 Page loaded, initializing QR scanner...
+scan_fixed.js:509 Initializing navigation map with prioritized API key
+scan_fixed.js:167 Starting automatic location tracking...
+scan_fixed.js:47 QR Scanner initialized successfully
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:572 Error initializing map: TypeError: Cannot read properties of undefined (reading 'raster')
+    at Du (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:140:38)
+    at Au.createDefault (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:138:127)
+    at initializeMap (scan_fixed.js:563:18)
+initializeMap @ scan_fixed.js:572Understand this error
+scan_fixed.js:883 Initializing fallback map functionality
+scan_fixed.js:235 Found delivery partner: a@gmail.com
+scan_fixed.js:249 Sending location data: Object
+scan_fixed.js:260 Live location updated successfully
+scan_fixed.js:97 QR Code detected: {"name":"Mangaluru, Karnataka, India","address":"Mangaluru, Karnataka, India","latitude":12.89789,"longitude":74.8454,"googleMapsUrl":"https://www.google.com/maps?q=12.89789,74.8454","hereMapsUrl":"https://wego.here.com/directions/mix/12.89789,74.8454","timestamp":"2025-07-11T10:36:01.280Z","qr_id":"9957"}
+scan_fixed.js:108 QR ID stored for location tracking: 9957
+scan_fixed.js:582 Initializing navigation to: Object
+scan_fixed.js:629 Destination marker added
+scan_fixed.js:646 Current location obtained: Object
+scan_fixed.js:683 Current location marker added
+scan_fixed.js:690 Calculating route from Object to Object
+scan_fixed.js:694 Using direct path due to API limitations
+scan_fixed.js:757 displayDirectPath called with: Object
+scan_fixed.js:770 Parsed coordinates: Object
+scan_fixed.js:827 Error creating blue route line: InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+    at new D (mapsjs-core.js:39:376)
+    at Ic (mapsjs-core.js:51:290)
+    at Gf (mapsjs-core.js:118:442)
+    at K.vg (mapsjs-core.js:120:71)
+    at displayDirectPath (scan_fixed.js:786:16)
+    at calculateRoute (scan_fixed.js:695:3)
+    at scan_fixed.js:652:7
+displayDirectPath @ scan_fixed.js:827Understand this error
+scan_fixed.js:702 Uncaught TypeError: group.getBounds is not a function
+    at calculateRoute (scan_fixed.js:702:43)
+    at scan_fixed.js:652:7Understand this error
+scan_fixed.js:690 Calculating route from Object to Object
+scan_fixed.js:694 Using direct path due to API limitations
+scan_fixed.js:757 displayDirectPath called with: Object
+scan_fixed.js:770 Parsed coordinates: Object
+scan_fixed.js:827 Error creating blue route line: InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+    at new D (mapsjs-core.js:39:376)
+    at Ic (mapsjs-core.js:51:290)
+    at Gf (mapsjs-core.js:118:442)
+    at K.vg (mapsjs-core.js:120:71)
+    at displayDirectPath (scan_fixed.js:786:16)
+    at calculateRoute (scan_fixed.js:695:3)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9
+displayDirectPath @ scan_fixed.js:827Understand this error
+scan_fixed.js:702 Uncaught TypeError: group.getBounds is not a function
+    at calculateRoute (scan_fixed.js:702:43)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9Understand this error
+scan_fixed.js:690 Calculating route from {lat: 12.338134, lng: 76.6193583} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+scan_fixed.js:694 Using direct path due to API limitations
+scan_fixed.js:757 displayDirectPath called with: {userLocation: {…}, destination: {…}, map: true}
+scan_fixed.js:770 Parsed coordinates: {fromLat: 12.338134, fromLng: 76.6193583, toLat: 12.89789, toLng: 74.8454}
+scan_fixed.js:827 Error creating blue route line: InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+    at new D (mapsjs-core.js:39:376)
+    at Ic (mapsjs-core.js:51:290)
+    at Gf (mapsjs-core.js:118:442)
+    at K.vg (mapsjs-core.js:120:71)
+    at displayDirectPath (scan_fixed.js:786:16)
+    at calculateRoute (scan_fixed.js:695:3)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9
+displayDirectPath @ scan_fixed.js:827
+calculateRoute @ scan_fixed.js:695
+updateCurrentLocationMarker @ scan_fixed.js:872
+(anonymous) @ scan_fixed.js:199Understand this error
+scan_fixed.js:702 Uncaught TypeError: group.getBounds is not a function
+    at calculateRoute (scan_fixed.js:702:43)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9
+calculateRoute @ scan_fixed.js:702
+updateCurrentLocationMarker @ scan_fixed.js:872
+(anonymous) @ scan_fixed.js:199Understand this error
+scan_fixed.js:690 Calculating route from {lat: 12.338134, lng: 76.6193583} to {name: 'Mangaluru, Karnataka, India', address: 'Mangaluru, Karnataka, India', lat: 12.89789, lng: 74.8454}
+scan_fixed.js:694 Using direct path due to API limitations
+scan_fixed.js:757 displayDirectPath called with: {userLocation: {…}, destination: {…}, map: true}
+scan_fixed.js:770 Parsed coordinates: {fromLat: 12.338134, fromLng: 76.6193583, toLat: 12.89789, toLng: 74.8454}
+scan_fixed.js:827 Error creating blue route line: InvalidArgumentError: H.geo.LineString#pushPoint (Argument  undefined)
+    at new D (mapsjs-core.js:39:376)
+    at Ic (mapsjs-core.js:51:290)
+    at Gf (mapsjs-core.js:118:442)
+    at K.vg (mapsjs-core.js:120:71)
+    at displayDirectPath (scan_fixed.js:786:16)
+    at calculateRoute (scan_fixed.js:695:3)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9
+displayDirectPath @ scan_fixed.js:827
+calculateRoute @ scan_fixed.js:695
+updateCurrentLocationMarker @ scan_fixed.js:872
+(anonymous) @ scan_fixed.js:199Understand this error
+scan_fixed.js:702 Uncaught TypeError: group.getBounds is not a function
+    at calculateRoute (scan_fixed.js:702:43)
+    at updateCurrentLocationMarker (scan_fixed.js:872:5)
+    at scan_fixed.js:199:9
+calculateRoute @ scan_fixed.js:702
+updateCurrentLocationMarker @ scan_fixed.js:872
+(anonymous) @ scan_fixed.js:199Understand this error

@@ -522,21 +522,11 @@ async function initializeMap() {
     // Initialize layers with enhanced error handling
     let defaultLayers;
     try {
-      defaultLayers = platform.createDefaultLayers({
-        tileSize: 512,
-        ppi: 320
-      });
+      defaultLayers = platform.createDefaultLayers();
     } catch (layerError) {
-      console.warn('Standard layers failed, trying alternative approach:', layerError);
-      try {
-        // Try with minimal configuration
-        defaultLayers = platform.createDefaultLayers();
-      } catch (secondError) {
-        console.error('All layer creation attempts failed:', secondError);
-        showStatus('Map loading with reduced functionality due to rate limits', 'warning');
-        initializeFallbackMap();
-        return;
-      }
+      console.error('HERE Maps layers failed, creating fallback system:', layerError);
+      createFallbackMapSystem();
+      return;
     }
     
     // Select map layer with multiple fallback options
@@ -571,8 +561,43 @@ async function initializeMap() {
   } catch (error) {
     console.error('Error initializing map:', error);
     showStatus('Map temporarily unavailable due to API rate limits - using fallback', 'warning');
-    initializeFallbackMap();
+    createFallbackMapSystem();
   }
+}
+
+// Create fallback map system when HERE Maps fails
+function createFallbackMapSystem() {
+  console.log('Creating fallback map system');
+  
+  // Mark that we're using fallback mode
+  window.fallbackMode = true;
+  
+  // Create a simple canvas-based map representation
+  const mapContainer = document.getElementById('mapContainer');
+  if (!mapContainer) return;
+  
+  // Create fallback map canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = mapContainer.clientWidth || 800;
+  canvas.height = mapContainer.clientHeight || 400;
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.backgroundColor = '#f0f0f0';
+  canvas.style.border = '1px solid #ccc';
+  
+  // Clear container and add canvas
+  mapContainer.innerHTML = '';
+  mapContainer.appendChild(canvas);
+  
+  // Store canvas context
+  window.mapCanvas = canvas;
+  window.mapContext = canvas.getContext('2d');
+  
+  // Initialize fallback navigation
+  initializeFallbackNavigation();
+  
+  console.log('Fallback map system created');
+  showStatus('Using fallback map system - route generation available', 'info');
 }
 
 // Initialize navigation after QR scan
@@ -685,7 +710,7 @@ function addCurrentLocationMarker() {
 
 // Calculate and display route
 function calculateRoute() {
-  if (!userLocation || !destination || !map) return;
+  if (!userLocation || !destination) return;
   
   console.log('Calculating route from', userLocation, 'to', destination);
   
@@ -694,12 +719,16 @@ function calculateRoute() {
   console.log('Using direct path due to API limitations');
   displayDirectPath();
   
-  // Fit map to show both locations
-  if (currentLocationMarker && destinationMarker) {
-    const group = new H.map.Group();
-    group.addObject(currentLocationMarker);
-    group.addObject(destinationMarker);
-    map.getViewPort().setViewBounds(group.getBounds());
+  // Fit map to show both locations (only if HERE Maps is available)
+  if (map && currentLocationMarker && destinationMarker && !window.fallbackMode) {
+    try {
+      const group = new H.map.Group();
+      group.addObject(currentLocationMarker);
+      group.addObject(destinationMarker);
+      map.getViewPort().setViewBounds(group.getBounds());
+    } catch (error) {
+      console.log('Map viewport adjustment failed:', error);
+    }
   }
 }
 
@@ -754,10 +783,10 @@ function displayRoute(route) {
 
 // Display direct path if routing fails
 function displayDirectPath() {
-  console.log('displayDirectPath called with:', { userLocation, destination, map: !!map });
+  console.log('displayDirectPath called with:', { userLocation, destination, map: !!map, fallbackMode: window.fallbackMode });
   
-  if (!userLocation || !destination || !map) {
-    console.error('Missing required data for direct path:', { userLocation, destination, map: !!map });
+  if (!userLocation || !destination) {
+    console.error('Missing required data for direct path:', { userLocation, destination });
     return;
   }
   
@@ -771,62 +800,138 @@ function displayDirectPath() {
   
   if (isNaN(fromLat) || isNaN(fromLng) || isNaN(toLat) || isNaN(toLng)) {
     console.error('Invalid coordinates for direct path:', { fromLat, fromLng, toLat, toLng });
-    console.error('Original coordinates:', { userLocation, destination });
     return;
   }
   
-  // Remove existing route if present
-  if (routeGroup) {
-    map.removeObject(routeGroup);
+  // Calculate distance and travel time
+  const distance = calculateDistance(
+    { lat: fromLat, lng: fromLng },
+    { lat: toLat, lng: toLng }
+  );
+  
+  const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
+  
+  // Update UI with travel time
+  updateTravelTimeDisplay(estimatedTime, distance * 1000);
+  
+  // Check if we're in fallback mode
+  if (window.fallbackMode && window.mapCanvas && window.mapContext) {
+    drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance);
+  } else if (map) {
+    // Try to use HERE Maps
+    try {
+      // Remove existing route if present
+      if (routeGroup) {
+        map.removeObject(routeGroup);
+      }
+      
+      // Create direct line with validated coordinates
+      const lineString = new H.geo.LineString();
+      lineString.pushPoint(fromLat, fromLng);
+      lineString.pushPoint(toLat, toLng);
+      
+      // Create blue direct line
+      const directLine = new H.map.Polyline(lineString, {
+        style: {
+          strokeColor: '#007bff',
+          lineWidth: 6,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }
+      });
+      
+      routeGroup = new H.map.Group();
+      routeGroup.addObject(directLine);
+      map.addObject(routeGroup);
+      
+      console.log('Blue route line added to HERE Maps successfully');
+      
+    } catch (error) {
+      console.error('HERE Maps route creation failed, using fallback:', error);
+      drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance);
+    }
+  } else {
+    // Create fallback route display
+    drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance);
   }
   
-  try {
-    // Create direct line with validated coordinates
-    const lineString = new H.geo.LineString();
-    lineString.pushPoint(fromLat, fromLng);
-    lineString.pushPoint(toLat, toLng);
-    
-    // Create blue direct line - solid line since this is our primary routing method
-    const directLine = new H.map.Polyline(lineString, {
-      style: {
-        strokeColor: '#007bff',
-        lineWidth: 6,
-        lineCap: 'round',
-        lineJoin: 'round'
-      }
-    });
-    
-    routeGroup = new H.map.Group();
-    routeGroup.addObject(directLine);
-    map.addObject(routeGroup);
-    
-    console.log('Blue route line added to map successfully');
-    
-    // Calculate straight-line distance for travel time estimation
-    const distance = calculateDistance(
-      { lat: fromLat, lng: fromLng },
-      { lat: toLat, lng: toLng }
-    );
-    
-    const estimatedTime = calculateTravelTime(distance * 1000); // Convert to meters
-    
-    // Update UI with estimated travel time
-    updateTravelTimeDisplay(estimatedTime, distance * 1000);
-    
-    console.log('Blue route displayed with estimated time:', estimatedTime, 'seconds');
-    console.log('Route details:', {
-      distance: distance.toFixed(2) + ' km',
-      time: Math.round(estimatedTime / 60) + ' minutes',
-      from: { lat: fromLat, lng: fromLng },
-      to: { lat: toLat, lng: toLng }
-    });
-    
-    showStatus(`Blue route generated - ${distance.toFixed(1)} km route with ${Math.round(estimatedTime / 60)} min ETA`, 'success');
-    
-  } catch (error) {
-    console.error('Error creating blue route line:', error);
-    showStatus('Error generating blue route - see console for details', 'error');
-  }
+  console.log('Route details:', {
+    distance: distance.toFixed(2) + ' km',
+    time: Math.round(estimatedTime / 60) + ' minutes',
+    from: { lat: fromLat, lng: fromLng },
+    to: { lat: toLat, lng: toLng }
+  });
+  
+  showStatus(`Blue route generated - ${distance.toFixed(1)} km route with ${Math.round(estimatedTime / 60)} min ETA`, 'success');
+}
+
+// Draw fallback route on canvas
+function drawFallbackRoute(fromLat, fromLng, toLat, toLng, distance) {
+  if (!window.mapCanvas || !window.mapContext) return;
+  
+  const canvas = window.mapCanvas;
+  const ctx = window.mapContext;
+  
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Draw background
+  ctx.fillStyle = '#e8f4f8';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Calculate positions (simple projection for visualization)
+  const centerLat = (fromLat + toLat) / 2;
+  const centerLng = (fromLng + toLng) / 2;
+  
+  // Simple coordinate mapping to canvas
+  const scale = Math.min(canvas.width, canvas.height) * 0.6 / Math.max(Math.abs(toLat - fromLat), Math.abs(toLng - fromLng));
+  
+  const fromX = canvas.width / 2 + (fromLng - centerLng) * scale;
+  const fromY = canvas.height / 2 - (fromLat - centerLat) * scale;
+  const toX = canvas.width / 2 + (toLng - centerLng) * scale;
+  const toY = canvas.height / 2 - (toLat - centerLat) * scale;
+  
+  // Draw route line in blue
+  ctx.beginPath();
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(toX, toY);
+  ctx.strokeStyle = '#007bff';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+  
+  // Draw markers
+  // Current location marker (blue)
+  ctx.beginPath();
+  ctx.arc(fromX, fromY, 12, 0, 2 * Math.PI);
+  ctx.fillStyle = '#007bff';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  
+  // Destination marker (red)
+  ctx.beginPath();
+  ctx.arc(toX, toY, 12, 0, 2 * Math.PI);
+  ctx.fillStyle = '#dc3545';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  
+  // Add labels
+  ctx.fillStyle = '#333';
+  ctx.font = '14px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Current Location', fromX, fromY - 20);
+  ctx.fillText('Destination', toX, toY - 20);
+  
+  // Add distance info
+  ctx.fillStyle = '#007bff';
+  ctx.font = 'bold 16px Arial';
+  ctx.fillText(`${distance.toFixed(1)} km`, canvas.width / 2, 30);
+  
+  console.log('Fallback route drawn on canvas');
 }
 
 // Update location display
