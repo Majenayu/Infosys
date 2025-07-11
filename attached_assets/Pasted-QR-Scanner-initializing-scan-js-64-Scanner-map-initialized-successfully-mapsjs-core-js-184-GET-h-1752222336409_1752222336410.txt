@@ -1,0 +1,765 @@
+QR Scanner initializing...
+scan.js:64 Scanner map initialized successfully
+mapsjs-core.js:184  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/copyright/newest?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&output=json 429 (Too Many Requests)
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM688:19
+br.Mf @ VM688:167
+br.X @ VM688:166
+ar.X @ VM688:165
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ scan.js:45
+(anonymous) @ scan.js:720Understand this error
+mapsjs-core.js:80 Uncaught Error
+Ho.Lc @ VM688:19
+eval @ VM688:19
+Promise.then
+eval @ VM688:19
+e.Wh @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.reject @ mapsjs-core.js:89
+(anonymous) @ mapsjs-core.js:187
+Xg.Zh @ mapsjs-core.js:186
+XMLHttpRequest.send
+d @ mapsjs-core.js:184
+Xg @ mapsjs-core.js:185
+application/json @ mapsjs-core.js:187
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+Ho.u @ VM688:19
+br.Mf @ VM688:167
+br.X @ VM688:166
+ar.X @ VM688:165
+Vk.X @ mapsjs-core.js:336
+Ah.X @ mapsjs-core.js:207
+Ah.Gi @ mapsjs-core.js:206
+Ah.ie @ mapsjs-core.js:206
+Ah @ mapsjs-core.js:204
+U @ mapsjs-core.js:424
+initializeMap @ scan.js:45
+(anonymous) @ scan.js:720Understand this error
+VM688:2 H.service.MapTileService is deprecated and will be removed soon. Use HERE Vector Tile API or Raster Tile API v3 instead.
+to @ VM688:2
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457
+mapsjs-core.js:189  GET https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/92/58/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/91/58/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/92/57/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://3.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/92/59/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/91/57/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/92/58/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/92/59/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/91/57/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/91/58/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/92/57/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/91/59/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/91/59/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/90/58/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/89/59/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://3.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/90/57/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/89/57/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+m.Nf @ mapsjs-core.js:104
+J.Nf @ mapsjs-core.js:106
+m.dispatchEvent @ mapsjs-core.js:103
+m.cm @ mapsjs-core.js:184
+e.rk @ mapsjs-core.js:86
+ee @ mapsjs-core.js:89
+$d @ mapsjs-core.js:89
+Kd.gz @ mapsjs-core.js:88
+Jd @ mapsjs-core.js:83
+Promise.then
+Fd @ mapsjs-core.js:83
+Ed @ mapsjs-core.js:83
+be @ mapsjs-core.js:88
+Md @ mapsjs-core.js:87
+(anonymous) @ mapsjs-core.js:83
+m.resolve @ mapsjs-core.js:89
+b.onload @ mapsjs-core.js:189
+XMLHttpRequest.send
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/90/59/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:189  GET https://3.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/7/89/58/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+(anonymous) @ mapsjs-core.js:394
+Vl.a.qg.onsuccess @ mapsjs-core.js:394
+IndexedDB
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/90/58/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/89/59/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/90/57/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/89/57/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/90/59/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/7/89/58/7 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan.js:98 Camera access confirmed
+scan.js:130 QR Scanner initialized successfully
+scan.js:748 QR Scanner initialization complete
+scan.js:230 QR Code detected: {"name":"Mysuru Sub-District (Mysore Sub-District), Karnataka, India","address":"Mysuru Sub-District (Mysore Sub-District), Karnataka, India","latitude":12.20473,"longitude":76.59464,"googleMapsUrl":"https://www.google.com/maps?q=12.20473,76.59464","hereMapsUrl":"https://wego.here.com/directions/mix/12.20473,76.59464","timestamp":"2025-07-11T08:17:03.472Z"}
+scan.js:521 Route calculated successfully
+mapsjs-core.js:189  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/0/0/0/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/0/1/0/0 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/0/0/0/0 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/0/-1/0/0 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:40 Uncaught IllegalOperationError: H.map.Group#removeObject object not found
+vb @ mapsjs-core.js:40
+T.Ra @ mapsjs-core.js:405
+U.Ra @ mapsjs-core.js:438
+updateUserLocation @ scan.js:410
+(anonymous) @ scan.js:366Understand this error
+mapsjs-core.js:189  GET https://1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/0/0/0/256/png8?xnlp=CL_JSMv3.1.66.0&apikey=YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI&ppi=320 429 (Too Many Requests)
+dh.arraybuffer @ mapsjs-core.js:189
+ch.St @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:91
+(anonymous) @ mapsjs-core.js:91
+ke.Tt @ mapsjs-core.js:91
+ke.add @ mapsjs-core.js:90
+he @ mapsjs-core.js:89
+ch @ mapsjs-core.js:186
+(anonymous) @ mapsjs-core.js:351
+setTimeout
+ml.u @ mapsjs-core.js:351
+ar.u @ VM688:164
+q @ mapsjs-core.js:345
+Ul.a.onsuccess @ mapsjs-core.js:395
+IndexedDB
+(anonymous) @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:395
+Vl @ mapsjs-core.js:394
+Tl @ mapsjs-core.js:395
+m.get @ mapsjs-core.js:393
+(anonymous) @ mapsjs-core.js:345
+Kd @ mapsjs-core.js:83
+R.Mw @ mapsjs-core.js:345
+gj @ mapsjs-core.js:266
+(anonymous) @ mapsjs-core.js:467
+value @ mapsjs-core.js:467
+e @ mapsjs-core.js:459
+_callSuper @ mapsjs-core.js:457
+t @ mapsjs-core.js:467
+value @ mapsjs-core.js:459
+value @ mapsjs-core.js:459
+loadTextures @ mapsjs-core.js:465
+(anonymous) @ mapsjs-core.js:457Understand this error
+mapsjs-core.js:457 Tangram [error]: Error for style group 'non-collision' for tile 5/0/2/0/0 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457
+(anonymous) @ mapsjs-core.js:457Understand this error
+scan.js:392 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:392Understand this error
+scan.js:392 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:392Understand this error
+scan.js:392 Failed to get location for tracking: GeolocationPositionError {code: 3, message: 'Timeout expired'}
+navigator.geolocation.getCurrentPosition.enableHighAccuracy @ scan.js:392Understand this error

@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime
+from pymongo import MongoClient
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -53,7 +54,19 @@ class Location(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     qr_generated = db.Column(db.Boolean, default=True)
 
+# MongoDB connection for live location tracking
+try:
+    mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
+    mongo_db = mongo_client.get_database("tracksmart")
+    live_locations_collection = mongo_db.get_collection("live_locations")
+    app.logger.info("MongoDB connected successfully")
+except Exception as e:
+    app.logger.error(f"MongoDB connection failed: {e}")
+    mongo_client = None
+    live_locations_collection = None
+
 with app.app_context():
+    # Create all tables including LiveLocation
     db.create_all()
     app.logger.info("Database tables created successfully")
 
@@ -193,7 +206,7 @@ def get_companies():
         app.logger.error(f"Error fetching companies: {str(e)}")
         return jsonify({'message': 'Failed to fetch companies'}), 500
 
-# Live location model for tracking
+# Live location model for tracking (keeping for compatibility, but using MongoDB)
 class LiveLocation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.Float, nullable=False)
@@ -205,37 +218,67 @@ def store_live_location():
     try:
         data = request.get_json()
         
-        live_location = LiveLocation(
-            latitude=data['latitude'],
-            longitude=data['longitude']
-        )
-        
-        db.session.add(live_location)
-        db.session.commit()
-        
-        app.logger.info(f"Live location stored: {data['latitude']}, {data['longitude']}")
-        return jsonify({'message': 'Live location stored successfully!'})
+        if live_locations_collection is not None:
+            # Store in MongoDB
+            live_location_doc = {
+                'latitude': data['latitude'],
+                'longitude': data['longitude'],
+                'timestamp': datetime.utcnow()
+            }
+            
+            result = live_locations_collection.insert_one(live_location_doc)
+            app.logger.info(f"Live location stored in MongoDB: {data['latitude']}, {data['longitude']}")
+            return jsonify({'message': 'Live location stored successfully!', 'id': str(result.inserted_id)})
+        else:
+            # Fallback to SQLite if MongoDB is not available
+            live_location = LiveLocation(
+                latitude=data['latitude'],
+                longitude=data['longitude']
+            )
+            
+            db.session.add(live_location)
+            db.session.commit()
+            
+            app.logger.info(f"Live location stored in SQLite: {data['latitude']}, {data['longitude']}")
+            return jsonify({'message': 'Live location stored successfully!'})
         
     except Exception as e:
         app.logger.error(f"Error storing live location: {str(e)}")
-        db.session.rollback()
+        if 'db.session' in locals():
+            db.session.rollback()
         return jsonify({'message': 'Failed to store live location'}), 500
 
 @app.route('/live-locations')
 def get_live_locations():
     try:
-        live_locations = LiveLocation.query.order_by(LiveLocation.timestamp.desc()).limit(100).all()
-        locations_data = []
-        
-        for location in live_locations:
-            locations_data.append({
-                'id': location.id,
-                'latitude': location.latitude,
-                'longitude': location.longitude,
-                'timestamp': location.timestamp.isoformat()
-            })
-        
-        return jsonify(locations_data)
+        if live_locations_collection is not None:
+            # Get from MongoDB
+            live_locations = list(live_locations_collection.find().sort('timestamp', -1).limit(100))
+            locations_data = []
+            
+            for location in live_locations:
+                locations_data.append({
+                    'id': str(location['_id']),
+                    'latitude': location['latitude'],
+                    'longitude': location['longitude'],
+                    'timestamp': location['timestamp'].isoformat()
+                })
+            
+            return jsonify(locations_data)
+        else:
+            # Fallback to SQLite
+            live_locations = LiveLocation.query.order_by(LiveLocation.timestamp.desc()).limit(100).all()
+            locations_data = []
+            
+            for location in live_locations:
+                locations_data.append({
+                    'id': location.id,
+                    'latitude': location.latitude,
+                    'longitude': location.longitude,
+                    'timestamp': location.timestamp.isoformat()
+                })
+            
+            return jsonify(locations_data)
         
     except Exception as e:
         app.logger.error(f"Error fetching live locations: {str(e)}")

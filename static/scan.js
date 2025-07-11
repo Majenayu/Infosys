@@ -1,6 +1,10 @@
 // QR Scanner and Navigation functionality
-const API_KEY = 'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI';
-const FALLBACK_API_KEY = 'fh6EbgDQs0TfFNm6BRaNSUJLbSKlMpHXxvCvpgjjzNE';
+const API_KEYS = [
+    'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI',
+    'fh6EbgDQs0TfFNm6BRaNSUJLbSKlMpHXxvCvpgjjzNE',
+    'your-backup-key-here'
+];
+let currentApiKeyIndex = 0;
 let platform, defaultLayers, map, routingService, ui;
 let userMarker, destinationMarker, routeLine;
 let destination = null;
@@ -26,7 +30,7 @@ const qrFileInput = document.getElementById('qrFileInput');
 const initializeMap = () => {
   try {
     platform = new H.service.Platform({ 
-      'apikey': API_KEY,
+      'apikey': API_KEYS[currentApiKeyIndex],
       'app_id': undefined,
       'app_code': undefined
     });
@@ -446,17 +450,26 @@ const calculateRoute = async (from, to) => {
     }
 
     // Use HERE Maps Routing API v8 directly with fallback
-    let routingUrl = `https://router.hereapi.com/v8/routes?apikey=${API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+    let response;
+    let data;
     
-    let response = await fetch(routingUrl);
-    
-    // If rate limited, try with fallback API key
-    if (response.status === 429) {
-      routingUrl = `https://router.hereapi.com/v8/routes?apikey=${FALLBACK_API_KEY}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+    // Try different API keys if rate limited
+    for (let i = 0; i < API_KEYS.length; i++) {
+      const apiKey = API_KEYS[(currentApiKeyIndex + i) % API_KEYS.length];
+      const routingUrl = `https://router.hereapi.com/v8/routes?apikey=${apiKey}&origin=${from.lat},${from.lng}&destination=${to.lat},${to.lng}&return=summary,polyline&transportMode=car&routingMode=fast`;
+      
       response = await fetch(routingUrl);
+      
+      if (response.status !== 429) {
+        currentApiKeyIndex = (currentApiKeyIndex + i) % API_KEYS.length;
+        data = await response.json();
+        break;
+      }
+      
+      if (i === API_KEYS.length - 1) {
+        throw new Error('All API keys rate limited');
+      }
     }
-    
-    const data = await response.json();
 
     if (!data.routes || data.routes.length === 0) {
       console.warn('No route found in response');
