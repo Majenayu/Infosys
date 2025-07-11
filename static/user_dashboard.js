@@ -141,6 +141,13 @@ class UserDashboard {
       if (trackingData.driver_location) {
         driverLocation.textContent = `Lat: ${trackingData.driver_location.latitude.toFixed(4)}, Lng: ${trackingData.driver_location.longitude.toFixed(4)}`;
       }
+    } else if (trackingData.delivery_status === 'nobody_received') {
+      statusIndicator.className = 'status-indicator status-error';
+      deliveryStatus.textContent = 'Nobody received the item or courier';
+      lastUpdated.textContent = 'No delivery partner has scanned this QR code';
+      
+      // Hide driver section
+      document.getElementById('driverSection').style.display = 'none';
     } else {
       statusIndicator.className = 'status-indicator status-no-driver';
       deliveryStatus.textContent = 'No Driver Assigned';
@@ -342,7 +349,9 @@ class UserDashboard {
     let statusText = 'Ready for QR scan';
     if (trackingData.delivery_status === 'driver_assigned') {
       statusText = 'Driver en route';
-    } else if (trackingData.delivery_status === 'no_driver_assigned') {
+    } else if (trackingData.delivery_status === 'nobody_received') {
+      statusText = 'Nobody received the item or courier';
+    } else {
       statusText = 'Waiting for driver';
     }
     document.getElementById('trackingStatus').textContent = statusText;

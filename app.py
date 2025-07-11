@@ -669,10 +669,11 @@ def get_qr_tracking_data(qr_id):
                         'address': qr_location.get('address', ''),
                         'coordinates': qr_location.get('coordinates', {})
                     },
-                    'delivery_status': 'no_driver_assigned',
+                    'delivery_status': 'nobody_received',
                     'driver_location': None,
                     'driver_info': None,
-                    'last_updated': None
+                    'last_updated': None,
+                    'message': 'Nobody received the item or courier'
                 }
                 
                 if delivery_location:
@@ -686,6 +687,7 @@ def get_qr_tracking_data(qr_id):
                         'last_seen': delivery_location.get('timestamp')
                     }
                     response_data['last_updated'] = delivery_location.get('timestamp')
+                    response_data['message'] = 'Driver assigned and tracking'
                 
                 app.logger.info(f"QR tracking data retrieved for ID: {qr_id}")
                 
