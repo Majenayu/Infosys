@@ -7,6 +7,20 @@ class DeliveryAuth {
     init() {
         console.log('Delivery Auth System initialized');
         this.bindEvents();
+        this.checkElements();
+    }
+
+    checkElements() {
+        // Check if all required elements exist
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const statusMessage = document.getElementById('statusMessage');
+        
+        console.log('Form elements check:', {
+            loginForm: !!loginForm,
+            registerForm: !!registerForm,
+            statusMessage: !!statusMessage
+        });
     }
 
     bindEvents() {
@@ -58,20 +72,45 @@ class DeliveryAuth {
 
             if (response.ok) {
                 this.showMessage('Login successful! Redirecting...', 'success');
+                console.log('Login successful, user data:', data.user);
                 
                 // Store user data in localStorage
                 localStorage.setItem('deliveryPartner', JSON.stringify(data.user));
                 
                 // Redirect to scan page after a short delay
                 setTimeout(() => {
+                    console.log('Redirecting to scan page...');
                     window.location.href = '/scan';
                 }, 1500);
             } else {
+                console.error('Login failed:', data);
                 this.showMessage(data.message || 'Login failed', 'error');
             }
         } catch (error) {
             console.error('Login error:', error);
             this.showMessage('Network error. Please try again.', 'error');
+        }
+    }
+
+    async testLogin() {
+        // Test function to check if login is working
+        console.log('Testing login functionality...');
+        try {
+            const response = await fetch('/delivery/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: 'test@example.com',
+                    password: 'test123'
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Test login response:', data);
+        } catch (error) {
+            console.error('Test login error:', error);
         }
     }
 
@@ -168,7 +207,11 @@ class DeliveryAuth {
 
     showMessage(message, type) {
         const messageContainer = document.getElementById('statusMessage');
-        if (!messageContainer) return;
+        if (!messageContainer) {
+            console.error('Status message container not found');
+            console.log('Message:', message, 'Type:', type);
+            return;
+        }
 
         let alertClass = 'alert-info';
         switch (type) {
@@ -208,5 +251,14 @@ class DeliveryAuth {
 
 // Initialize the delivery auth system when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new DeliveryAuth();
+    const deliveryAuth = new DeliveryAuth();
+    
+    // Add test button for debugging
+    if (window.location.search.includes('debug')) {
+        const testButton = document.createElement('button');
+        testButton.textContent = 'Test Login';
+        testButton.className = 'btn btn-secondary mt-2';
+        testButton.onclick = () => deliveryAuth.testLogin();
+        document.body.appendChild(testButton);
+    }
 });
