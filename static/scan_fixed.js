@@ -4,6 +4,12 @@ let isScanning = false;
 let isTracking = false;
 let destination = null;
 let currentQRId = null;
+let map = null;
+let platform = null;
+let currentLocationMarker = null;
+let destinationMarker = null;
+let routeGroup = null;
+let userLocation = null;
 
 // DOM Elements
 const startScanBtn = document.getElementById('startScanBtn');
@@ -19,11 +25,8 @@ console.log('QR Scanner initializing...');
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Page loaded, initializing QR scanner...');
   
-  // Initialize map container
-  const mapContainer = document.getElementById('mapContainer');
-  if (mapContainer) {
-    mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;"><div><h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5><p>QR Scanner is ready to use<br>Map will display destination after scanning</p></div></div>';
-  }
+  // Initialize map
+  initializeMap();
   
   // Set up event listeners
   if (startScanBtn) {
@@ -116,13 +119,16 @@ function onScanSuccess(decodedText, decodedResult) {
       // Update UI
       updateDestinationInfo();
       
+      // Initialize navigation features
+      initializeNavigation();
+      
       // Start location tracking
       startLocationTracking();
       
       // Stop scanning after successful scan
       stopScanning();
       
-      showStatus(`Destination set: ${destination.name}`, 'success');
+      showStatus(`Destination set: ${destination.name}. Starting navigation...`, 'success');
       
     } else {
       throw new Error('Invalid QR code format');
@@ -178,19 +184,28 @@ function trackUserLocation() {
   
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      const userLocation = {
+      const locationData = {
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         timestamp: new Date().toISOString()
       };
       
+      // Update navigation map if available
+      if (map && destination) {
+        const newLocation = {
+          lat: locationData.latitude,
+          lng: locationData.longitude
+        };
+        updateCurrentLocationMarker(newLocation);
+      }
+      
       // Update UI
       if (currentLocationSpan) {
-        currentLocationSpan.textContent = `${userLocation.latitude.toFixed(6)}, ${userLocation.longitude.toFixed(6)}`;
+        currentLocationSpan.textContent = `${locationData.latitude.toFixed(6)}, ${locationData.longitude.toFixed(6)}`;
       }
       
       // Send to server
-      sendLocationToServer(userLocation);
+      sendLocationToServer(locationData);
       
     },
     (error) => {
@@ -365,5 +380,274 @@ function testSampleLocation() {
 window.processManualQRData = processManualQRData;
 window.loadSampleQRData = loadSampleQRData;
 window.testSampleLocation = testSampleLocation;
+
+// ====== NAVIGATION FUNCTIONS ======
+
+// Initialize HERE Maps
+function initializeMap() {
+  try {
+    // Initialize HERE Maps platform
+    platform = new H.service.Platform({
+      'apikey': 'AYBw5XcF2K4nPxfpzaUh3g_w0qpKVmzDGD6-obRJE7o'
+    });
+    
+    // Get default map layers
+    const defaultLayers = platform.createDefaultLayers();
+    
+    // Initialize map
+    const mapContainer = document.getElementById('mapContainer');
+    if (mapContainer) {
+      // Create map centered on Bangalore initially
+      map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+        zoom: 10,
+        center: { lat: 12.9716, lng: 77.5946 }
+      });
+      
+      // Make map interactive
+      const behavior = new H.mapevents.Behavior();
+      const ui = new H.ui.UI.createDefault(map);
+      
+      console.log('Navigation map initialized successfully');
+    }
+  } catch (error) {
+    console.error('Error initializing map:', error);
+    const mapContainer = document.getElementById('mapContainer');
+    if (mapContainer) {
+      mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;"><div><h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5><p>QR Scanner is ready to use<br>Map will display destination after scanning</p></div></div>';
+    }
+  }
+}
+
+// Initialize navigation after QR scan
+function initializeNavigation() {
+  if (!destination || !map) return;
+  
+  console.log('Initializing navigation to:', destination);
+  
+  // Clear existing markers and routes
+  if (currentLocationMarker) {
+    map.removeObject(currentLocationMarker);
+  }
+  if (destinationMarker) {
+    map.removeObject(destinationMarker);
+  }
+  if (routeGroup) {
+    map.removeObject(routeGroup);
+  }
+  
+  // Add destination marker
+  addDestinationMarker();
+  
+  // Get user's current location and set up navigation
+  getCurrentLocationAndNavigate();
+}
+
+// Add destination marker to map
+function addDestinationMarker() {
+  if (!destination || !map) return;
+  
+  // Create destination marker
+  const destIcon = new H.map.Icon(
+    '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#dc3545"/></svg>',
+    { size: { w: 24, h: 24 } }
+  );
+  
+  destinationMarker = new H.map.Marker(
+    { lat: destination.lat, lng: destination.lng },
+    { icon: destIcon }
+  );
+  
+  map.addObject(destinationMarker);
+  
+  // Center map on destination
+  map.setCenter({ lat: destination.lat, lng: destination.lng });
+  map.setZoom(12);
+  
+  console.log('Destination marker added');
+}
+
+// Get current location and start navigation
+function getCurrentLocationAndNavigate() {
+  if (!navigator.geolocation) {
+    showStatus('Geolocation not supported', 'error');
+    return;
+  }
+  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      userLocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      
+      console.log('Current location obtained:', userLocation);
+      
+      // Add current location marker
+      addCurrentLocationMarker();
+      
+      // Calculate and display route
+      calculateRoute();
+      
+      // Update location display
+      updateLocationDisplay();
+      
+    },
+    (error) => {
+      console.error('Error getting location:', error);
+      showStatus('Could not get your location. Please enable location services.', 'error');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+// Add current location marker
+function addCurrentLocationMarker() {
+  if (!userLocation || !map) return;
+  
+  // Create current location marker
+  const currentIcon = new H.map.Icon(
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="#007bff" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg>',
+    { size: { w: 20, h: 20 } }
+  );
+  
+  currentLocationMarker = new H.map.Marker(
+    { lat: userLocation.lat, lng: userLocation.lng },
+    { icon: currentIcon }
+  );
+  
+  map.addObject(currentLocationMarker);
+  
+  console.log('Current location marker added');
+}
+
+// Calculate and display route
+function calculateRoute() {
+  if (!userLocation || !destination || !map) return;
+  
+  console.log('Calculating route from', userLocation, 'to', destination);
+  
+  // Get routing service
+  const router = platform.getRoutingService();
+  
+  // Set up routing parameters
+  const routingParameters = {
+    'mode': 'fastest;car',
+    'start': `${userLocation.lat},${userLocation.lng}`,
+    'destination': `${destination.lat},${destination.lng}`,
+    'representation': 'display'
+  };
+  
+  // Calculate route
+  router.calculateRoute(routingParameters, 
+    (result) => {
+      if (result.response.route) {
+        const route = result.response.route[0];
+        displayRoute(route);
+        
+        // Fit map to show both locations
+        const group = new H.map.Group();
+        group.addObject(currentLocationMarker);
+        group.addObject(destinationMarker);
+        map.getViewPort().setViewBounds(group.getBounds());
+        
+        showStatus('Route calculated successfully', 'success');
+      }
+    },
+    (error) => {
+      console.error('Error calculating route:', error);
+      showStatus('Could not calculate route. Showing direct path.', 'error');
+      displayDirectPath();
+    }
+  );
+}
+
+// Display route on map
+function displayRoute(route) {
+  if (!route || !map) return;
+  
+  // Create route polyline
+  const routeShape = route.shape;
+  const lineString = new H.geo.LineString();
+  
+  routeShape.forEach((point) => {
+    const parts = point.split(',');
+    lineString.pushPoint(parseFloat(parts[0]), parseFloat(parts[1]));
+  });
+  
+  // Create route line
+  const routeLine = new H.map.Polyline(lineString, {
+    style: {
+      strokeColor: '#007bff',
+      lineWidth: 6,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }
+  });
+  
+  // Add route to map
+  routeGroup = new H.map.Group();
+  routeGroup.addObject(routeLine);
+  map.addObject(routeGroup);
+  
+  console.log('Route displayed on map');
+}
+
+// Display direct path if routing fails
+function displayDirectPath() {
+  if (!userLocation || !destination || !map) return;
+  
+  // Create direct line
+  const lineString = new H.geo.LineString();
+  lineString.pushPoint(userLocation.lat, userLocation.lng);
+  lineString.pushPoint(destination.lat, destination.lng);
+  
+  const directLine = new H.map.Polyline(lineString, {
+    style: {
+      strokeColor: '#007bff',
+      lineWidth: 4,
+      lineCap: 'round',
+      strokeDasharray: '10 5'
+    }
+  });
+  
+  routeGroup = new H.map.Group();
+  routeGroup.addObject(directLine);
+  map.addObject(routeGroup);
+  
+  console.log('Direct path displayed');
+}
+
+// Update location display
+function updateLocationDisplay() {
+  if (!userLocation) return;
+  
+  if (currentLocationSpan) {
+    currentLocationSpan.textContent = `${userLocation.lat.toFixed(4)}, ${userLocation.lng.toFixed(4)}`;
+  }
+  
+  if (trackingStatusSpan) {
+    trackingStatusSpan.textContent = 'Navigation active - Route displayed';
+  }
+}
+
+// Update current location marker during tracking
+function updateCurrentLocationMarker(newLocation) {
+  if (!newLocation || !map) return;
+  
+  userLocation = newLocation;
+  
+  // Update marker position
+  if (currentLocationMarker) {
+    currentLocationMarker.setGeometry({ lat: newLocation.lat, lng: newLocation.lng });
+  }
+  
+  // Update location display
+  updateLocationDisplay();
+  
+  // Recalculate route if needed
+  if (destination) {
+    calculateRoute();
+  }
+}
 
 console.log('QR Scanner script loaded successfully');
