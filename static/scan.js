@@ -29,12 +29,17 @@ const initializeMap = () => {
   // Add rate limiting delay to prevent API abuse
   setTimeout(() => {
     initializeMapWithDelay();
-  }, 1000);
+  }, 2000); // Increased delay to ensure scripts load
 };
 
 const initializeMapWithDelay = () => {
   try {
     console.log('Attempting to initialize map...');
+    
+    // Check if HERE Maps is available
+    if (typeof H === 'undefined') {
+      throw new Error('HERE Maps API not loaded');
+    }
     
     // Initialize HERE platform and map with minimal setup
     platform = new H.service.Platform({
@@ -54,11 +59,13 @@ const initializeMapWithDelay = () => {
       });
       
       // Enable map interaction
-      const behavior = new H.mapevents.Behavior();
+      const behavior = new H.mapevents.Behavior(map);
       ui = H.ui.UI.createDefault(map);
       
       // Configure UI to show road map like Google Maps
-      ui.getControl('mapsettings').setAlignment('top-right');
+      if (ui.getControl('mapsettings')) {
+        ui.getControl('mapsettings').setAlignment('top-right');
+      }
       
       console.log('HERE Maps initialized successfully with road view');
       showStatus('Scanner ready with road map visualization.', 'success');
@@ -85,18 +92,23 @@ const checkCameraSupport = async () => {
       return false;
     }
     
-    // Skip device enumeration as it may fail in some environments
-    // Instead, try to request camera access directly
+    // First try to get camera devices
     try {
-      const testStream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
-      });
-      testStream.getTracks().forEach(track => track.stop());
-      console.log('Camera access confirmed');
-      return true;
-    } catch (accessError) {
-      console.warn('Camera access test failed:', accessError.message);
-      return false;
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasCamera = devices.some(device => device.kind === 'videoinput');
+      
+      if (!hasCamera) {
+        console.warn('No camera devices found');
+        return false;
+      }
+      
+      console.log('Camera devices found, permission test skipped for better UX');
+      return true; // Return true if cameras are available, let user grant permission when needed
+      
+    } catch (enumError) {
+      console.warn('Could not enumerate devices:', enumError.message);
+      // Fall back to basic support check
+      return true; // Still try to use camera
     }
   } catch (error) {
     console.warn('Camera support check failed:', error.message);
@@ -784,15 +796,34 @@ window.addEventListener('beforeunload', () => {
 
 // Window load backup
 window.addEventListener('load', () => {
-  if (!map) {
-    console.log('Backup map initialization...');
-    initializeMap();
-  }
+  // Wait for HERE Maps to be available
+  let attempts = 0;
+  const maxAttempts = 10;
+  
+  const checkAndInitialize = () => {
+    attempts++;
+    
+    if (typeof H !== 'undefined' && !map) {
+      console.log('HERE Maps available, initializing...');
+      initializeMapWithDelay();
+    } else if (attempts < maxAttempts) {
+      console.log(`Waiting for HERE Maps... (${attempts}/${maxAttempts})`);
+      setTimeout(checkAndInitialize, 1000);
+    } else {
+      console.log('HERE Maps not available after 10 attempts, using fallback');
+      const mapContainer = document.getElementById('mapContainer');
+      if (mapContainer) {
+        mapContainer.innerHTML = '<div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center;">Map service temporarily unavailable<br>QR scanning is still functional</div>';
+      }
+    }
+  };
+  
+  checkAndInitialize();
   
   // Ensure map is properly sized
   setTimeout(() => {
-    if (map) {
+    if (map && map.getViewPort) {
       map.getViewPort().resize();
     }
-  }, 500);
+  }, 3000);
 });
