@@ -473,7 +473,7 @@ window.testSampleLocation = testSampleLocation;
 // Initialize HERE Maps - Simple approach like working QR page
 function initializeMap() {
   try {
-    const API_KEY = 'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI';
+    const API_KEY = 'qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI';
     
     // Initialize HERE Maps platform - same as working QR page
     platform = new H.service.Platform({ apikey: API_KEY });

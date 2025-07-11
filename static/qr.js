@@ -1,4 +1,4 @@
-// HERE Maps API Configuration with multiple API keys for better reliability
+// HERE Maps API Configuration with multiple API keys for better reliability - prioritized order
 const HERE_API_KEYS = [
   "qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI",
   "fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE", 

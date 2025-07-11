@@ -19,11 +19,12 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 mongo_client = None
 mongo_connected = False
 
-# HERE Maps API keys for better reliability
+# HERE Maps API keys for better reliability - prioritized order
 HERE_API_KEYS = [
     "qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI",
     "fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE", 
-    "KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ"
+    "KrksWbCEU3g3OnuQN3wDOncIgVTA2UrwIpTIN8iKzPQ",
+    "YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI"
 ]
 
 # API endpoint to get available HERE Maps API keys

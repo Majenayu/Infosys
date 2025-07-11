@@ -16,6 +16,7 @@ Added: Automatic location tracking instead of manual "Track Location" button
 Added: Location data stored in individual user collections, not common collection
 Updated: Removed QR scanner button from main navigation per user request
 Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB collection for each QR code
+Updated: Prioritized HERE Maps API key qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI as first priority across all JavaScript files
 
 ## System Architecture
 

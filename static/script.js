@@ -1,7 +1,7 @@
 // HERE Map initialization for company registration page
 let platform, map, geocoder;
 
-// Multiple API keys for better reliability
+// Multiple API keys for better reliability - prioritized order
 const HERE_API_KEYS = [
   "qOmqLOozpFXbHY1DD-N5xkTeAP8TYORuuEAbBO6NaGI",
   "fdEwg_luXCC7NWAtXFnTWWZCuoMDHZDhCdnVM0cXZQE", 
