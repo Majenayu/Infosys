@@ -439,6 +439,7 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
   // Update UI elements
   const travelTimeSpan = document.getElementById('travelTime');
   const distanceSpan = document.getElementById('distance');
+  const routeInfoDiv = document.getElementById('routeInfo');
   
   if (travelTimeSpan) {
     travelTimeSpan.textContent = timeDisplay;
@@ -448,8 +449,39 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
     distanceSpan.textContent = `${distanceKm} km`;
   }
   
+  // Update route information panel
+  if (routeInfoDiv) {
+    routeInfoDiv.innerHTML = `
+      <div class="row">
+        <div class="col-md-4">
+          <div class="text-center">
+            <h6 class="text-info mb-1">Distance</h6>
+            <span class="h5 text-primary">${distanceKm} km</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center">
+            <h6 class="text-info mb-1">Travel Time</h6>
+            <span class="h5 text-success">${timeDisplay}</span>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center">
+            <h6 class="text-info mb-1">Average Speed</h6>
+            <span class="h5 text-warning">${(window.currentSpeed || 10).toFixed(1)} km/h</span>
+          </div>
+        </div>
+      </div>
+      <hr class="my-3">
+      <div class="text-center">
+        <div class="badge bg-primary">Blue Route Active</div>
+        <div class="small text-muted mt-1">Real-time navigation with GPS tracking</div>
+      </div>
+    `;
+  }
+  
   // Update status message
-  showStatus(`Route: ${distanceKm} km, ETA: ${timeDisplay}`, 'success');
+  showStatus(`Blue route generated: ${distanceKm} km, ETA: ${timeDisplay}`, 'success');
 }
 
 // Update speed tracking
@@ -680,6 +712,11 @@ function calculateRoute() {
 function displayRoute(route) {
   if (!route || !map) return;
   
+  // Remove existing route if present
+  if (routeGroup) {
+    map.removeObject(routeGroup);
+  }
+  
   // Create route polyline
   const routeShape = route.shape;
   const lineString = new H.geo.LineString();
@@ -689,13 +726,15 @@ function displayRoute(route) {
     lineString.pushPoint(parseFloat(parts[0]), parseFloat(parts[1]));
   });
   
-  // Create route line in blue color
+  // Create route line in blue color with enhanced styling
   const routeLine = new H.map.Polyline(lineString, {
     style: {
       strokeColor: '#007bff',
       lineWidth: 6,
       lineCap: 'round',
-      lineJoin: 'round'
+      lineJoin: 'round',
+      lineDash: [0], // Solid line
+      lineStyle: H.map.SpatialStyle.LineStyle.SOLID
     }
   });
   
@@ -714,24 +753,32 @@ function displayRoute(route) {
   // Update UI with travel time
   updateTravelTimeDisplay(estimatedTime, routeDistance);
   
-  console.log('Route displayed on map with travel time:', estimatedTime);
+  console.log('Blue route displayed on map with travel time:', estimatedTime, 'seconds');
+  showStatus(`Blue route generated successfully - ${(routeDistance/1000).toFixed(1)} km route`, 'success');
 }
 
 // Display direct path if routing fails
 function displayDirectPath() {
   if (!userLocation || !destination || !map) return;
   
+  // Remove existing route if present
+  if (routeGroup) {
+    map.removeObject(routeGroup);
+  }
+  
   // Create direct line
   const lineString = new H.geo.LineString();
   lineString.pushPoint(userLocation.lat, userLocation.lng);
   lineString.pushPoint(destination.lat, destination.lng);
   
+  // Create blue direct line with dashed pattern to indicate fallback
   const directLine = new H.map.Polyline(lineString, {
     style: {
       strokeColor: '#007bff',
-      lineWidth: 4,
+      lineWidth: 6,
       lineCap: 'round',
-      strokeDasharray: '10 5'
+      lineJoin: 'round',
+      lineDash: [15, 10] // Dashed pattern to indicate direct path
     }
   });
   
@@ -746,7 +793,8 @@ function displayDirectPath() {
   // Update UI with estimated travel time
   updateTravelTimeDisplay(estimatedTime, distance * 1000);
   
-  console.log('Direct path displayed with estimated time:', estimatedTime);
+  console.log('Direct blue path displayed with estimated time:', estimatedTime, 'seconds');
+  showStatus(`Direct blue route generated - ${distance.toFixed(1)} km straight-line distance`, 'info');
 }
 
 // Update location display
@@ -768,6 +816,14 @@ function updateCurrentLocationMarker(newLocation) {
   
   // Calculate speed if we have previous location
   const currentSpeed = calculateCurrentSpeed(userLocation, newLocation);
+  
+  // Update speed tracking
+  if (currentSpeed > 0) {
+    updateSpeedTracking(currentSpeed);
+  } else {
+    // Use default speed if no movement detected
+    updateSpeedTracking(10);
+  }
   
   userLocation = newLocation;
   
