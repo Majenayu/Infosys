@@ -756,28 +756,15 @@ def initialize_mongodb():
     global mongo_client, mongo_connected
     
     try:
-        # Clean approach to avoid bson conflicts
-        import importlib
-        import sys
-        
-        # Remove any problematic bson modules from cache
-        modules_to_clear = [k for k in sys.modules.keys() if k.startswith('bson') and k != 'bson']
-        for mod in modules_to_clear:
-            try:
-                del sys.modules[mod]
-            except KeyError:
-                pass
-        
-        # Import pymongo directly using importlib
-        pymongo = importlib.import_module('pymongo')
-        MongoClient = getattr(pymongo, 'MongoClient')
+        # Simple clean import of pymongo
+        from pymongo import MongoClient
         
         # Create connection
         mongo_client = MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
         
         # Test connection
         mongo_client.admin.command('ping')
-        app.logger.info(f"MongoDB connected successfully with PyMongo {pymongo.version}")
+        app.logger.info("MongoDB connected successfully")
         mongo_connected = True
         return True
         
