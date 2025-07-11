@@ -190,12 +190,37 @@ function trackUserLocation() {
         timestamp: new Date().toISOString()
       };
       
+      const newLocation = {
+        lat: locationData.latitude,
+        lng: locationData.longitude
+      };
+      
+      // Calculate distance and travel time if destination is available
+      if (destination) {
+        const distance = calculateDistance(newLocation, destination);
+        const distanceInMeters = distance * 1000;
+        
+        // Calculate speed if we have previous location
+        if (window.previousLocation) {
+          const speed = calculateCurrentSpeed(window.previousLocation, newLocation);
+          updateSpeedTracking(speed);
+        }
+        
+        // Calculate travel time
+        const travelTimeSeconds = calculateTravelTime(distanceInMeters);
+        
+        // Update UI with distance and travel time
+        updateTravelTimeDisplay(travelTimeSeconds, distanceInMeters);
+        
+        // Store current location for next speed calculation
+        window.previousLocation = newLocation;
+        
+        // Update user location for calculations
+        userLocation = newLocation;
+      }
+      
       // Update navigation map if available
       if (map && destination) {
-        const newLocation = {
-          lat: locationData.latitude,
-          lng: locationData.longitude
-        };
         updateCurrentLocationMarker(newLocation);
       }
       
@@ -203,6 +228,9 @@ function trackUserLocation() {
       if (currentLocationSpan) {
         currentLocationSpan.textContent = `${locationData.latitude.toFixed(6)}, ${locationData.longitude.toFixed(6)}`;
       }
+      
+      // Always call updateLocationDisplay to refresh all location-related UI
+      updateLocationDisplay();
       
       // Send to server
       sendLocationToServer(locationData);
@@ -436,11 +464,12 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
     timeDisplay = `${minutes}m`;
   }
   
-  // Update UI elements
+  // Update UI elements in location status panel
   const travelTimeSpan = document.getElementById('travelTime');
   const distanceSpan = document.getElementById('distance');
   const routeInfoDiv = document.getElementById('routeInfo');
   
+  // Update individual span elements
   if (travelTimeSpan) {
     travelTimeSpan.textContent = timeDisplay;
   }
@@ -448,6 +477,36 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
   if (distanceSpan) {
     distanceSpan.textContent = `${distanceKm} km`;
   }
+  
+  // Update location status panel directly using querySelector to find exact elements
+  console.log('Updating distance and travel time displays:', { distance: distanceKm, time: timeDisplay });
+  
+  // Try multiple ways to find and update the distance and travel time elements
+  const allElements = document.querySelectorAll('*');
+  allElements.forEach(element => {
+    if (element.textContent && element.textContent.trim() === '--') {
+      const parent = element.parentElement;
+      if (parent && parent.textContent.includes('Route Distance:')) {
+        element.textContent = `${distanceKm} km`;
+        console.log('Updated Route Distance element');
+      } else if (parent && parent.textContent.includes('Travel Time:')) {
+        element.textContent = timeDisplay;
+        console.log('Updated Travel Time element');
+      }
+    }
+  });
+  
+  // Also try direct text content replacement
+  document.querySelectorAll('div, span, p').forEach(element => {
+    if (element.innerHTML.includes('Route Distance:</strong>') && element.innerHTML.includes('--')) {
+      element.innerHTML = element.innerHTML.replace('--', `${distanceKm} km`);
+      console.log('Updated Route Distance via innerHTML');
+    }
+    if (element.innerHTML.includes('Travel Time:</strong>') && element.innerHTML.includes('--')) {
+      element.innerHTML = element.innerHTML.replace('--', timeDisplay);
+      console.log('Updated Travel Time via innerHTML');
+    }
+  });
   
   // Update route information panel
   if (routeInfoDiv) {
@@ -1044,6 +1103,42 @@ function updateLocationDisplay() {
   
   if (trackingStatusSpan) {
     trackingStatusSpan.textContent = 'Navigation active - Route displayed';
+  }
+  
+  // Calculate and update distance/time if destination is available
+  if (destination) {
+    const distance = calculateDistance(userLocation, destination);
+    const distanceInMeters = distance * 1000;
+    const estimatedTime = calculateTravelTime(distanceInMeters);
+    
+    console.log('updateLocationDisplay called:', { 
+      distance: distance.toFixed(2) + ' km', 
+      time: Math.round(estimatedTime / 60) + ' min',
+      userLocation,
+      destination 
+    });
+    
+    // Update travel time display
+    updateTravelTimeDisplay(estimatedTime, distanceInMeters);
+    
+    // Force update the specific elements by ID
+    setTimeout(() => {
+      const distanceEl = document.getElementById('distance');
+      const travelTimeEl = document.getElementById('travelTime');
+      
+      if (distanceEl) {
+        distanceEl.textContent = `${distance.toFixed(1)} km`;
+        console.log('Force updated distance element');
+      }
+      
+      if (travelTimeEl) {
+        const hours = Math.floor(estimatedTime / 3600);
+        const minutes = Math.floor((estimatedTime % 3600) / 60);
+        const timeDisplay = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+        travelTimeEl.textContent = timeDisplay;
+        console.log('Force updated travel time element');
+      }
+    }, 100);
   }
 }
 
