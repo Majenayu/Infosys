@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TrackSmart - Company Registration</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+  <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+  <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+</head>
+<body>
+  <h1>Register Logistics Company</h1>
+  
+  <div style="margin-bottom: 20px;">
+    <a href="qr.html">
+      <button type="button" style="background-color: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">
+        QR Generator
+      </button>
+    </a>
+  </div>
+
+  <form id="companyForm">
+    <input type="text" name="name" placeholder="Company Name" required>
+    <input type="text" name="contactPerson" placeholder="Contact Person" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="Phone" required>
+    <input type="text" name="apiUrl" placeholder="API Base URL" required>
+    <input type="text" name="apiKey" placeholder="API Key" required>
+    <input type="text" name="address" placeholder="Head Office Address" required>
+    <button type="submit">Register</button>
+  </form>
+
+  <div id="mapContainer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
