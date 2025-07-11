@@ -385,74 +385,41 @@ window.testSampleLocation = testSampleLocation;
 
 // ====== NAVIGATION FUNCTIONS ======
 
-// Initialize HERE Maps
+// Initialize HERE Maps - Simple approach like working QR page
 function initializeMap() {
   try {
-    // Use only the working API key from QR generation page
-    const apiKeys = [
-      'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI'
-    ];
+    const API_KEY = 'YaQ_t8pg3O-_db-werIC_Prpikr0qz7Zc2zWHvKYadI';
     
-    // Try initializing with backup API keys
-    for (const apiKey of apiKeys) {
-      try {
-        // Initialize HERE Maps platform
-        platform = new H.service.Platform({
-          'apikey': apiKey
-        });
-        
-        // Get default map layers
-        const defaultLayers = platform.createDefaultLayers();
-        
-        // Initialize map
-        const mapContainer = document.getElementById('mapContainer');
-        if (mapContainer && typeof H !== 'undefined') {
-          // Create map centered on Bangalore initially
-          map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
-            zoom: 10,
-            center: { lat: 12.9716, lng: 77.5946 }
-          });
-          
-          // Make map interactive
-          const behavior = new H.mapevents.Behavior();
-          const ui = new H.ui.UI.createDefault(map);
-          
-          console.log('Navigation map initialized successfully with API key:', apiKey.substring(0, 10) + '...');
-          return; // Success, exit the loop
-        }
-      } catch (keyError) {
-        console.log('API key failed:', apiKey.substring(0, 10) + '...', keyError.message);
-        continue; // Try next API key
-      }
+    // Initialize HERE Maps platform - same as working QR page
+    platform = new H.service.Platform({ apikey: API_KEY });
+    defaultLayers = platform.createDefaultLayers();
+    
+    const mapContainer = document.getElementById('mapContainer');
+    if (!mapContainer) {
+      throw new Error('Map container not found');
     }
     
-    // If all API keys failed
-    throw new Error('All HERE Maps API keys failed');
+    // Initialize map - same as working QR page
+    map = new H.Map(mapContainer, defaultLayers.vector.normal.map, {
+      zoom: 10,
+      center: { lat: 12.9716, lng: 77.5946 } // Bangalore coordinates
+    });
+    
+    // Enable map events and behaviors - same as working QR page
+    mapEvents = new H.mapevents.MapEvents(map);
+    behavior = new H.mapevents.Behavior(mapEvents);
+    ui = H.ui.UI.createDefault(map);
+    
+    console.log('Navigation map initialized successfully');
+    showStatus('Map loaded successfully', 'success');
+    
+    // Initialize navigation after map is ready
+    initializeNavigation();
     
   } catch (error) {
     console.error('Error initializing map:', error);
-    
-    // Create a fallback map container
-    const mapContainer = document.getElementById('mapContainer');
-    if (mapContainer) {
-      mapContainer.innerHTML = `
-        <div style="background: #f8f9fa; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px; padding: 20px; text-align: center; border: 1px solid #ddd; border-radius: 8px;">
-          <div>
-            <h5 style="margin-bottom: 10px;">🗺️ Map Preview</h5>
-            <p>QR Scanner is ready to use<br>Navigation will work after scanning QR code</p>
-            <small style="color: #999; margin-top: 10px; display: block;">Map service temporarily unavailable</small>
-            <div id="fallbackMapData" style="margin-top: 15px; padding: 10px; background: #fff; border-radius: 5px; display: none;">
-              <strong>Current Location:</strong> <span id="fallbackCurrentLocation">Getting location...</span><br>
-              <strong>Destination:</strong> <span id="fallbackDestination">Set by scanning QR code</span><br>
-              <button onclick="openExternalMap()" style="margin-top: 10px; padding: 5px 10px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer;">Open in Maps</button>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      // Set up fallback map functionality
-      initializeFallbackMap();
-    }
+    showStatus('Map initialization failed - using fallback', 'warning');
+    initializeFallbackMap();
   }
 }
 

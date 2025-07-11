@@ -143,7 +143,8 @@ Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB colle
    - Added automatic location marker updates during tracking
    - Created "Open in Maps" button for external navigation when fallback is active
    - Fixed API key consistency: now using same working API key from QR generation page
-   - Status: Navigation system complete with both HERE Maps and fallback functionality
+   - Simplified map initialization to match working QR generator approach
+   - Status: Map initialization fixed, navigation system complete with both HERE Maps and fallback functionality
 
 ### API Integration
 - **HERE Maps API**: Provides mapping, geocoding, and search functionality
