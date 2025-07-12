@@ -155,12 +155,9 @@ class DeliveryAuth {
             return;
         }
 
-        // Get selected companies
+        // Get selected companies (optional)
         const selectedCompanies = this.getSelectedCompanies();
-        if (selectedCompanies.length === 0) {
-            this.showMessage('Please select at least one company to work with', 'error');
-            return;
-        }
+        console.log('Selected companies:', selectedCompanies);
 
         try {
             this.showMessage('Registering...', 'info');
@@ -262,15 +259,26 @@ class DeliveryAuth {
 
     async loadCompanies() {
         try {
+            console.log('Loading companies...');
             const response = await fetch('/companies');
+            console.log('Companies response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const companies = await response.json();
+            console.log('Companies loaded:', companies);
             
             const companySelection = document.getElementById('companySelection');
-            if (!companySelection) return;
+            if (!companySelection) {
+                console.error('companySelection element not found');
+                return;
+            }
             
-            if (companies.length === 0) {
+            if (!companies || companies.length === 0) {
                 companySelection.innerHTML = `
-                    <div class="text-center">
+                    <div class="text-center p-3">
                         <p class="text-muted">No companies available yet. Please contact admin.</p>
                     </div>
                 `;
@@ -278,12 +286,12 @@ class DeliveryAuth {
             }
             
             companySelection.innerHTML = companies.map(company => `
-                <div class="company-item" onclick="this.classList.toggle('selected'); this.querySelector('input').checked = !this.querySelector('input').checked">
-                    <input type="checkbox" value="${company.company_id}" onclick="event.stopPropagation()">
-                    <div class="company-info">
-                        <div class="company-name">${company.name}</div>
-                        <div class="company-details">ID: ${company.company_id} | ${company.email}</div>
-                    </div>
+                <div class="form-check mb-2 p-2 border rounded" style="cursor: pointer;">
+                    <input class="form-check-input" type="checkbox" value="${company.company_id || company._id}" id="company_${company.company_id || company._id}">
+                    <label class="form-check-label" for="company_${company.company_id || company._id}" style="cursor: pointer;">
+                        <strong>${company.name}</strong><br>
+                        <small class="text-muted">ID: ${company.company_id || company._id} | ${company.email}</small>
+                    </label>
                 </div>
             `).join('');
             
@@ -292,8 +300,9 @@ class DeliveryAuth {
             const companySelection = document.getElementById('companySelection');
             if (companySelection) {
                 companySelection.innerHTML = `
-                    <div class="text-center">
-                        <p class="text-danger">Failed to load companies. Please try again later.</p>
+                    <div class="text-center p-3">
+                        <p class="text-danger">Failed to load companies: ${error.message}</p>
+                        <button class="btn btn-sm btn-outline-primary" onclick="window.deliveryAuth.loadCompanies()">Retry</button>
                     </div>
                 `;
             }
@@ -302,20 +311,20 @@ class DeliveryAuth {
 
     getSelectedCompanies() {
         const checkboxes = document.querySelectorAll('#companySelection input[type="checkbox"]:checked');
-        return Array.from(checkboxes).map(cb => parseInt(cb.value));
+        return Array.from(checkboxes).map(cb => cb.value);
     }
 }
 
 // Initialize the delivery auth system when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    const deliveryAuth = new DeliveryAuth();
+    window.deliveryAuth = new DeliveryAuth();
     
     // Add test button for debugging
     if (window.location.search.includes('debug')) {
         const testButton = document.createElement('button');
         testButton.textContent = 'Test Login';
         testButton.className = 'btn btn-secondary mt-2';
-        testButton.onclick = () => deliveryAuth.testLogin();
+        testButton.onclick = () => window.deliveryAuth.testLogin();
         document.body.appendChild(testButton);
     }
 });

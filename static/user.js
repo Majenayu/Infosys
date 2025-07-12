@@ -90,15 +90,14 @@ class UserAuth {
     event.preventDefault();
     this.clearMessages();
     
-    const name = document.getElementById('registerName').value.trim();
-    const email = document.getElementById('registerEmail').value.trim();
-    const phone = document.getElementById('registerPhone').value.trim();
-    const address = document.getElementById('registerAddress').value.trim();
-    const password = document.getElementById('registerPassword').value;
-    const confirmPassword = document.getElementById('registerConfirmPassword').value;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const password = document.getElementById('password').value;
     
     // Validation
-    if (!name || !email || !phone || !address || !password || !confirmPassword) {
+    if (!name || !email || !phone || !address || !password) {
       this.showMessage('Please fill in all fields', 'error');
       return;
     }
@@ -110,11 +109,6 @@ class UserAuth {
 
     if (!this.isValidPhone(phone)) {
       this.showMessage('Please enter a valid phone number', 'error');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      this.showMessage('Passwords do not match', 'error');
       return;
     }
 
@@ -178,29 +172,45 @@ class UserAuth {
   }
 
   showMessage(message, type) {
-    const alertContainer = document.getElementById('alertContainer');
-    const alert = document.getElementById('alert');
-    const alertMessage = document.getElementById('alertMessage');
-    
-    if (!alertContainer || !alert || !alertMessage) return;
-    
-    // Set alert type
-    alert.className = `alert alert-dismissible fade show alert-${type === 'error' ? 'danger' : type}`;
-    alertMessage.textContent = message;
-    
-    // Show alert
-    alertContainer.style.display = 'block';
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-      this.clearMessages();
-    }, 5000);
+    const messageContainer = document.getElementById('statusMessage');
+    if (!messageContainer) {
+      console.error('Status message container not found');
+      alert(message); // Fallback to browser alert
+      return;
+    }
+
+    let alertClass = 'alert-info';
+    switch (type) {
+      case 'success':
+        alertClass = 'alert-success';
+        break;
+      case 'error':
+        alertClass = 'alert-danger';
+        break;
+      case 'warning':
+        alertClass = 'alert-warning';
+        break;
+    }
+
+    messageContainer.innerHTML = `
+      <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    `;
+
+    // Auto-hide success messages after 5 seconds
+    if (type === 'success' || type === 'info') {
+      setTimeout(() => {
+        this.clearMessages();
+      }, 5000);
+    }
   }
 
   clearMessages() {
-    const alertContainer = document.getElementById('alertContainer');
-    if (alertContainer) {
-      alertContainer.style.display = 'none';
+    const messageContainer = document.getElementById('statusMessage');
+    if (messageContainer) {
+      messageContainer.innerHTML = '';
     }
   }
 }

@@ -61,8 +61,8 @@ def user_page():
     """User login/register page"""
     return render_template('user.html')
 
-@app.route('/dashboard')
 @app.route('/user/dashboard')
+@app.route('/dashboard')  # Add alias route to prevent "Not Found" errors
 def user_dashboard():
     """User dashboard page"""
     return render_template('user_dashboard.html')
@@ -408,6 +408,7 @@ def get_location(location_id):
         return jsonify({'message': 'Failed to fetch location'}), 500
 
 @app.route('/companies')
+@app.route('/api/companies')  # Add API alias
 def get_companies():
     """Get all registered companies"""
     try:
