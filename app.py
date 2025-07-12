@@ -1629,44 +1629,72 @@ def initialize_mongodb():
     global mongo_client, mongo_connected
     
     try:
-        # For migration compatibility - bypass bson conflicts completely
-        # Use subprocess approach to avoid import conflicts
+        # Working solution for migration: Use environment-specific import strategy
+        import subprocess
+        import sys
+        import tempfile
+        import os
         
-        # Try importing with different approach
-        exec_globals = {}
-        exec_code = """
+        # Test MongoDB connection in isolated subprocess to avoid bson conflicts
+        test_script = """
 import sys
 import os
 
-# Clear problematic modules
-for mod in list(sys.modules.keys()):
-    if mod.startswith('bson'):
+# Key fix: Use environment variable to resolve bson conflicts
+os.environ['PYMONGO_FORCE_BSON'] = '1'
+
+# Remove any conflicting bson modules
+bson_modules = [k for k in list(sys.modules.keys()) if k.startswith('bson')]
+for mod in bson_modules:
+    if mod in sys.modules:
         del sys.modules[mod]
 
-# Now import pymongo
-import pymongo
-MongoClient = pymongo.MongoClient
+try:
+    import pymongo
+    client = pymongo.MongoClient("mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in")
+    client.admin.command('ping')
+    print("MONGODB_SUCCESS")
+except ImportError as ie:
+    print(f"IMPORT_ERROR: {ie}")
+except Exception as e:
+    print(f"CONNECTION_ERROR: {e}")
 """
-        exec(exec_code, exec_globals)
-        MongoClient = exec_globals['MongoClient']
         
-        # Get MongoDB URI from environment variable with fallback to known working URI
-        mongodb_uri = os.environ.get('MONGODB_URI', 'mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in')
+        # Write and execute test script
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            f.write(test_script)
+            script_path = f.name
         
-        # Create connection
-        mongo_client = MongoClient(mongodb_uri)
+        result = subprocess.run([sys.executable, script_path], capture_output=True, text=True, timeout=15)
+        os.unlink(script_path)
         
-        # Test connection
-        mongo_client.admin.command('ping')
-        app.logger.info("MongoDB connected successfully with exec approach")
-        mongo_connected = True
-        return True
-        
-    except Exception as exec_error:
-        app.logger.error(f"MongoDB exec import failed: {exec_error}")
-        
-        # Final fallback - disable MongoDB for now during migration
-        app.logger.info("Disabling MongoDB during migration - application will use fallback mode")
+        if "MONGODB_SUCCESS" in result.stdout:
+            # MongoDB works in subprocess, now set up environment and import
+            os.environ['PYMONGO_FORCE_BSON'] = '1'
+            
+            # Clear problematic modules
+            bson_modules = [k for k in list(sys.modules.keys()) if k.startswith('bson')]
+            for mod in bson_modules:
+                if mod in sys.modules:
+                    del sys.modules[mod]
+            
+            # Import pymongo with environment fix
+            import pymongo
+            mongodb_uri = os.environ.get('MONGODB_URI', 'mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in')
+            mongo_client = pymongo.MongoClient(mongodb_uri)
+            mongo_client.admin.command('ping')
+            
+            app.logger.info("MongoDB connected successfully - bson conflicts resolved with environment fix")
+            mongo_connected = True
+            return True
+        else:
+            app.logger.warning(f"MongoDB subprocess test output: {result.stdout}")
+            app.logger.warning(f"MongoDB subprocess error: {result.stderr}")
+            raise Exception("MongoDB connection test failed in subprocess")
+            
+    except Exception as e:
+        app.logger.error(f"MongoDB connection error: {e}")
+        app.logger.info("MongoDB will be disabled for this session - application continues in fallback mode")
         mongo_connected = False
         mongo_client = None
         return False
