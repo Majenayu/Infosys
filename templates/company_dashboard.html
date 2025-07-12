@@ -149,9 +149,9 @@
                 </div>
             </div>
 
-            <!-- Order Tracking Section (Hidden by default) -->
-            <div id="orderTrackingSection" style="display: none;">
-                <h3 class="mb-4">📦 Order Tracking</h3>
+            <!-- Order Tracking Section (Shown by default) -->
+            <div id="orderTrackingSection" style="display: block;">
+                <h3 class="mb-4">📦 Order Tracking - Live Updates</h3>
                 <div class="orders-table">
                     <table class="table table-dark table-striped">
                         <thead>
@@ -293,6 +293,9 @@
             document.getElementById('companyName').textContent = companyData.name;
             document.getElementById('companyId').textContent = companyData.company_id;
             document.getElementById('contactPerson').textContent = companyData.contact_person;
+            
+            // Automatically load orders when page loads
+            loadCompanyOrders();
         }
 
         function redirectToQRGeneration() {
