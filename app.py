@@ -75,6 +75,11 @@ def company_login_page():
     """Company login page"""
     return render_template('company_login.html')
 
+@app.route('/company/dashboard')
+def company_dashboard():
+    """Company dashboard page"""
+    return render_template('company_dashboard.html')
+
 @app.route('/company/register', methods=['POST'])
 def company_register():
     """Register a new company"""
@@ -310,6 +315,7 @@ def store_location():
             'longitude': data.get('longitude'),
             'google_maps_url': data.get('google_maps_url', ''),
             'here_maps_url': data.get('here_maps_url', ''),
+            'company_id': data.get('company_id'),  # Store company ID with QR code
             'timestamp': datetime.utcnow(),
             'qr_generated': True,
             'status': 'pending_download'  # Collection will be created when downloaded
@@ -969,6 +975,150 @@ def get_qr_code_data(qr_id):
     except Exception as e:
         app.logger.error(f"Error retrieving QR code data: {str(e)}")
         return jsonify({'message': 'Failed to retrieve QR code data'}), 500
+
+@app.route('/api/company/<int:company_id>/orders')
+def get_company_orders(company_id):
+    """Get orders for a specific company"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get all QR codes created by this company
+                db = mongo_client.get_database("tracksmart")
+                locations_collection = db.get_collection("locations")
+                
+                # Find all QR codes for this company
+                company_qrs = locations_collection.find({'company_id': company_id})
+                
+                orders = []
+                for qr_doc in company_qrs:
+                    qr_id = qr_doc.get('qr_id')
+                    if qr_id:
+                        # Get QR-specific collection data
+                        qr_collection = db.get_collection(str(qr_id))
+                        
+                        # Get destination info
+                        destination_info = qr_collection.find_one({'type': 'destination_info'})
+                        if not destination_info:
+                            destination_info = qr_collection.find_one({'type': 'qr_info'})
+                        
+                        # Get latest delivery info
+                        delivery_info = qr_collection.find_one(
+                            {'type': 'delivery_location'}, 
+                            sort=[('timestamp', -1)]
+                        )
+                        
+                        # Determine status
+                        if not delivery_info:
+                            status = 'Pending'
+                        elif delivery_info.get('location_type') == 'role_only':
+                            status = 'Boarded and Arriving'
+                        else:
+                            status = 'In Progress'
+                        
+                        order_data = {
+                            'order_id': f"ORD-{qr_id}",
+                            'qr_id': qr_id,
+                            'destination': destination_info.get('location_name', 'Unknown') if destination_info else 'Unknown',
+                            'delivery_partner': delivery_info.get('delivery_partner_name', 'Not assigned') if delivery_info else 'Not assigned',
+                            'status': status,
+                            'created_at': qr_doc.get('timestamp', qr_doc.get('created_at'))
+                        }
+                        orders.append(order_data)
+                
+                return jsonify({
+                    'orders': orders,
+                    'total': len(orders)
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error retrieving company orders: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            return jsonify({'message': 'Database connection failed'}), 500
+            
+    except Exception as e:
+        app.logger.error(f"Error retrieving company orders: {str(e)}")
+        return jsonify({'message': 'Failed to retrieve orders'}), 500
+
+@app.route('/api/company/<int:company_id>/employees')
+def get_company_employees(company_id):
+    """Get employees and reviews for a specific company"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                db = mongo_client.get_database("tracksmart")
+                
+                # Get all delivery partners (for now, showing all since we don't have company-specific assignment)
+                partners_collection = db.get_collection("delivery_partners")
+                partners = list(partners_collection.find({'active': True}))
+                
+                employees = []
+                for partner in partners:
+                    # Count active orders for this partner
+                    active_orders = 0
+                    locations_collection = db.get_collection("locations")
+                    company_qrs = locations_collection.find({'company_id': company_id})
+                    
+                    for qr_doc in company_qrs:
+                        qr_id = qr_doc.get('qr_id')
+                        if qr_id:
+                            qr_collection = db.get_collection(str(qr_id))
+                            delivery_info = qr_collection.find_one({
+                                'type': 'delivery_location',
+                                'delivery_partner_name': partner['name']
+                            })
+                            if delivery_info:
+                                active_orders += 1
+                    
+                    employee_data = {
+                        'name': partner['name'],
+                        'role': partner.get('role', 'Delivery Partner'),
+                        'vehicle_type': partner.get('vehicle_type', 'N/A'),
+                        'active_orders': active_orders,
+                        'active': partner.get('active', False)
+                    }
+                    employees.append(employee_data)
+                
+                # Generate sample reviews (in a real app, you'd store these in a reviews collection)
+                reviews = [
+                    {
+                        'customer_name': 'John Doe',
+                        'rating': 5,
+                        'comment': 'Excellent service! Very fast delivery.',
+                        'order_id': 'ORD-1234',
+                        'created_at': '2025-07-10T10:30:00Z'
+                    },
+                    {
+                        'customer_name': 'Jane Smith',
+                        'rating': 4,
+                        'comment': 'Good tracking system, arrived on time.',
+                        'order_id': 'ORD-5678',
+                        'created_at': '2025-07-09T14:15:00Z'
+                    }
+                ]
+                
+                return jsonify({
+                    'employees': employees,
+                    'reviews': reviews
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error retrieving company employees: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            return jsonify({'message': 'Database connection failed'}), 500
+            
+    except Exception as e:
+        app.logger.error(f"Error retrieving company employees: {str(e)}")
+        return jsonify({'message': 'Failed to retrieve employees'}), 500
 
 @app.route('/api/qr-tracking/<qr_id>')
 def get_qr_tracking_data(qr_id):

@@ -23,6 +23,9 @@ Added: Separated company registration from main index page with dedicated regist
 Updated: Simplified company registration form by removing API Base URL, API Key fields, and Location Preview map per user request (July 12, 2025)
 Added: Unique company ID system starting from 1 - each registered company receives a sequential ID starting from 1 and incrementing for each new company (July 12, 2025)
 Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
+Added: Complete company dashboard system with QR generation, order tracking, and employee management (July 12, 2025)
+Added: Company-specific QR code generation that includes company ID for order differentiation and filtering (July 12, 2025)
+Added: API endpoints for company dashboard data retrieval: /api/company/<id>/orders and /api/company/<id>/employees (July 12, 2025)
 
 ## System Architecture
 

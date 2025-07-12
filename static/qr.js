@@ -386,6 +386,9 @@ const generateQR = (name, address, coords) => {
   // Clear existing QR code
   qrContainer.innerHTML = '';
 
+  // Get company ID from localStorage
+  const companyId = localStorage.getItem('currentCompanyId');
+  
   const data = {
     name,
     address,
@@ -394,6 +397,7 @@ const generateQR = (name, address, coords) => {
     googleMapsUrl: `https://www.google.com/maps?q=${coords.lat},${coords.lng}`,
     hereMapsUrl: `https://wego.here.com/directions/mix/${coords.lat},${coords.lng}`,
     timestamp: new Date().toISOString(),
+    company_id: companyId ? parseInt(companyId) : null, // Include company ID
     qr_id: null // Will be set after server response
   };
 
@@ -453,7 +457,8 @@ const storeLocationData = async (data) => {
         // Regenerate QR code with the QR ID included
         const updatedData = {
           ...data,
-          qr_id: result.qr_id
+          qr_id: result.qr_id,
+          company_id: data.company_id // Ensure company_id is included
         };
         
         // Clear and regenerate QR code with updated data
