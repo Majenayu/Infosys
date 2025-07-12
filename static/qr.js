@@ -383,6 +383,15 @@ const updateLocationInfo = (name, address, coords) => {
 const generateQR = (name, address, coords) => {
   if (!qrContainer) return;
 
+  // Check if user is selected
+  const userSelect = document.getElementById('userSelect');
+  const selectedUserId = userSelect ? userSelect.value : null;
+  
+  if (!selectedUserId) {
+    showStatus('Please select a user to assign this QR code to', 'error');
+    return;
+  }
+
   // Clear existing QR code
   qrContainer.innerHTML = '';
 
@@ -407,6 +416,7 @@ const generateQR = (name, address, coords) => {
     hereMapsUrl: `https://wego.here.com/directions/mix/${coords.lat},${coords.lng}`,
     timestamp: new Date().toISOString(),
     company_id: companyId ? parseInt(companyId) : null, // Include company ID
+    assigned_user_id: selectedUserId ? parseInt(selectedUserId) : null, // Include assigned user ID
     qr_id: null // Will be set after server response
   };
 
@@ -562,6 +572,32 @@ const showStatus = (message, type) => {
   }, 4000);
 };
 
+// Load available users for assignment
+const loadUsers = async () => {
+  try {
+    const response = await fetch('/api/users');
+    if (!response.ok) {
+      throw new Error('Failed to load users');
+    }
+    
+    const users = await response.json();
+    const userSelect = document.getElementById('userSelect');
+    
+    if (userSelect) {
+      userSelect.innerHTML = '<option value="">Select a user...</option>';
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.user_id;
+        option.textContent = `${user.name} (${user.email})`;
+        userSelect.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error('Error loading users:', error);
+    showStatus('Failed to load users', 'error');
+  }
+};
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   console.log('QR Generator initializing...');
@@ -571,6 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupSearch();
   setupCurrentLocation();
   setupDownload();
+  loadUsers();
   
   console.log('QR Generator initialized successfully');
 });

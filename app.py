@@ -113,7 +113,7 @@ def company_register():
         if existing_company:
             return jsonify({'message': 'Company with this name or email already exists'}), 400
         
-        # Generate unique company ID starting from 1000
+        # Generate unique company ID starting from 1
         # Get the highest existing company_id and increment by 1
         highest_id_company = companies_collection.find_one(
             {},
@@ -123,7 +123,7 @@ def company_register():
         if highest_id_company and 'company_id' in highest_id_company:
             company_id = highest_id_company['company_id'] + 1
         else:
-            company_id = 1000
+            company_id = 1
         
         # Create company document
         company_doc = {
@@ -257,6 +257,7 @@ def store_location():
             'google_maps_url': data.get('google_maps_url', ''),
             'here_maps_url': data.get('here_maps_url', ''),
             'company_id': data.get('company_id'),  # Store company ID with QR code
+            'assigned_user_id': data.get('assigned_user_id'),  # Store assigned user ID
             'timestamp': datetime.utcnow(),
             'qr_generated': True,
             'status': 'pending_download'  # Collection will be created when downloaded
@@ -317,6 +318,7 @@ def activate_qr(qr_id):
             'google_maps_url': qr_data.get('google_maps_url', ''),
             'here_maps_url': qr_data.get('here_maps_url', ''),
             'company_id': qr_data.get('company_id'),  # Include company ID from original QR data
+            'assigned_user_id': qr_data.get('assigned_user_id'),  # Include assigned user ID
             'timestamp': datetime.utcnow(),
             'created_at': datetime.utcnow(),
             'qr_generated': True,
@@ -406,6 +408,44 @@ def get_companies():
     except Exception as e:
         app.logger.error(f"Error fetching companies: {str(e)}")
         return jsonify({'message': 'Failed to fetch companies'}), 500
+
+@app.route('/api/users')
+def get_users():
+    """Get all registered users for company selection"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get all users from database
+                users_collection = mongo_client.get_database("tracksmart").get_collection("users")
+                users = list(users_collection.find({}, {
+                    'user_id': 1,
+                    'name': 1,
+                    'email': 1,
+                    'phone': 1,
+                    'active': 1,
+                    '_id': 0
+                }))
+                
+                # Sort by user_id
+                users.sort(key=lambda x: x.get('user_id', 0))
+                
+                app.logger.info(f"Retrieved {len(users)} users")
+                return jsonify(users)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error fetching users: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot fetch users")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching users: {str(e)}")
+        return jsonify({'message': 'Failed to fetch users'}), 500
 
 @app.route('/store-live-location', methods=['POST'])
 def store_live_location():
@@ -937,14 +977,16 @@ def get_qr_code_data(qr_id):
                 if not qr_data:
                     return jsonify({'message': 'QR code not found'}), 404
                 
-                # Return QR code information
+                # Return QR code information (including access control data)
                 response_data = {
                     'qr_id': qr_data.get('qr_id', qr_id),
                     'location_name': qr_data.get('location_name', ''),
                     'address': qr_data.get('address', ''),
                     'coordinates': qr_data.get('coordinates', {}),
                     'created_at': qr_data.get('created_at'),
-                    'status': qr_data.get('status', 'active')
+                    'status': qr_data.get('status', 'active'),
+                    'company_id': qr_data.get('company_id'),
+                    'assigned_user_id': qr_data.get('assigned_user_id')
                 }
                 
                 app.logger.info(f"QR code data retrieved for ID: {qr_id}")
@@ -961,6 +1003,61 @@ def get_qr_code_data(qr_id):
     except Exception as e:
         app.logger.error(f"Error retrieving QR code data: {str(e)}")
         return jsonify({'message': 'Failed to retrieve QR code data'}), 500
+
+@app.route('/api/check-qr-access/<qr_id>/<user_id>')
+def check_qr_access(qr_id, user_id):
+    """Check if a user has access to a specific QR code"""
+    try:
+        if not qr_id or len(qr_id) != 4 or not qr_id.isdigit():
+            return jsonify({'message': 'Invalid QR ID format', 'access': False}), 400
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed', 'access': False}), 500
+        
+        db = mongo_client.get_database("tracksmart")
+        
+        # Get QR data from QR-specific collection
+        qr_collection = db.get_collection(qr_id)
+        qr_data = qr_collection.find_one({'type': 'destination_info'})
+        
+        if not qr_data:
+            return jsonify({'message': 'QR code not found', 'access': False}), 404
+        
+        # Check if user is assigned to this QR code
+        assigned_user_id = qr_data.get('assigned_user_id')
+        company_id = qr_data.get('company_id')
+        
+        # Convert user_id to int for comparison
+        try:
+            user_id_int = int(user_id)
+        except ValueError:
+            return jsonify({'message': 'Invalid user ID format', 'access': False}), 400
+        
+        # Allow access if user is assigned to this QR code
+        if assigned_user_id and assigned_user_id == user_id_int:
+            return jsonify({
+                'access': True,
+                'message': 'Access granted',
+                'qr_id': qr_id,
+                'assigned_user_id': assigned_user_id,
+                'company_id': company_id
+            })
+        
+        # Deny access for unassigned users
+        return jsonify({
+            'access': False,
+            'message': 'Access denied. This QR code is assigned to another user.',
+            'qr_id': qr_id,
+            'assigned_user_id': assigned_user_id
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error checking QR access: {str(e)}")
+        return jsonify({'message': 'Failed to check QR access', 'access': False}), 500
 
 @app.route('/api/company/<int:company_id>/orders')
 def get_company_orders(company_id):
