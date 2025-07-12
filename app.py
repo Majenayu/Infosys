@@ -61,6 +61,7 @@ def user_page():
     """User login/register page"""
     return render_template('user.html')
 
+@app.route('/dashboard')
 @app.route('/user/dashboard')
 def user_dashboard():
     """User dashboard page"""
