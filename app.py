@@ -327,6 +327,16 @@ def store_live_location():
                 # Get delivery partner's info from database
                 partners_collection = db.get_collection("delivery_partners")
                 delivery_partner = partners_collection.find_one({'email': user_email})
+                
+                # If user_email is 'anonymous', try to find the most recent delivery partner
+                if user_email == 'anonymous' or not delivery_partner:
+                    # Find the most recently active delivery partner as a fallback
+                    recent_partner = partners_collection.find_one({}, sort=[('created_at', -1)])
+                    if recent_partner:
+                        delivery_partner = recent_partner
+                        user_email = recent_partner['email']  # Update the user_email for storage
+                        app.logger.info(f"Using most recent delivery partner as fallback: {recent_partner['name']} ({recent_partner['email']})")
+                
                 partner_name = delivery_partner.get('name', 'Unknown Partner') if delivery_partner else 'Unknown Partner'
                 partner_role = delivery_partner.get('role', 'boy') if delivery_partner else 'boy'
                 
