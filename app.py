@@ -485,6 +485,71 @@ def get_users():
         app.logger.error(f"Error fetching users: {str(e)}")
         return jsonify({'message': 'Failed to fetch users'}), 500
 
+@app.route('/api/delivery-partners')
+def get_delivery_partners():
+    """Get all delivery partners"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get all delivery partners from database
+                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
+                partners = list(partners_collection.find({}, {
+                    'name': 1,
+                    'email': 1,
+                    'phone': 1,
+                    'role': 1,
+                    'vehicle_type': 1,
+                    'active': 1,
+                    'created_at': 1,
+                    '_id': 0
+                }))
+                
+                app.logger.info(f"Retrieved {len(partners)} delivery partners")
+                return jsonify(partners)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error fetching delivery partners: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot fetch delivery partners")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching delivery partners: {str(e)}")
+        return jsonify({'message': 'Failed to fetch delivery partners'}), 500
+
+@app.route('/api/debug/users')
+def debug_users():
+    """Debug endpoint to see user data with passwords (for testing only)"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get all users from database with all fields
+                users_collection = mongo_client.get_database("tracksmart").get_collection("users")
+                users = list(users_collection.find({}, {'_id': 0}))
+                
+                app.logger.info(f"Debug: Retrieved {len(users)} users with full data")
+                return jsonify(users)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error fetching users: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot fetch users")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching users: {str(e)}")
+        return jsonify({'message': 'Failed to fetch users'}), 500
+
 @app.route('/store-live-location', methods=['POST'])
 def store_live_location():
     """Store live location data - special handling for QR tracking"""
