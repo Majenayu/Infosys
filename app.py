@@ -108,8 +108,21 @@ def company_register():
         if existing_company:
             return jsonify({'message': 'Company with this name or email already exists'}), 400
         
+        # Generate unique company ID starting from 1
+        # Get the highest existing company_id and increment by 1
+        highest_id_company = companies_collection.find_one(
+            {},
+            sort=[('company_id', -1)]
+        )
+        
+        if highest_id_company and 'company_id' in highest_id_company:
+            company_id = highest_id_company['company_id'] + 1
+        else:
+            company_id = 1
+        
         # Create company document
         company_doc = {
+            'company_id': company_id,
             'name': data['name'],
             'contact_person': data['contactPerson'],
             'email': data['email'],
@@ -123,11 +136,11 @@ def company_register():
         # Insert into companies collection
         result = companies_collection.insert_one(company_doc)
         
-        app.logger.info(f"Company registered: {data['name']} ({data['email']})")
+        app.logger.info(f"Company registered: {data['name']} ({data['email']}) - ID: {company_id}")
         
         return jsonify({
             'message': 'Company registered successfully!',
-            'company_id': str(result.inserted_id),
+            'company_id': company_id,
             'name': data['name']
         })
         
@@ -174,6 +187,7 @@ def company_login():
                 # Prepare company data for response
                 company_data = {
                     'id': str(company['_id']),
+                    'company_id': company.get('company_id', 'N/A'),
                     'name': company['name'],
                     'email': company['email'],
                     'contact_person': company['contact_person'],

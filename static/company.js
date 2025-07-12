@@ -59,7 +59,7 @@ class CompanyAuth {
       const result = await response.json();
 
       if (response.ok) {
-        this.showMessage('Company registered successfully!', 'success');
+        this.showMessage(`Company registered successfully! Welcome, ${result.name}! Your Company ID is: ${result.company_id}`, 'success');
         setTimeout(() => {
           window.location.href = '/company/login';
         }, 2000);
