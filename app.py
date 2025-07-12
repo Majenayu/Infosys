@@ -806,8 +806,21 @@ def user_register():
                 if existing_user:
                     return jsonify({'message': 'Email already registered'}), 400
                 
+                # Generate unique user ID starting from 1000
+                # Get the highest existing user_id and increment by 1
+                highest_id_user = users_collection.find_one(
+                    {},
+                    sort=[('user_id', -1)]
+                )
+                
+                if highest_id_user and 'user_id' in highest_id_user:
+                    user_id = highest_id_user['user_id'] + 1
+                else:
+                    user_id = 1000
+                
                 # Create user document
                 user = {
+                    'user_id': user_id,
                     'name': data['name'],
                     'email': email,
                     'phone': data['phone'],
@@ -825,7 +838,8 @@ def user_register():
                 
                 return jsonify({
                     'message': 'User registered successfully!',
-                    'user_id': str(result.inserted_id)
+                    'user_id': user_id,
+                    'name': data['name']
                 })
                 
             except Exception as db_error:
