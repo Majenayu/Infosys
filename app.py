@@ -1629,8 +1629,26 @@ def initialize_mongodb():
     global mongo_client, mongo_connected
     
     try:
-        # Direct pymongo import
-        from pymongo import MongoClient
+        # For migration compatibility - bypass bson conflicts completely
+        # Use subprocess approach to avoid import conflicts
+        
+        # Try importing with different approach
+        exec_globals = {}
+        exec_code = """
+import sys
+import os
+
+# Clear problematic modules
+for mod in list(sys.modules.keys()):
+    if mod.startswith('bson'):
+        del sys.modules[mod]
+
+# Now import pymongo
+import pymongo
+MongoClient = pymongo.MongoClient
+"""
+        exec(exec_code, exec_globals)
+        MongoClient = exec_globals['MongoClient']
         
         # Get MongoDB URI from environment variable with fallback to known working URI
         mongodb_uri = os.environ.get('MONGODB_URI', 'mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in')
@@ -1640,19 +1658,17 @@ def initialize_mongodb():
         
         # Test connection
         mongo_client.admin.command('ping')
-        app.logger.info("MongoDB connected successfully")
+        app.logger.info("MongoDB connected successfully with exec approach")
         mongo_connected = True
         return True
         
-    except ImportError as import_error:
-        app.logger.error(f"MongoDB import failed: {import_error}")
-        app.logger.info("Application will continue without MongoDB connection")
+    except Exception as exec_error:
+        app.logger.error(f"MongoDB exec import failed: {exec_error}")
+        
+        # Final fallback - disable MongoDB for now during migration
+        app.logger.info("Disabling MongoDB during migration - application will use fallback mode")
         mongo_connected = False
-        return False
-    except Exception as e:
-        app.logger.error(f"MongoDB connection failed: {e}")
-        app.logger.info("Application will continue without MongoDB connection")
-        mongo_connected = False
+        mongo_client = None
         return False
 
 # Initialize MongoDB on startup
