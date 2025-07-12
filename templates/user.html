@@ -3,116 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Portal - TrackSmart</title>
+  <title>TrackSmart - User Portal</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
   
   <!-- Bootstrap CSS with Replit dark theme -->
   <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
   
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=1.1">
 </head>
 <body>
   <div class="container my-5">
     <div class="row">
-      <div class="col-lg-6 mx-auto">
+      <div class="col-lg-8 mx-auto">
         <div class="text-center mb-4">
-          <h1 class="display-4 mb-3">👤 User Portal</h1>
-          <p class="lead">Login or Register to Access TrackSmart</p>
+          <h1 class="display-4 mb-3">👤 TrackSmart User Portal</h1>
+          <p class="lead">Track your deliveries and manage your orders</p>
         </div>
         
-        <!-- Navigation -->
-        <div class="d-flex justify-content-center gap-3 mb-4">
-          <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
-            ← Back to Home
-          </a>
-          <a href="{{ url_for('qr_generator') }}" class="btn btn-outline-info">
-            QR Generator
-          </a>
-          <a href="{{ url_for('delivery_page') }}" class="btn btn-outline-warning">
-            🚚 Delivery Boy
-          </a>
-          <a href="tel:+919483246283" class="btn btn-danger btn-sm">
+        <!-- Customer Care Button -->
+        <div class="d-flex justify-content-center mb-4">
+          <a href="tel:9483246283" class="btn btn-outline-light btn-lg">
             📞 Customer Care: 9483246283
           </a>
         </div>
 
-        <!-- Alert for messages -->
-        <div id="alertContainer" class="mb-4" style="display: none;">
-          <div id="alert" class="alert alert-dismissible fade show" role="alert">
-            <span id="alertMessage"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <!-- User Authentication Options -->
+        <div class="card shadow">
+          <div class="card-header">
+            <h3 class="card-title mb-0">User Access</h3>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+              <p class="lead mb-4">Login or register to track your deliveries</p>
+              <div class="d-grid gap-3">
+                <button class="btn btn-primary btn-lg" onclick="showRegister()">
+                  📝 Register User
+                </button>
+                <button class="btn btn-outline-primary btn-lg" onclick="showLogin()">
+                  🔐 Login User
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Login/Register Toggle -->
-        <div class="card shadow">
+        <!-- Registration Form -->
+        <div class="card shadow mt-4" id="registerCard" style="display: none;">
           <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" id="authTabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">
-                  Login
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">
-                  Register
-                </button>
-              </li>
-            </ul>
+            <h3 class="card-title mb-0">User Registration</h3>
           </div>
           <div class="card-body">
-            <div class="tab-content" id="authTabContent">
-              <!-- Login Form -->
-              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                <form id="loginForm">
-                  <div class="mb-3">
-                    <label for="loginEmail" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="loginEmail" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="loginPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="loginPassword" required>
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                  </div>
-                </form>
+            <form id="registerForm">
+              <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" required>
               </div>
-              
-              <!-- Register Form -->
-              <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                <form id="registerForm">
-                  <div class="mb-3">
-                    <label for="registerName" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="registerName" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="registerEmail" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="registerEmail" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="registerPhone" class="form-label">Phone Number</label>
-                    <input type="tel" class="form-control" id="registerPhone" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="registerAddress" class="form-label">Address</label>
-                    <textarea class="form-control" id="registerAddress" rows="3" required></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="registerPassword" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="registerPassword" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="registerConfirmPassword" required>
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-success btn-lg">Register</button>
-                  </div>
-                </form>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
               </div>
-            </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" required>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea class="form-control" id="address" rows="3" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="card shadow mt-4" id="loginCard" style="display: none;">
+          <div class="card-header">
+            <h3 class="card-title mb-0">User Login</h3>
+          </div>
+          <div class="card-body">
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="loginEmail" required>
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" required>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
           </div>
         </div>
       </div>
@@ -122,7 +106,88 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
-  <!-- User Authentication Script -->
-  <script src="{{ url_for('static', filename='user.js') }}"></script>
+  <script>
+    function showRegister() {
+      document.getElementById('registerCard').style.display = 'block';
+      document.getElementById('loginCard').style.display = 'none';
+    }
+    
+    function showLogin() {
+      document.getElementById('loginCard').style.display = 'block';
+      document.getElementById('registerCard').style.display = 'none';
+    }
+    
+    // Register form submission
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        password: document.getElementById('password').value
+      };
+      
+      fetch('/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          if (data.user_id) {
+            // Registration successful, redirect to dashboard
+            localStorage.setItem('user_id', data.user_id);
+            localStorage.setItem('user_name', data.name);
+            window.location.href = '/dashboard';
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Registration failed. Please try again.');
+      });
+    });
+    
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        email: document.getElementById('loginEmail').value,
+        password: document.getElementById('loginPassword').value
+      };
+      
+      fetch('/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          if (data.user) {
+            // Login successful, redirect to dashboard
+            localStorage.setItem('user_id', data.user.user_id);
+            localStorage.setItem('user_name', data.user.name);
+            localStorage.setItem('user_email', data.user.email);
+            window.location.href = '/dashboard';
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Login failed. Please try again.');
+      });
+    });
+  </script>
 </body>
 </html>

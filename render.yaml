@@ -1,0 +1,45 @@
+services:
+  # User Service
+  - type: web
+    name: tracksmart-user
+    env: python
+    plan: starter
+    buildCommand: pip install -r render_requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --reuse-port user_app:app
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        value: mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in
+      - key: PORT
+        value: 10000
+
+  # Delivery Partner Service
+  - type: web
+    name: tracksmart-delivery
+    env: python
+    plan: starter
+    buildCommand: pip install -r render_requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --reuse-port delivery_app:app
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        value: mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in
+      - key: PORT
+        value: 10000
+
+  # Company Service
+  - type: web
+    name: tracksmart-company
+    env: python
+    plan: starter
+    buildCommand: pip install -r render_requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --reuse-port company_app:app
+    envVars:
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        value: mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in
+      - key: PORT
+        value: 10000
