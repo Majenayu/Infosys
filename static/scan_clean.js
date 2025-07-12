@@ -723,19 +723,7 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
     timeDisplay = `${minutes}m`;
   }
   
-  // Update Location Status panel elements
-  const routeDistanceElement = document.querySelector('.card-body').children[1]; // Route Distance element
-  const travelTimeElement = document.querySelector('.card-body').children[2]; // Travel Time element
-  
-  if (routeDistanceElement && routeDistanceElement.textContent.includes('Route Distance:')) {
-    routeDistanceElement.innerHTML = `<strong>Route Distance:</strong> <span class="text-info">${distanceKm} km</span>`;
-  }
-  
-  if (travelTimeElement && travelTimeElement.textContent.includes('Travel Time:')) {
-    travelTimeElement.innerHTML = `<strong>Travel Time:</strong> <span class="text-success">${timeDisplay}</span>`;
-  }
-  
-  // Also update any other UI elements that might exist
+  // Update any other UI elements that might exist
   const travelTimeSpan = document.getElementById('travelTime');
   const distanceSpan = document.getElementById('distance');
   const routeInfoDiv = document.getElementById('routeInfo');

@@ -481,32 +481,7 @@ function updateTravelTimeDisplay(timeInSeconds, distanceInMeters) {
   // Update location status panel directly using querySelector to find exact elements
   console.log('Updating distance and travel time displays:', { distance: distanceKm, time: timeDisplay });
   
-  // Try multiple ways to find and update the distance and travel time elements
-  const allElements = document.querySelectorAll('*');
-  allElements.forEach(element => {
-    if (element.textContent && element.textContent.trim() === '--') {
-      const parent = element.parentElement;
-      if (parent && parent.textContent.includes('Route Distance:')) {
-        element.textContent = `${distanceKm} km`;
-        console.log('Updated Route Distance element');
-      } else if (parent && parent.textContent.includes('Travel Time:')) {
-        element.textContent = timeDisplay;
-        console.log('Updated Travel Time element');
-      }
-    }
-  });
-  
-  // Also try direct text content replacement
-  document.querySelectorAll('div, span, p').forEach(element => {
-    if (element.innerHTML.includes('Route Distance:</strong>') && element.innerHTML.includes('--')) {
-      element.innerHTML = element.innerHTML.replace('--', `${distanceKm} km`);
-      console.log('Updated Route Distance via innerHTML');
-    }
-    if (element.innerHTML.includes('Travel Time:</strong>') && element.innerHTML.includes('--')) {
-      element.innerHTML = element.innerHTML.replace('--', timeDisplay);
-      console.log('Updated Travel Time via innerHTML');
-    }
-  });
+  // Route Distance and Travel Time elements have been removed from the UI
   
   // Update route information panel
   if (routeInfoDiv) {

@@ -18,6 +18,7 @@ Updated: Removed QR scanner button from main navigation per user request
 Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB collection for each QR code
 Updated: Prioritized HERE Maps API key VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA as primary key across all JavaScript files
 Updated: Enhanced rate limiting handling in all map initialization functions with delays and graceful fallback
+Updated: Removed Route Distance and Travel Time display elements from delivery partner interface per user request (July 12, 2025)
 Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
 
 ## System Architecture
