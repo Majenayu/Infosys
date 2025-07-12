@@ -301,26 +301,37 @@ class UserDashboard {
       
       while (!success && apiKeyIndex < apiKeys.length) {
         try {
-          // Add delay to prevent rate limiting
-          if (apiKeyIndex > 0) {
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay for fallback keys
-          } else {
-            await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay for primary key
-          }
+          // Progressive delay to prevent rate limiting
+          const delay = apiKeyIndex === 0 ? 1000 : 3000 + (apiKeyIndex * 1000);
+          await new Promise(resolve => setTimeout(resolve, delay));
           
-          console.log(`Trying HERE Maps API key ${apiKeyIndex + 1}/${apiKeys.length}`);
+          console.log(`Trying HERE Maps API key ${apiKeyIndex + 1}/${apiKeys.length} (delay: ${delay}ms)`);
           
           platform = new H.service.Platform({
-            'apikey': apiKeys[apiKeyIndex]
+            'apikey': apiKeys[apiKeyIndex],
+            'useHTTPS': true
           });
           
+          // Test platform first
+          await new Promise(resolve => setTimeout(resolve, 200));
           defaultLayers = platform.createDefaultLayers();
+          
+          // Test layer creation
+          if (!defaultLayers || (!defaultLayers.vector && !defaultLayers.raster)) {
+            throw new Error('Invalid layers created');
+          }
+          
           success = true;
-          console.log('HERE Maps initialized successfully');
+          console.log(`HERE Maps initialized successfully with API key ${apiKeyIndex + 1}`);
           
         } catch (error) {
-          console.warn(`API key ${apiKeyIndex + 1} failed:`, error);
+          console.warn(`API key ${apiKeyIndex + 1} failed:`, error.message);
           apiKeyIndex++;
+          
+          // If it's a rate limit error, add extra delay
+          if (error.message && error.message.includes('429')) {
+            await new Promise(resolve => setTimeout(resolve, 5000));
+          }
         }
       }
       
@@ -352,21 +363,36 @@ class UserDashboard {
       const centerLat = (destLat + deliveryLat) / 2;
       const centerLng = (destLng + deliveryLng) / 2;
       
-      // Try raster map first, fallback to vector if needed
+      // Use terrain/satellite map for Google Maps-like appearance with comprehensive fallback
       let mapLayer;
       try {
-        mapLayer = defaultLayers.raster.normal.map; // Google Maps-like appearance
+        // Priority order: terrain > satellite > normal raster > vector
+        if (defaultLayers.raster && defaultLayers.raster.terrain && defaultLayers.raster.terrain.map) {
+          mapLayer = defaultLayers.raster.terrain.map;
+          console.log('Using terrain map layer for Google Maps style');
+        } else if (defaultLayers.raster && defaultLayers.raster.satellite && defaultLayers.raster.satellite.map) {
+          mapLayer = defaultLayers.raster.satellite.map;
+          console.log('Using satellite map layer for Google Maps style');
+        } else if (defaultLayers.raster && defaultLayers.raster.normal && defaultLayers.raster.normal.map) {
+          mapLayer = defaultLayers.raster.normal.map;
+          console.log('Using normal raster map layer');
+        } else {
+          mapLayer = defaultLayers.vector.normal.map;
+          console.log('Using vector map layer as final fallback');
+        }
       } catch (e) {
-        console.warn('Raster maps not available, using vector');
-        mapLayer = defaultLayers.vector.normal.map;
+        console.warn('Error selecting map layer, using fallback:', e);
+        this.initializeFallbackMap(trackingData);
+        return;
       }
       
       const map = new H.Map(
         mapContainer,
         mapLayer,
         {
-          zoom: 12,
-          center: { lat: centerLat, lng: centerLng }
+          zoom: 11,
+          center: { lat: centerLat, lng: centerLng },
+          pixelRatio: window.devicePixelRatio || 1
         }
       );
       
@@ -374,21 +400,33 @@ class UserDashboard {
       const behavior = new H.mapevents.Behavior();
       const ui = new H.ui.UI(map);
       
-      // Create destination marker (red)
-      const destMarker = new H.map.Marker(
-        { lat: destLat, lng: destLng },
-        { 
-          icon: new H.map.Icon('https://img.icons8.com/color/48/000000/marker.png', {size: {w: 32, h: 32}}) 
-        }
+      // Create custom destination marker (Google Maps style red pin)
+      const destIcon = new H.map.Icon(
+        'data:image/svg+xml,' + encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+            <path d="M16 0C7.2 0 0 7.2 0 16s16 24 16 24 16-15.2 16-24S24.8 0 16 0z" fill="#EA4335"/>
+            <circle cx="16" cy="16" r="8" fill="white"/>
+            <circle cx="16" cy="16" r="4" fill="#EA4335"/>
+          </svg>
+        `),
+        { size: { w: 32, h: 40 }, anchor: { x: 16, y: 40 } }
       );
       
-      // Create delivery partner marker (blue)
-      const deliveryMarker = new H.map.Marker(
-        { lat: deliveryLat, lng: deliveryLng },
-        { 
-          icon: new H.map.Icon('https://img.icons8.com/color/48/000000/delivery-truck.png', {size: {w: 32, h: 32}}) 
-        }
+      const destMarker = new H.map.Marker({ lat: destLat, lng: destLng }, { icon: destIcon });
+      
+      // Create custom delivery partner marker (Google Maps style blue truck)
+      const deliveryIcon = new H.map.Icon(
+        'data:image/svg+xml,' + encodeURIComponent(`
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+            <path d="M16 0C7.2 0 0 7.2 0 16s16 24 16 24 16-15.2 16-24S24.8 0 16 0z" fill="#4285F4"/>
+            <circle cx="16" cy="16" r="8" fill="white"/>
+            <text x="16" y="20" text-anchor="middle" font-family="Arial" font-size="12" fill="#4285F4">🚚</text>
+          </svg>
+        `),
+        { size: { w: 32, h: 40 }, anchor: { x: 16, y: 40 } }
       );
+      
+      const deliveryMarker = new H.map.Marker({ lat: deliveryLat, lng: deliveryLng }, { icon: deliveryIcon });
       
       // Add markers to map
       map.addObject(destMarker);
@@ -409,39 +447,55 @@ class UserDashboard {
           const route = result.routes[0];
           const routeShape = route.sections[0].polyline;
           
-          // Create polyline for the route
+          // Create Google Maps-style blue route line
           const linestring = H.geo.LineString.fromFlexiblePolyline(routeShape);
           const polyline = new H.map.Polyline(linestring, {
-            style: { strokeColor: '#007bff', lineWidth: 6 }
+            style: { 
+              strokeColor: '#4285F4', 
+              lineWidth: 8,
+              lineCap: 'round',
+              lineJoin: 'round'
+            }
           });
           
           // Add route to map
           map.addObject(polyline);
+          console.log('Google Maps-style route added successfully');
         }
       }, (error) => {
-        console.warn('Route calculation failed, showing direct path');
+        console.warn('Route calculation failed, showing Google Maps-style direct path:', error);
         
-        // Create direct path line
+        // Create Google Maps-style direct path line
         const linestring = new H.geo.LineString();
         linestring.pushPoint({ lat: deliveryLat, lng: deliveryLng });
         linestring.pushPoint({ lat: destLat, lng: destLng });
         
         const polyline = new H.map.Polyline(linestring, {
-          style: { strokeColor: '#007bff', lineWidth: 6 }
+          style: { 
+            strokeColor: '#4285F4', 
+            lineWidth: 8,
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineDash: [10, 5] // Dashed line for direct path
+          }
         });
         
         map.addObject(polyline);
+        console.log('Google Maps-style direct path added');
       });
       
-      // Fit the map to show both markers
-      const bbox = new H.geo.Rect(
-        Math.max(destLat, deliveryLat) + 0.01,
-        Math.min(destLng, deliveryLng) - 0.01,
-        Math.min(destLat, deliveryLat) - 0.01,
-        Math.max(destLng, deliveryLng) + 0.01
-      );
+      // Fit the map to show both markers with padding (Google Maps style)
+      const group = new H.map.Group();
+      group.addObject(destMarker);
+      group.addObject(deliveryMarker);
       map.getViewPort().resize();
-      map.getViewPort().setViewBounds(bbox);
+      map.getViewPort().setViewBounds(group.getBoundingBox(), false);
+      
+      // Add some padding for better visibility
+      setTimeout(() => {
+        const currentZoom = map.getZoom();
+        map.setZoom(Math.max(currentZoom - 1, 8)); // Zoom out slightly for better overview
+      }, 100);
       
       // Calculate distance and display
       const distance = this.calculateDistance(
