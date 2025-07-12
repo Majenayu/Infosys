@@ -27,6 +27,9 @@ Added: QR code user assignment system - companies can now select and assign user
 Added: Access control system for QR codes - only assigned users can access their QR codes, others receive error messages (July 12, 2025)
 Added: API endpoint /api/check-qr-access/<qr_id>/<user_id> for checking user access to specific QR codes (July 12, 2025)
 Added: User selection dropdown in QR generation page with validation to ensure user is selected before QR creation (July 12, 2025)
+Added: Email notification system for QR code assignment - sends unique 4-digit QR code ID to assigned user's email automatically (July 12, 2025)
+Added: Email service using pgayushrai@gmail.com as company sender with detailed QR code information and usage instructions (July 12, 2025)
+Added: Comprehensive email templates with QR code details, usage instructions, and company contact information (July 12, 2025)
 Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
 Added: Complete company dashboard system with QR generation, order tracking, and employee management (July 12, 2025)
 Added: Company-specific QR code generation that includes company ID for order differentiation and filtering (July 12, 2025)

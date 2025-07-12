@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import sys
 import time
 import random
+from email_service import send_qr_email, send_simple_notification
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -268,8 +269,44 @@ def store_location():
         result = locations_collection.insert_one(location_doc)
         app.logger.info(f"QR location stored with ID {qr_id}: {data.get('name', 'Unknown')} (pending download)")
         
+        # Send email notification to assigned user
+        if data.get('assigned_user_id'):
+            try:
+                # Get user details
+                users_collection = db.get_collection("users")
+                user_data = users_collection.find_one({'user_id': data.get('assigned_user_id')})
+                
+                # Get company details
+                company_data = None
+                if data.get('company_id'):
+                    companies_collection = db.get_collection("companies")
+                    company_data = companies_collection.find_one({'company_id': data.get('company_id')})
+                
+                if user_data:
+                    user_email = user_data.get('email', '')
+                    user_name = user_data.get('name', 'User')
+                    company_name = company_data.get('name', 'Unknown Company') if company_data else 'Unknown Company'
+                    location_name = data.get('name', 'Unknown Location')
+                    
+                    # Try to send email notification
+                    email_sent = send_simple_notification(
+                        user_email=user_email,
+                        user_name=user_name,
+                        qr_id=qr_id,
+                        company_name=company_name,
+                        location_name=location_name
+                    )
+                    
+                    if email_sent:
+                        app.logger.info(f"Email notification sent to {user_email} for QR code {qr_id}")
+                    else:
+                        app.logger.warning(f"Failed to send email notification to {user_email} for QR code {qr_id}")
+                        
+            except Exception as email_error:
+                app.logger.error(f"Error sending email notification: {str(email_error)}")
+        
         return jsonify({
-            'message': 'Location data stored successfully!',
+            'message': 'Location data stored successfully! User notified via email.',
             'qr_id': qr_id,
             'location_id': str(result.inserted_id),
             'status': 'pending_download'

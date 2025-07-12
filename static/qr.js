@@ -458,7 +458,11 @@ const storeLocationData = async (data) => {
       
       // Display QR ID if available
       if (result.qr_id) {
-        showStatus(`QR code generated! ID: ${result.qr_id}`, 'success');
+        // Check if email notification was included
+        const emailMessage = result.message && result.message.includes('User notified via email') 
+          ? `QR code generated! ID: ${result.qr_id} - User notified via email` 
+          : `QR code generated! ID: ${result.qr_id}`;
+        showStatus(emailMessage, 'success');
         
         // Update the QR code display with the ID
         const qrIdElement = document.getElementById('qrId');
