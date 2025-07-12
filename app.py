@@ -827,8 +827,11 @@ def get_qr_tracking_data(qr_id):
                 # Get QR-specific collection data
                 qr_collection = mongo_client.get_database("tracksmart").get_collection(qr_id)
                 
-                # Get destination data (coordinate A)
+                # Get destination data (coordinate A) - check both possible types
                 destination_data = qr_collection.find_one({'type': 'destination_info'})
+                if not destination_data:
+                    # Fallback to check for qr_info type (older format)
+                    destination_data = qr_collection.find_one({'type': 'qr_info'})
                 
                 if not destination_data:
                     return jsonify({'message': 'No item exists'}), 404
