@@ -277,8 +277,8 @@ class UserDashboard {
     }
     
     // Update destination info
-    document.getElementById('destinationName').textContent = trackingData.destination.name || 'Unknown Location';
-    document.getElementById('destinationAddress').textContent = trackingData.destination.address || 'Address not available';
+    document.getElementById('destinationName').textContent = trackingData.coordinate_A?.name || 'Unknown Location';
+    document.getElementById('destinationAddress').textContent = trackingData.coordinate_A?.address || 'Address not available';
     
     // Show and update location status panel
     this.updateLocationStatusPanel(trackingData);
@@ -294,13 +294,21 @@ class UserDashboard {
       const keysData = await keysResponse.json();
       const apiKey = keysData.keys[0]; // Use primary API key
       
-      // Initialize HERE Maps platform
+      // Initialize HERE Maps platform with delay and error handling
+      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for rate limiting
+      
       const platform = new H.service.Platform({
         'apikey': apiKey
       });
       
-      // Get default map layers
-      const defaultLayers = platform.createDefaultLayers();
+      // Get default map layers with fallback
+      let defaultLayers;
+      try {
+        defaultLayers = platform.createDefaultLayers();
+      } catch (layerError) {
+        console.error('Error creating map layers:', layerError);
+        throw new Error('Map initialization failed');
+      }
       
       // Initialize the map
       const mapContainer = document.getElementById('trackingMap');
@@ -309,19 +317,33 @@ class UserDashboard {
         return;
       }
       
-      // Get coordinates from tracking data
-      const destLat = trackingData.coordinate_A.latitude;
-      const destLng = trackingData.coordinate_A.longitude;
-      const deliveryLat = trackingData.coordinate_B.latitude;
-      const deliveryLng = trackingData.coordinate_B.longitude;
+      // Get coordinates from tracking data with safety checks
+      const destLat = trackingData.coordinate_A?.latitude;
+      const destLng = trackingData.coordinate_A?.longitude;
+      const deliveryLat = trackingData.coordinate_B?.latitude;
+      const deliveryLng = trackingData.coordinate_B?.longitude;
+      
+      if (!destLat || !destLng || !deliveryLat || !deliveryLng) {
+        console.error('Missing coordinate data:', trackingData);
+        return;
+      }
       
       // Create the map centered between both coordinates
       const centerLat = (destLat + deliveryLat) / 2;
       const centerLng = (destLng + deliveryLng) / 2;
       
+      // Try raster map first, fallback to vector if needed
+      let mapLayer;
+      try {
+        mapLayer = defaultLayers.raster.normal.map; // Google Maps-like appearance
+      } catch (e) {
+        console.warn('Raster maps not available, using vector');
+        mapLayer = defaultLayers.vector.normal.map;
+      }
+      
       const map = new H.Map(
         mapContainer,
-        defaultLayers.vector.normal.map,
+        mapLayer,
         {
           zoom: 12,
           center: { lat: centerLat, lng: centerLng }
@@ -330,7 +352,7 @@ class UserDashboard {
       
       // Add map behavior and UI
       const behavior = new H.mapevents.Behavior();
-      const ui = new H.ui.UI(map, defaultLayers);
+      const ui = new H.ui.UI(map);
       
       // Create destination marker (red)
       const destMarker = new H.map.Marker(
