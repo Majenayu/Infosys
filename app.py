@@ -1561,10 +1561,32 @@ def initialize_mongodb():
     """Initialize MongoDB connection"""
     global mongo_client, mongo_connected
     
-    # Skip MongoDB initialization for now - will be enabled once PyMongo package is fixed
-    app.logger.info("MongoDB initialization skipped - running in development mode")
-    mongo_connected = False
-    return False
+    try:
+        # Direct pymongo import
+        from pymongo import MongoClient
+        
+        # Get MongoDB URI from environment variable with fallback to known working URI
+        mongodb_uri = os.environ.get('MONGODB_URI', 'mongodb+srv://in:in@in.hfxejxb.mongodb.net/?retryWrites=true&w=majority&appName=in')
+        
+        # Create connection
+        mongo_client = MongoClient(mongodb_uri)
+        
+        # Test connection
+        mongo_client.admin.command('ping')
+        app.logger.info("MongoDB connected successfully")
+        mongo_connected = True
+        return True
+        
+    except ImportError as import_error:
+        app.logger.error(f"MongoDB import failed: {import_error}")
+        app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
+        return False
+    except Exception as e:
+        app.logger.error(f"MongoDB connection failed: {e}")
+        app.logger.info("Application will continue without MongoDB connection")
+        mongo_connected = False
+        return False
 
 # Initialize MongoDB on startup
 initialize_mongodb()
