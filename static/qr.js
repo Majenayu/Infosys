@@ -387,7 +387,16 @@ const generateQR = (name, address, coords) => {
   qrContainer.innerHTML = '';
 
   // Get company ID from localStorage
-  const companyId = localStorage.getItem('currentCompanyId');
+  const companyData = localStorage.getItem('companyData');
+  let companyId = null;
+  if (companyData) {
+    try {
+      const parsedData = JSON.parse(companyData);
+      companyId = parsedData.company_id;
+    } catch (e) {
+      console.error('Error parsing company data:', e);
+    }
+  }
   
   const data = {
     name,

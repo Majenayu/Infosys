@@ -26,6 +26,8 @@ Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles
 Added: Complete company dashboard system with QR generation, order tracking, and employee management (July 12, 2025)
 Added: Company-specific QR code generation that includes company ID for order differentiation and filtering (July 12, 2025)
 Added: API endpoints for company dashboard data retrieval: /api/company/<id>/orders and /api/company/<id>/employees (July 12, 2025)
+Fixed: QR code generation now properly includes company ID in both locations collection and QR-specific collections for accurate order tracking (July 12, 2025)
+Enhanced: Company ID integration ensures QR codes are linked to the company that created them, enabling proper order differentiation and filtering (July 12, 2025)
 
 ## System Architecture
 

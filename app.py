@@ -316,6 +316,7 @@ def activate_qr(qr_id):
             'longitude': qr_data.get('longitude'),    # Coordinate A - destination longitude
             'google_maps_url': qr_data.get('google_maps_url', ''),
             'here_maps_url': qr_data.get('here_maps_url', ''),
+            'company_id': qr_data.get('company_id'),  # Include company ID from original QR data
             'timestamp': datetime.utcnow(),
             'created_at': datetime.utcnow(),
             'qr_generated': True,
