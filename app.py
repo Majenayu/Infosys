@@ -1414,19 +1414,7 @@ def initialize_mongodb():
     global mongo_client, mongo_connected
     
     try:
-        # Install bson module if missing (common issue with pymongo)
-        try:
-            import bson
-        except ImportError:
-            app.logger.info("Installing missing bson module...")
-            import subprocess
-            import sys
-            result = subprocess.run([sys.executable, "-m", "pip", "install", "bson"], 
-                                  capture_output=True, text=True)
-            if result.returncode != 0:
-                app.logger.warning("Could not install bson module, trying alternative approach")
-        
-        # Import pymongo
+        # Import pymongo - bson is included with pymongo
         from pymongo import MongoClient
         
         # Create connection
