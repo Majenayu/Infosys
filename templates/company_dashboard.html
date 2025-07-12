@@ -188,12 +188,14 @@
                                         <th>Role</th>
                                         <th>Vehicle</th>
                                         <th>Active Orders</th>
+                                        <th>Rating</th>
                                         <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="employeesTableBody">
                                     <tr>
-                                        <td colspan="5" class="text-center">Loading employees...</td>
+                                        <td colspan="7" class="text-center">Loading employees...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -212,7 +214,62 @@
         </div>
     </div>
 
+    <!-- Employee Analytics Modal -->
+    <div class="modal fade" id="employeeAnalyticsModal" tabindex="-1" aria-labelledby="employeeAnalyticsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeAnalyticsModalLabel">Employee Analytics</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Performance Score</h5>
+                                    <h2 id="performanceScore" class="text-primary">-</h2>
+                                    <small id="performanceComparison" class="text-muted">vs company average</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Average Rating</h5>
+                                    <h2 id="employeeRating" class="text-warning">-</h2>
+                                    <small id="ratingComparison" class="text-muted">vs company average</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-secondary text-white mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Total Orders</h5>
+                                    <h2 id="totalOrders" class="text-success">-</h2>
+                                    <small id="completionRate" class="text-muted">completion rate</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Performance Comparison</h6>
+                            <canvas id="performanceChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Recent Activity</h6>
+                            <canvas id="activityChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Company data from localStorage
         let companyData = null;
@@ -308,15 +365,21 @@
                 if (data.employees && data.employees.length > 0) {
                     employeesBody.innerHTML = data.employees.map(employee => `
                         <tr>
-                            <td>${employee.name}</td>
+                            <td><a href="javascript:void(0)" onclick="showEmployeeAnalytics('${employee.name}')" class="text-info text-decoration-none">${employee.name}</a></td>
                             <td>${employee.role || 'Delivery Partner'}</td>
                             <td>${employee.vehicle_type || 'N/A'}</td>
                             <td>${employee.active_orders || 0}</td>
+                            <td><span class="text-warning">${employee.avg_rating || 'N/A'}</span></td>
                             <td><span class="status-badge ${employee.active ? 'status-delivered' : 'status-pending'}">${employee.active ? 'Active' : 'Inactive'}</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary" onclick="showEmployeeAnalytics('${employee.name}')">
+                                    📊 Analytics
+                                </button>
+                            </td>
                         </tr>
                     `).join('');
                 } else {
-                    employeesBody.innerHTML = '<tr><td colspan="5" class="text-center">No employees found</td></tr>';
+                    employeesBody.innerHTML = '<tr><td colspan="7" class="text-center">No employees found</td></tr>';
                 }
 
                 // Load customer reviews
@@ -338,7 +401,7 @@
             } catch (error) {
                 console.error('Error loading employee data:', error);
                 document.getElementById('employeesTableBody').innerHTML = 
-                    '<tr><td colspan="5" class="text-center text-danger">Error loading employees</td></tr>';
+                    '<tr><td colspan="7" class="text-center text-danger">Error loading employees</td></tr>';
                 document.getElementById('reviewsContainer').innerHTML = 
                     '<div class="text-center text-danger">Error loading reviews</div>';
             }
@@ -349,6 +412,134 @@
                 window.open(`/user/dashboard?qr_id=${qrId}`, '_blank');
             } else {
                 alert('Order details not available');
+            }
+        }
+
+        async function showEmployeeAnalytics(employeeName) {
+            try {
+                const response = await fetch(`/api/company/${companyData.company_id}/employee/${encodeURIComponent(employeeName)}/analytics`);
+                const data = await response.json();
+                
+                if (data.message) {
+                    alert(data.message);
+                    return;
+                }
+                
+                // Update modal title
+                document.getElementById('employeeAnalyticsModalLabel').textContent = `${employeeName} - Analytics`;
+                
+                // Update performance metrics
+                document.getElementById('performanceScore').textContent = data.metrics.performance_score;
+                document.getElementById('employeeRating').textContent = data.metrics.avg_rating;
+                document.getElementById('totalOrders').textContent = data.metrics.total_orders;
+                
+                // Update comparison text
+                const perfComp = data.comparison.performance_vs_avg;
+                document.getElementById('performanceComparison').textContent = 
+                    `${perfComp >= 0 ? '+' : ''}${perfComp.toFixed(1)} vs company avg`;
+                document.getElementById('performanceComparison').className = 
+                    perfComp >= 0 ? 'text-success' : 'text-danger';
+                
+                const ratingComp = data.comparison.rating_vs_avg;
+                document.getElementById('ratingComparison').textContent = 
+                    `${ratingComp >= 0 ? '+' : ''}${ratingComp.toFixed(1)} vs company avg`;
+                document.getElementById('ratingComparison').className = 
+                    ratingComp >= 0 ? 'text-success' : 'text-danger';
+                
+                const completionRate = (data.metrics.completed_orders / data.metrics.total_orders * 100).toFixed(1);
+                document.getElementById('completionRate').textContent = `${completionRate}% completion rate`;
+                
+                // Create performance comparison chart
+                const perfCtx = document.getElementById('performanceChart').getContext('2d');
+                new Chart(perfCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Performance Score', 'Average Rating', 'Completion Rate', 'On-Time Rate'],
+                        datasets: [{
+                            label: employeeName,
+                            data: [
+                                data.metrics.performance_score,
+                                data.metrics.avg_rating * 20, // Scale to 100
+                                (data.metrics.completed_orders / data.metrics.total_orders) * 100,
+                                data.comparison.on_time_vs_avg + data.company_average.on_time_rate
+                            ],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Company Average',
+                            data: [
+                                data.company_average.performance_score,
+                                data.company_average.avg_rating * 20,
+                                data.company_average.completion_rate,
+                                data.company_average.on_time_rate
+                            ],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { labels: { color: 'white' } }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                pointLabels: { color: 'white' },
+                                ticks: { color: 'white' }
+                            }
+                        }
+                    }
+                });
+                
+                // Create recent activity chart
+                const activityCtx = document.getElementById('activityChart').getContext('2d');
+                new Chart(activityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.recent_performance.map(d => d.date),
+                        datasets: [{
+                            label: 'Orders',
+                            data: data.recent_performance.map(d => d.orders),
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Rating',
+                            data: data.recent_performance.map(d => d.rating),
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { labels: { color: 'white' } }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: 'white' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            },
+                            y: {
+                                ticks: { color: 'white' },
+                                grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                            }
+                        }
+                    }
+                });
+                
+                // Show modal
+                const modal = new bootstrap.Modal(document.getElementById('employeeAnalyticsModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Error loading employee analytics:', error);
+                alert('Error loading employee analytics. Please try again.');
             }
         }
 
