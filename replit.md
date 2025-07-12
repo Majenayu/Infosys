@@ -45,6 +45,7 @@ Added: Chart.js integration for radar charts and line graphs showing employee pe
 Fixed: Resolved timedelta import error that was causing employee analytics API failures (July 12, 2025)
 Security: Enhanced order access control ensuring only company employees can view company-specific orders (July 12, 2025)
 Added: Customer care button with phone number 9483246283 across all pages except index page - placed in user dashboard and other relevant pages per user request (July 12, 2025)
+Updated: Removed QR Location Generator button from main index page navigation - QR generation now only accessible through Company Dashboard for authenticated companies (July 12, 2025)
 
 ## System Architecture
 
