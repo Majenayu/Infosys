@@ -19,6 +19,7 @@ Updated: QR generation now creates unique 4-digit ID and dedicated MongoDB colle
 Updated: Prioritized HERE Maps API key VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA as primary key across all JavaScript files
 Updated: Enhanced rate limiting handling in all map initialization functions with delays and graceful fallback
 Updated: Removed Route Distance and Travel Time display elements from delivery partner interface per user request (July 12, 2025)
+Added: Separated company registration from main index page with dedicated registration and login pages storing data in MongoDB "companies" collection (July 12, 2025)
 Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
 
 ## System Architecture
@@ -63,10 +64,11 @@ Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles
 ## Key Components
 
 ### Database Collections (MongoDB)
-1. **Companies Collection**
-   - Stores logistics company information
-   - Fields: name, contact_person, email, phone, api_url, api_key, address, created_at
-   - Purpose: Central registry for logistics companies
+1. **Companies Collection** (ENHANCED - July 12, 2025)
+   - Stores logistics company information with authentication
+   - Fields: name, contact_person, email, phone, password, api_url, api_key, address, created_at, status
+   - Purpose: Central registry for logistics companies with login/registration system
+   - Authentication: Email/password based with separate registration and login pages
 
 2. **Locations Collection**
    - Stores QR-generated location data

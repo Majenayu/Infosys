@@ -65,6 +65,144 @@ def user_dashboard():
     """User dashboard page"""
     return render_template('user_dashboard.html')
 
+@app.route('/company')
+def company_page():
+    """Company registration page"""
+    return render_template('company.html')
+
+@app.route('/company/login')
+def company_login_page():
+    """Company login page"""
+    return render_template('company_login.html')
+
+@app.route('/company/register', methods=['POST'])
+def company_register():
+    """Register a new company"""
+    try:
+        data = request.get_json()
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if not mongo_client:
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+        # Validate required fields
+        required_fields = ['name', 'contactPerson', 'email', 'phone', 'password', 'apiUrl', 'apiKey', 'address']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({'message': f'Missing required field: {field}'}), 400
+        
+        # Check if company already exists
+        db = mongo_client.get_database("tracksmart")
+        companies_collection = db.get_collection("companies")
+        
+        existing_company = companies_collection.find_one({
+            '$or': [
+                {'email': data['email']},
+                {'name': data['name']}
+            ]
+        })
+        
+        if existing_company:
+            return jsonify({'message': 'Company with this name or email already exists'}), 400
+        
+        # Create company document
+        company_doc = {
+            'name': data['name'],
+            'contact_person': data['contactPerson'],
+            'email': data['email'],
+            'phone': data['phone'],
+            'password': data['password'],  # In production, hash this password
+            'api_url': data['apiUrl'],
+            'api_key': data['apiKey'],
+            'address': data['address'],
+            'created_at': datetime.utcnow(),
+            'status': 'active'
+        }
+        
+        # Insert into companies collection
+        result = companies_collection.insert_one(company_doc)
+        
+        app.logger.info(f"Company registered: {data['name']} ({data['email']})")
+        
+        return jsonify({
+            'message': 'Company registered successfully!',
+            'company_id': str(result.inserted_id),
+            'name': data['name']
+        })
+        
+    except Exception as e:
+        app.logger.error(f"Error registering company: {str(e)}")
+        return jsonify({'message': 'Failed to register company'}), 500
+
+@app.route('/company/login', methods=['POST'])
+def company_login():
+    """Login company"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('email') or not data.get('password'):
+            return jsonify({'message': 'Email and password are required'}), 400
+        
+        email = data['email'].lower()
+        password = data['password']
+        
+        app.logger.info(f"Company login attempt: {email}")
+        
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Find company in database
+                companies_collection = mongo_client.get_database("tracksmart").get_collection("companies")
+                company = companies_collection.find_one({'email': email})
+                
+                if not company:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check password (in production, use hashed passwords)
+                if company['password'] != password:
+                    return jsonify({'message': 'Invalid email or password'}), 401
+                
+                # Check if company is active
+                if not company.get('status') == 'active':
+                    return jsonify({'message': 'Company account is deactivated'}), 401
+                
+                # Prepare company data for response
+                company_data = {
+                    'id': str(company['_id']),
+                    'name': company['name'],
+                    'email': company['email'],
+                    'contact_person': company['contact_person'],
+                    'phone': company['phone'],
+                    'address': company['address'],
+                    'api_url': company['api_url'],
+                    'status': company['status']
+                }
+                
+                app.logger.info(f"Company login successful: {company['name']} ({email})")
+                
+                return jsonify({
+                    'message': 'Login successful!',
+                    'company': company_data
+                })
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error during company login: {str(db_error)}")
+                return jsonify({'message': 'Database error during login'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot login company")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error logging in company: {str(e)}")
+        return jsonify({'message': 'Login failed'}), 500
+
 @app.route('/register-company', methods=['POST'])
 def register_company():
     """Register a new logistics company"""
