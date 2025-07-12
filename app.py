@@ -1258,6 +1258,29 @@ def get_qr_tracking_data(qr_id):
                 if not destination_data:
                     return jsonify({'message': 'No item exists'}), 404
                 
+                # Check for delivery completion first
+                delivery_completion = qr_collection.find_one({'type': 'delivery_complete'})
+                
+                if delivery_completion:
+                    # Order is delivered - return completion data
+                    return jsonify({
+                        'qr_id': qr_id,
+                        'status': 'delivered',
+                        'delivery_status': 'delivered',
+                        'coordinate_A': {  # Destination
+                            'type': 'destination',
+                            'name': destination_data.get('location_name', ''),
+                            'address': destination_data.get('address', ''),
+                            'latitude': destination_data.get('latitude'),
+                            'longitude': destination_data.get('longitude'),
+                            'google_maps_url': destination_data.get('google_maps_url', ''),
+                            'here_maps_url': destination_data.get('here_maps_url', '')
+                        },
+                        'delivered_at': delivery_completion.get('delivered_at', '').isoformat() if delivery_completion.get('delivered_at') else None,
+                        'delivery_partner_name': delivery_completion.get('delivery_partner_name', 'Unknown'),
+                        'last_updated': delivery_completion.get('timestamp', '').isoformat() if delivery_completion.get('timestamp') else None
+                    })
+                
                 # Get latest delivery location if exists (coordinate B)
                 delivery_location = qr_collection.find_one(
                     {'type': 'delivery_location'}, 
@@ -1321,6 +1344,69 @@ def get_qr_tracking_data(qr_id):
     except Exception as e:
         app.logger.error(f"Error retrieving QR tracking data: {str(e)}")
         return jsonify({'message': 'Failed to retrieve QR tracking data'}), 500
+
+@app.route('/api/mark-delivered', methods=['POST'])
+def mark_delivered():
+    """Mark an order as delivered"""
+    try:
+        data = request.json
+        qr_id = data.get('qr_id')
+        delivery_partner_name = data.get('delivery_partner_name')
+        
+        if not qr_id or not delivery_partner_name:
+            return jsonify({'message': 'QR ID and delivery partner name are required'}), 400
+        
+        # Initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            db = mongo_client['tracksmart']
+            
+            # Check if delivery is already marked as complete
+            qr_collection = db[qr_id]
+            existing_completion = qr_collection.find_one({'type': 'delivery_complete'})
+            
+            if existing_completion:
+                return jsonify({'message': 'Order already marked as delivered'}), 400
+            
+            # Update the QR-specific collection with delivery completion
+            delivery_completion_data = {
+                'type': 'delivery_complete',
+                'status': 'delivered',
+                'delivery_partner_name': delivery_partner_name,
+                'delivered_at': datetime.now(),
+                'timestamp': datetime.now()
+            }
+            
+            # Insert delivery completion record
+            qr_collection.insert_one(delivery_completion_data)
+            
+            # Update locations collection with delivery status
+            locations_collection = db['locations']
+            locations_collection.update_one(
+                {'qr_id': qr_id},
+                {'$set': {
+                    'delivery_status': 'delivered',
+                    'delivered_at': datetime.now(),
+                    'delivery_partner': delivery_partner_name
+                }}
+            )
+            
+            app.logger.info(f"Order {qr_id} marked as delivered by {delivery_partner_name}")
+            
+            return jsonify({
+                'message': 'Order marked as delivered successfully',
+                'qr_id': qr_id,
+                'status': 'delivered',
+                'delivered_at': datetime.now().isoformat()
+            }), 200
+        else:
+            return jsonify({'message': 'Database connection failed'}), 500
+            
+    except Exception as e:
+        app.logger.error(f"Error marking order as delivered: {str(e)}")
+        return jsonify({'message': 'Failed to mark order as delivered'}), 500
 
 # Initialize MongoDB connection after app is created
 def initialize_mongodb():

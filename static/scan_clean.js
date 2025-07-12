@@ -424,24 +424,48 @@ function stopQRTracking(reason = 'done_button') {
   }
   
   if (currentQRId) {
-    // Get delivery partner email from localStorage
+    // Get delivery partner info from localStorage
     let userEmail = 'anonymous';
+    let deliveryPartnerName = 'Unknown';
+    
     const deliveryPartner = localStorage.getItem('deliveryPartner');
     
     if (deliveryPartner) {
       try {
         const partnerData = JSON.parse(deliveryPartner);
         userEmail = partnerData.email || 'anonymous';
+        deliveryPartnerName = partnerData.name || 'Unknown';
       } catch (parseError) {
         console.error('Error parsing delivery partner data:', parseError);
         userEmail = localStorage.getItem('userEmail') || 'anonymous';
+        deliveryPartnerName = localStorage.getItem('deliveryPartnerName') || 'Unknown';
       }
     } else {
       userEmail = localStorage.getItem('userEmail') || 'anonymous';
+      deliveryPartnerName = localStorage.getItem('deliveryPartnerName') || 'Unknown';
     }
     
-    // Notify server that tracking stopped
-    fetch('/stop-qr-tracking', {
+    // Mark delivery as complete
+    fetch('/api/mark-delivered', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        qr_id: currentQRId,
+        delivery_partner_name: deliveryPartnerName,
+        user_email: userEmail
+      })
+    }).then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        showStatus(data.message, 'success');
+      }
+    }).catch(error => {
+      console.error('Error marking delivery as complete:', error);
+      showStatus('Error marking delivery as complete', 'error');
+    });
+    
+    // Also notify server that tracking stopped
+    fetch('/api/stop-qr-tracking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -457,7 +481,7 @@ function stopQRTracking(reason = 'done_button') {
   localStorage.removeItem('currentQRId');
   
   if (trackingStatusSpan) {
-    trackingStatusSpan.textContent = 'Tracking stopped';
+    trackingStatusSpan.textContent = 'Delivery completed';
   }
   
   // Hide Done button when tracking stops
@@ -466,8 +490,8 @@ function stopQRTracking(reason = 'done_button') {
     doneBtn.style.display = 'none';
   }
   
-  showStatus('QR tracking stopped', 'success');
-  console.log('QR tracking stopped - reason:', reason);
+  showStatus('Delivery marked as complete!', 'success');
+  console.log('Delivery marked as complete - QR ID:', currentQRId);
 }
 
 // Handle file upload

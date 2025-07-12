@@ -134,6 +134,12 @@ class UserDashboard {
     const trackingResults = document.getElementById('trackingResults');
     trackingResults.style.display = 'block';
     
+    // Check if delivery is completed
+    if (trackingData.status === 'delivered' || trackingData.delivery_status === 'delivered') {
+      this.showDeliveryCompletionMessage(trackingData);
+      return;
+    }
+    
     // Check if we have both coordinates for map display
     if (trackingData.coordinate_A && trackingData.coordinate_B) {
       // Display map with both coordinates
@@ -786,6 +792,58 @@ class UserDashboard {
     } catch (error) {
       console.error('Error refreshing tracking data:', error);
       this.showMessage('Network error. Please try again.', 'error');
+    }
+  }
+
+  showDeliveryCompletionMessage(trackingData) {
+    // Hide the map container
+    const mapContainer = document.getElementById('mapContainer');
+    if (mapContainer) {
+      mapContainer.style.display = 'none';
+    }
+    
+    // Show the delivery completion message
+    const completionMessage = document.getElementById('deliveryCompletionMessage');
+    if (completionMessage) {
+      completionMessage.style.display = 'flex';
+      
+      // Update delivery details
+      const deliveredLocation = document.getElementById('deliveredLocation');
+      const deliveredTime = document.getElementById('deliveredTime');
+      
+      if (deliveredLocation) {
+        deliveredLocation.textContent = trackingData.coordinate_A?.name || 'Destination';
+      }
+      
+      if (deliveredTime) {
+        const deliveryTime = trackingData.delivered_at || trackingData.last_updated || new Date();
+        deliveredTime.textContent = new Date(deliveryTime).toLocaleString();
+      }
+    }
+    
+    // Update status indicator
+    const statusIndicator = document.getElementById('statusIndicator');
+    const deliveryStatus = document.getElementById('deliveryStatus');
+    const lastUpdated = document.getElementById('lastUpdated');
+    
+    if (statusIndicator) {
+      statusIndicator.className = 'status-indicator status-delivered';
+      statusIndicator.textContent = '✅';
+    }
+    
+    if (deliveryStatus) {
+      deliveryStatus.textContent = 'Delivery Complete!';
+    }
+    
+    if (lastUpdated) {
+      const completionTime = trackingData.delivered_at || trackingData.last_updated || new Date();
+      lastUpdated.textContent = `Delivered: ${new Date(completionTime).toLocaleString()}`;
+    }
+    
+    // Hide location status panel for delivered items
+    const locationStatusPanel = document.getElementById('locationStatusPanel');
+    if (locationStatusPanel) {
+      locationStatusPanel.style.display = 'none';
     }
   }
 
