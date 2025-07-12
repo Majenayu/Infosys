@@ -244,7 +244,21 @@ function trackUserLocation() {
 // Send location to server
 async function sendLocationToServer(location) {
   try {
-    const userEmail = localStorage.getItem('userEmail') || 'anonymous';
+    // Get delivery partner email from localStorage
+    let userEmail = 'anonymous';
+    const deliveryPartner = localStorage.getItem('deliveryPartner');
+    
+    if (deliveryPartner) {
+      try {
+        const partnerData = JSON.parse(deliveryPartner);
+        userEmail = partnerData.email || 'anonymous';
+      } catch (parseError) {
+        console.error('Error parsing delivery partner data:', parseError);
+        userEmail = localStorage.getItem('userEmail') || 'anonymous';
+      }
+    } else {
+      userEmail = localStorage.getItem('userEmail') || 'anonymous';
+    }
     
     const response = await fetch('/store-live-location', {
       method: 'POST',
@@ -280,7 +294,21 @@ async function sendLocationToServer(location) {
 // Send role-only registration for Captain, Pilot, TC
 async function sendRoleOnlyRegistration(role) {
   try {
-    const userEmail = localStorage.getItem('userEmail') || localStorage.getItem('deliveryUserEmail') || 'anonymous';
+    // Get delivery partner email from localStorage
+    let userEmail = 'anonymous';
+    const deliveryPartner = localStorage.getItem('deliveryPartner');
+    
+    if (deliveryPartner) {
+      try {
+        const partnerData = JSON.parse(deliveryPartner);
+        userEmail = partnerData.email || 'anonymous';
+      } catch (parseError) {
+        console.error('Error parsing delivery partner data:', parseError);
+        userEmail = localStorage.getItem('userEmail') || 'anonymous';
+      }
+    } else {
+      userEmail = localStorage.getItem('userEmail') || 'anonymous';
+    }
     
     const response = await fetch('/store-live-location', {
       method: 'POST',
@@ -396,13 +424,29 @@ function stopQRTracking(reason = 'done_button') {
   }
   
   if (currentQRId) {
+    // Get delivery partner email from localStorage
+    let userEmail = 'anonymous';
+    const deliveryPartner = localStorage.getItem('deliveryPartner');
+    
+    if (deliveryPartner) {
+      try {
+        const partnerData = JSON.parse(deliveryPartner);
+        userEmail = partnerData.email || 'anonymous';
+      } catch (parseError) {
+        console.error('Error parsing delivery partner data:', parseError);
+        userEmail = localStorage.getItem('userEmail') || 'anonymous';
+      }
+    } else {
+      userEmail = localStorage.getItem('userEmail') || 'anonymous';
+    }
+    
     // Notify server that tracking stopped
     fetch('/stop-qr-tracking', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         qr_id: currentQRId,
-        user_email: localStorage.getItem('userEmail') || 'anonymous',
+        user_email: userEmail,
         reason: reason
       })
     }).catch(error => console.error('Error stopping QR tracking:', error));
