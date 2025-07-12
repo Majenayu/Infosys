@@ -113,7 +113,7 @@ def company_register():
         if existing_company:
             return jsonify({'message': 'Company with this name or email already exists'}), 400
         
-        # Generate unique company ID starting from 1
+        # Generate unique company ID starting from 1000
         # Get the highest existing company_id and increment by 1
         highest_id_company = companies_collection.find_one(
             {},
@@ -123,7 +123,7 @@ def company_register():
         if highest_id_company and 'company_id' in highest_id_company:
             company_id = highest_id_company['company_id'] + 1
         else:
-            company_id = 1
+            company_id = 1000
         
         # Create company document
         company_doc = {
