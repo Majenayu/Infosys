@@ -44,8 +44,6 @@ class CompanyAuth {
       email: formData.get('email'),
       phone: formData.get('phone'),
       password: formData.get('password'),
-      apiUrl: formData.get('apiUrl'),
-      apiKey: formData.get('apiKey'),
       address: formData.get('address')
     };
 
@@ -126,55 +124,7 @@ class CompanyAuth {
   }
 
   async initializeMap() {
-    const mapContainer = document.getElementById('mapContainer');
-    if (!mapContainer) return;
-
-    try {
-      // Try to initialize HERE Maps with API key priority
-      let mapInitialized = false;
-      
-      for (let i = 0; i < this.HERE_API_KEYS.length && !mapInitialized; i++) {
-        try {
-          await this.sleep(i * 1000); // Progressive delay
-          
-          this.platform = new H.service.Platform({
-            'apikey': this.HERE_API_KEYS[i]
-          });
-          
-          const defaultMapTypes = this.platform.createDefaultMapTypes();
-          
-          this.map = new H.Map(
-            mapContainer,
-            defaultMapTypes.vector.normal.map,
-            {
-              zoom: 10,
-              center: { lat: 12.9716, lng: 77.5946 } // Bangalore coordinates
-            }
-          );
-          
-          const behavior = new H.mapevents.Behavior();
-          this.ui = new H.ui.UI.createDefault(this.map);
-          this.mapGroup = new H.map.Group();
-          this.map.getViewPort().addResizeListener();
-          
-          mapInitialized = true;
-          console.log('Company registration map initialized successfully');
-          break;
-          
-        } catch (error) {
-          console.log(`Map initialization failed with key ${i + 1}:`, error);
-          continue;
-        }
-      }
-      
-      if (!mapInitialized) {
-        throw new Error('All HERE Maps API keys failed');
-      }
-      
-    } catch (error) {
-      console.error('Map initialization failed:', error);
-      mapContainer.innerHTML = '<div class="text-center p-4"><p class="text-muted">Map unavailable</p></div>';
-    }
+    // Map initialization removed - no longer needed for company registration
   }
 
   sleep(ms) {

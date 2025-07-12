@@ -89,7 +89,7 @@ def company_register():
             return jsonify({'message': 'Database connection failed'}), 500
         
         # Validate required fields
-        required_fields = ['name', 'contactPerson', 'email', 'phone', 'password', 'apiUrl', 'apiKey', 'address']
+        required_fields = ['name', 'contactPerson', 'email', 'phone', 'password', 'address']
         for field in required_fields:
             if not data.get(field):
                 return jsonify({'message': f'Missing required field: {field}'}), 400
@@ -115,8 +115,6 @@ def company_register():
             'email': data['email'],
             'phone': data['phone'],
             'password': data['password'],  # In production, hash this password
-            'api_url': data['apiUrl'],
-            'api_key': data['apiKey'],
             'address': data['address'],
             'created_at': datetime.utcnow(),
             'status': 'active'
@@ -181,7 +179,6 @@ def company_login():
                     'contact_person': company['contact_person'],
                     'phone': company['phone'],
                     'address': company['address'],
-                    'api_url': company['api_url'],
                     'status': company['status']
                 }
                 

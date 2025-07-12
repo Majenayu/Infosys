@@ -9,12 +9,7 @@
   <!-- Bootstrap CSS with Replit dark theme -->
   <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
   
-  <!-- HERE Maps API -->
-  <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
-  <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
-  <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
-  <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
-  <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+
   
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -80,21 +75,6 @@
                 <input type="password" class="form-control" name="password" id="password" required>
               </div>
               
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="apiUrl" class="form-label">API Base URL *</label>
-                    <input type="url" class="form-control" name="apiUrl" id="apiUrl" placeholder="https://api.yourcompany.com" required>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="apiKey" class="form-label">API Key *</label>
-                    <input type="text" class="form-control" name="apiKey" id="apiKey" required>
-                  </div>
-                </div>
-              </div>
-              
               <div class="mb-3">
                 <label for="address" class="form-label">Head Office Address *</label>
                 <textarea class="form-control" name="address" id="address" rows="3" required></textarea>
@@ -109,15 +89,7 @@
           </div>
         </div>
 
-        <!-- Map Container -->
-        <div class="card shadow mt-4">
-          <div class="card-header">
-            <h5 class="card-title mb-0">📍 Location Preview</h5>
-          </div>
-          <div class="card-body p-0">
-            <div id="mapContainer"></div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>

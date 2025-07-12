@@ -20,6 +20,7 @@ Updated: Prioritized HERE Maps API key VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfO
 Updated: Enhanced rate limiting handling in all map initialization functions with delays and graceful fallback
 Updated: Removed Route Distance and Travel Time display elements from delivery partner interface per user request (July 12, 2025)
 Added: Separated company registration from main index page with dedicated registration and login pages storing data in MongoDB "companies" collection (July 12, 2025)
+Updated: Simplified company registration form by removing API Base URL, API Key fields, and Location Preview map per user request (July 12, 2025)
 Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles for specialized tracking behavior
 
 ## System Architecture
@@ -66,9 +67,10 @@ Added: Role-based delivery partner system with Captain, Pilot, TC, and Boy roles
 ### Database Collections (MongoDB)
 1. **Companies Collection** (ENHANCED - July 12, 2025)
    - Stores logistics company information with authentication
-   - Fields: name, contact_person, email, phone, password, api_url, api_key, address, created_at, status
+   - Fields: name, contact_person, email, phone, password, address, created_at, status
    - Purpose: Central registry for logistics companies with login/registration system
    - Authentication: Email/password based with separate registration and login pages
+   - Simplified form: Removed API fields and location preview map
 
 2. **Locations Collection**
    - Stores QR-generated location data
