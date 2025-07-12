@@ -371,8 +371,37 @@ def get_location(location_id):
 def get_companies():
     """Get all registered companies"""
     try:
-        # Return empty list for now
-        return jsonify([])
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get all companies from database
+                companies_collection = mongo_client.get_database("tracksmart").get_collection("companies")
+                companies = list(companies_collection.find({}, {
+                    'company_id': 1,
+                    'name': 1,
+                    'email': 1,
+                    'phone': 1,
+                    'address': 1,
+                    'created_at': 1,
+                    'status': 1,
+                    '_id': 0
+                }))
+                
+                # Sort by company_id
+                companies.sort(key=lambda x: x.get('company_id', 0))
+                
+                app.logger.info(f"Retrieved {len(companies)} companies")
+                return jsonify(companies)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error fetching companies: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot fetch companies")
+            return jsonify({'message': 'Database connection failed'}), 500
         
     except Exception as e:
         app.logger.error(f"Error fetching companies: {str(e)}")
@@ -642,6 +671,7 @@ def delivery_register():
                     'vehicle_type': data['vehicleType'],
                     'license': data['license'],
                     'password': data['password'],  # In production, hash this password
+                    'companies': data.get('companies', []),  # Selected company IDs
                     'created_at': datetime.utcnow(),
                     'active': True,
                     'deliveries': []
@@ -998,9 +1028,12 @@ def get_company_employees(company_id):
             try:
                 db = mongo_client.get_database("tracksmart")
                 
-                # Get all delivery partners (for now, showing all since we don't have company-specific assignment)
+                # Get only delivery partners who have selected this company
                 partners_collection = db.get_collection("delivery_partners")
-                partners = list(partners_collection.find({'active': True}))
+                partners = list(partners_collection.find({
+                    'active': True,
+                    'companies': company_id  # Filter by company ID in the companies array
+                }))
                 
                 employees = []
                 for partner in partners:

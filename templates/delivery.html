@@ -54,6 +54,46 @@
             border-color: #007bff;
             box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
         }
+        .company-selection {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .company-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .company-item:hover {
+            background-color: #e9ecef;
+        }
+        .company-item.selected {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        .company-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .company-info {
+            flex: 1;
+        }
+        .company-name {
+            font-weight: 500;
+            color: #495057;
+        }
+        .company-details {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
@@ -144,6 +184,18 @@
                         <div class="form-group">
                             <label for="registerConfirmPassword">Confirm Password</label>
                             <input type="password" class="form-control" id="registerConfirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerCompanies">Select Companies to Work With</label>
+                            <p class="text-muted small">Choose which companies you want to work with. Your orders and tasks will only appear in selected companies' dashboards.</p>
+                            <div id="companySelection" class="company-selection">
+                                <div class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading companies...</span>
+                                    </div>
+                                    <p class="text-muted">Loading available companies...</p>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-delivery w-100">Register</button>
                     </form>

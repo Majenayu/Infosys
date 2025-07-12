@@ -8,6 +8,7 @@ class DeliveryAuth {
         console.log('Delivery Auth System initialized');
         this.bindEvents();
         this.checkElements();
+        this.loadCompanies();
     }
 
     checkElements() {
@@ -154,6 +155,13 @@ class DeliveryAuth {
             return;
         }
 
+        // Get selected companies
+        const selectedCompanies = this.getSelectedCompanies();
+        if (selectedCompanies.length === 0) {
+            this.showMessage('Please select at least one company to work with', 'error');
+            return;
+        }
+
         try {
             this.showMessage('Registering...', 'info');
             
@@ -170,7 +178,8 @@ class DeliveryAuth {
                     role: role,
                     vehicleType: vehicleType,
                     license: license,
-                    password: password
+                    password: password,
+                    companies: selectedCompanies
                 })
             });
 
@@ -249,6 +258,51 @@ class DeliveryAuth {
         if (messageContainer) {
             messageContainer.innerHTML = '';
         }
+    }
+
+    async loadCompanies() {
+        try {
+            const response = await fetch('/companies');
+            const companies = await response.json();
+            
+            const companySelection = document.getElementById('companySelection');
+            if (!companySelection) return;
+            
+            if (companies.length === 0) {
+                companySelection.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-muted">No companies available yet. Please contact admin.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            companySelection.innerHTML = companies.map(company => `
+                <div class="company-item" onclick="this.classList.toggle('selected'); this.querySelector('input').checked = !this.querySelector('input').checked">
+                    <input type="checkbox" value="${company.company_id}" onclick="event.stopPropagation()">
+                    <div class="company-info">
+                        <div class="company-name">${company.name}</div>
+                        <div class="company-details">ID: ${company.company_id} | ${company.email}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('Error loading companies:', error);
+            const companySelection = document.getElementById('companySelection');
+            if (companySelection) {
+                companySelection.innerHTML = `
+                    <div class="text-center">
+                        <p class="text-danger">Failed to load companies. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    getSelectedCompanies() {
+        const checkboxes = document.querySelectorAll('#companySelection input[type="checkbox"]:checked');
+        return Array.from(checkboxes).map(cb => parseInt(cb.value));
     }
 }
 
