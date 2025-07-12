@@ -45,6 +45,7 @@ ROUTING ISSUE FIXED: Added missing /dashboard route alias to prevent "Not Found"
 ✅ Security: Proper client/server separation implemented with secure practices
 ✅ Dependencies: All packages properly installed and configured
 ✅ Application Status: Running successfully on port 5000 with gunicorn
+✅ Company-Delivery Partner Association: Fixed and working - delivery partners can now be properly assigned to companies during registration and retrieved via /api/company/<id>/delivery-partners endpoint (July 12, 2025)
 Added: Customer care button with phone number 9483246283 integrated across all main pages for easy contact access (July 12, 2025)
 Enhanced: Company dashboard now shows order tracking immediately upon login without requiring "Go" button - direct access to progress (July 12, 2025)
 Enhanced: Company authentication system uses company email/details instead of user credentials for direct company access (July 12, 2025)

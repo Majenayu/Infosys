@@ -504,6 +504,7 @@ def get_delivery_partners():
                     'phone': 1,
                     'role': 1,
                     'vehicle_type': 1,
+                    'companies': 1,  # Include companies field
                     'active': 1,
                     'created_at': 1,
                     '_id': 0
@@ -522,6 +523,51 @@ def get_delivery_partners():
     except Exception as e:
         app.logger.error(f"Error fetching delivery partners: {str(e)}")
         return jsonify({'message': 'Failed to fetch delivery partners'}), 500
+
+@app.route('/api/company/<int:company_id>/delivery-partners')
+def get_company_delivery_partners(company_id):
+    """Get delivery partners associated with a specific company"""
+    try:
+        # Try to initialize MongoDB if not connected
+        if not mongo_connected:
+            initialize_mongodb()
+        
+        if mongo_client:
+            try:
+                # Get delivery partners assigned to this company
+                partners_collection = mongo_client.get_database("tracksmart").get_collection("delivery_partners")
+                
+                # Find partners where companies array contains the company_id
+                partners = list(partners_collection.find(
+                    {'active': True, 'companies': company_id}, 
+                    {
+                        'name': 1,
+                        'email': 1,
+                        'phone': 1,
+                        'role': 1,
+                        'vehicle_type': 1,
+                        'companies': 1,
+                        'created_at': 1,
+                        '_id': 0
+                    }
+                ))
+                
+                # Sort by created_at
+                partners.sort(key=lambda x: x.get('created_at', datetime.min))
+                
+                app.logger.info(f"Retrieved {len(partners)} delivery partners for company {company_id}")
+                return jsonify(partners)
+                
+            except Exception as db_error:
+                app.logger.error(f"Database error fetching company delivery partners: {str(db_error)}")
+                return jsonify({'message': 'Database error'}), 500
+        else:
+            app.logger.error("MongoDB not connected - cannot fetch company delivery partners")
+            return jsonify({'message': 'Database connection failed'}), 500
+        
+    except Exception as e:
+        app.logger.error(f"Error fetching company delivery partners: {str(e)}")
+        return jsonify({'message': 'Failed to fetch company delivery partners'}), 500
 
 @app.route('/api/debug/users')
 def debug_users():
