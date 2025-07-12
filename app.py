@@ -970,6 +970,7 @@ def user_login():
                 # Prepare user data for response
                 user_data = {
                     'id': str(user['_id']),
+                    'user_id': user.get('user_id', str(user['_id'])),  # Include user_id for frontend compatibility
                     'name': user['name'],
                     'email': user['email'],
                     'phone': user['phone'],
