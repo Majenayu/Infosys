@@ -292,22 +292,42 @@ class UserDashboard {
       // Get HERE Maps API keys
       const keysResponse = await fetch('/api/here-keys');
       const keysData = await keysResponse.json();
-      const apiKey = keysData.keys[0]; // Use primary API key
+      const apiKeys = keysData.keys;
       
-      // Initialize HERE Maps platform with delay and error handling
-      await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for rate limiting
+      // Try multiple API keys with rate limiting protection
+      let platform, defaultLayers;
+      let apiKeyIndex = 0;
+      let success = false;
       
-      const platform = new H.service.Platform({
-        'apikey': apiKey
-      });
+      while (!success && apiKeyIndex < apiKeys.length) {
+        try {
+          // Add delay to prevent rate limiting
+          if (apiKeyIndex > 0) {
+            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 second delay for fallback keys
+          } else {
+            await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay for primary key
+          }
+          
+          console.log(`Trying HERE Maps API key ${apiKeyIndex + 1}/${apiKeys.length}`);
+          
+          platform = new H.service.Platform({
+            'apikey': apiKeys[apiKeyIndex]
+          });
+          
+          defaultLayers = platform.createDefaultLayers();
+          success = true;
+          console.log('HERE Maps initialized successfully');
+          
+        } catch (error) {
+          console.warn(`API key ${apiKeyIndex + 1} failed:`, error);
+          apiKeyIndex++;
+        }
+      }
       
-      // Get default map layers with fallback
-      let defaultLayers;
-      try {
-        defaultLayers = platform.createDefaultLayers();
-      } catch (layerError) {
-        console.error('Error creating map layers:', layerError);
-        throw new Error('Map initialization failed');
+      if (!success) {
+        console.error('All HERE Maps API keys failed, using fallback map');
+        this.initializeFallbackMap(trackingData);
+        return;
       }
       
       // Initialize the map
@@ -436,7 +456,100 @@ class UserDashboard {
       
     } catch (error) {
       console.error('Error initializing tracking map:', error);
-      this.showMessage('Map initialization failed', 'error');
+      console.log('Falling back to simple map display');
+      this.initializeFallbackMap(trackingData);
+    }
+  }
+
+  initializeFallbackMap(trackingData) {
+    try {
+      const mapContainer = document.getElementById('trackingMap');
+      if (!mapContainer) return;
+      
+      // Clear any existing content
+      mapContainer.innerHTML = '';
+      
+      // Create fallback map with basic styling
+      mapContainer.style.cssText = `
+        width: 100%;
+        height: 400px;
+        background: linear-gradient(45deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        position: relative;
+        font-family: Arial, sans-serif;
+      `;
+      
+      // Add destination and driver markers
+      const destLat = trackingData.coordinate_A?.latitude;
+      const destLng = trackingData.coordinate_A?.longitude;
+      const deliveryLat = trackingData.coordinate_B?.latitude;
+      const deliveryLng = trackingData.coordinate_B?.longitude;
+      
+      if (destLat && destLng && deliveryLat && deliveryLng) {
+        // Calculate distance
+        const distance = this.calculateDistance(
+          {lat: destLat, lng: destLng},
+          {lat: deliveryLat, lng: deliveryLng}
+        );
+        
+        // Create visual representation
+        mapContainer.innerHTML = `
+          <div style="position: absolute; top: 20px; left: 20px; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <div style="color: #d32f2f; font-weight: bold; margin-bottom: 5px;">📍 Destination</div>
+            <div style="font-size: 12px;">${trackingData.coordinate_A?.name || 'Unknown Location'}</div>
+            <div style="font-size: 10px; color: #666;">${destLat.toFixed(4)}, ${destLng.toFixed(4)}</div>
+          </div>
+          
+          <div style="position: absolute; top: 20px; right: 20px; background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <div style="color: #1976d2; font-weight: bold; margin-bottom: 5px;">🚚 Driver</div>
+            <div style="font-size: 12px;">${trackingData.coordinate_B?.delivery_partner_name || 'Unknown Partner'}</div>
+            <div style="font-size: 10px; color: #666;">${deliveryLat.toFixed(4)}, ${deliveryLng.toFixed(4)}</div>
+          </div>
+          
+          <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); text-align: center; max-width: 300px;">
+            <div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 10px;">🗺️ Route Information</div>
+            <div style="margin-bottom: 8px;">
+              <span style="color: #666;">Distance: </span>
+              <span style="font-weight: bold; color: #1976d2;">${distance.toFixed(2)} km</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <span style="color: #666;">Status: </span>
+              <span style="font-weight: bold; color: #4caf50;">Driver en route</span>
+            </div>
+            <button onclick="window.open('https://www.google.com/maps/dir/${deliveryLat},${deliveryLng}/${destLat},${destLng}', '_blank')" 
+                    style="background: #4285f4; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+              🗺️ Open in Google Maps
+            </button>
+          </div>
+          
+          <div style="position: absolute; bottom: 10px; right: 10px; font-size: 10px; color: #666; background: rgba(255,255,255,0.8); padding: 5px; border-radius: 3px;">
+            Fallback Map Mode
+          </div>
+        `;
+      } else {
+        mapContainer.innerHTML = `
+          <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); text-align: center;">
+            <div style="font-size: 18px; color: #f44336; margin-bottom: 10px;">⚠️ Map Unavailable</div>
+            <div style="color: #666; margin-bottom: 15px;">Unable to load map data</div>
+            <button onclick="location.reload()" style="background: #4285f4; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+              🔄 Refresh Page
+            </button>
+          </div>
+        `;
+      }
+      
+      this.showMessage('Map service temporarily unavailable. Using fallback display.', 'warning');
+      
+    } catch (fallbackError) {
+      console.error('Fallback map initialization failed:', fallbackError);
+      const mapContainer = document.getElementById('trackingMap');
+      if (mapContainer) {
+        mapContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Map unavailable</div>';
+      }
     }
   }
 

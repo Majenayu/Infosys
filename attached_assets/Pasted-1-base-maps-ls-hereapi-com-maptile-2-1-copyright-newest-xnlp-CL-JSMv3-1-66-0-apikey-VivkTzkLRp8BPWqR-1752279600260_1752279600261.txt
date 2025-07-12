@@ -1,0 +1,69 @@
+1.base.maps.ls.hereapi.com/maptile/2.1/copyright/newest?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&output=json:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+mapsjs-core.js:80 Uncaught ErrorUnderstand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/copyright/newest?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&output=json:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+mapsjs-core.js:80 Uncaught ErrorUnderstand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1461/952/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 28/12/1461/952/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1461/952/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+2.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1461/953/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1460/953/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1460/952/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+4.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1459/953/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+3.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1459/952/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 28/12/1461/953/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1461/953/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1460/953/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 28/12/1460/953/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1460/952/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 28/12/1460/952/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1459/953/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+ Tangram [error]: Error for style group 'non-collision' for tile 5/12/1459/952/11 Cannot read properties of undefined (reading 'retain'): TypeError: Cannot read properties of undefined (reading 'retain')
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:53013
+    at Array.forEach (<anonymous>)
+    at https://js.api.here.com/v3/3.1/mapsjs-core.js:465:52983
+log @ mapsjs-core.js:457Understand this error
+2user_dashboard.js:438 Error initializing tracking map: TypeError: Cannot read properties of undefined (reading 's')
+    at new tn (eval at <anonymous> (mapsjs-core.js:109:72), <anonymous>:1:357)
+    at UserDashboard.initializeTrackingMap (user_dashboard.js:354:24)
+initializeTrackingMap @ user_dashboard.js:438Understand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/copyright/newest?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&output=json:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+mapsjs-core.js:80 Uncaught ErrorUnderstand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/copyright/newest?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA&output=json:1  Failed to load resource: the server responded with a status of 429 ()Understand this error
+mapsjs-core.js:80 Uncaught ErrorUnderstand this error
+1.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/11/1460/953/512/png8?xnlp=CL_JSMv3.1.66.0&apikey=VivkTzkLRp8BPWqRgV12KUmuOHfy6mobXyHUJSEfOcA:1  Failed to load resource: the server responded with a status of 429 ()
