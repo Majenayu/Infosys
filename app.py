@@ -219,66 +219,7 @@ def company_login():
         app.logger.error(f"Error logging in company: {str(e)}")
         return jsonify({'message': 'Login failed'}), 500
 
-@app.route('/register-company', methods=['POST'])
-def register_company():
-    """Register a new logistics company"""
-    try:
-        data = request.get_json()
-        
-        # Try to initialize MongoDB if not connected
-        if not mongo_connected:
-            initialize_mongodb()
-        
-        if not mongo_client:
-            return jsonify({'message': 'Database connection failed'}), 500
-        
-        # Validate required fields
-        required_fields = ['name', 'contactPerson', 'email', 'phone', 'apiUrl', 'apiKey', 'address']
-        for field in required_fields:
-            if not data.get(field):
-                return jsonify({'message': f'Missing required field: {field}'}), 400
-        
-        # Check if company already exists
-        db = mongo_client.get_database("tracksmart")
-        companies_collection = db.get_collection("companies")
-        
-        existing_company = companies_collection.find_one({
-            '$or': [
-                {'email': data['email']},
-                {'name': data['name']}
-            ]
-        })
-        
-        if existing_company:
-            return jsonify({'message': 'Company with this name or email already exists'}), 400
-        
-        # Create company document
-        company_doc = {
-            'name': data['name'],
-            'contact_person': data['contactPerson'],
-            'email': data['email'],
-            'phone': data['phone'],
-            'api_url': data['apiUrl'],
-            'api_key': data['apiKey'],
-            'address': data['address'],
-            'created_at': datetime.utcnow(),
-            'status': 'active'
-        }
-        
-        # Insert into companies collection
-        result = companies_collection.insert_one(company_doc)
-        
-        app.logger.info(f"Company registered: {data['name']} ({data['email']})")
-        
-        return jsonify({
-            'message': 'Company registered successfully!',
-            'company_id': str(result.inserted_id),
-            'name': data['name']
-        })
-        
-    except Exception as e:
-        app.logger.error(f"Error registering company: {str(e)}")
-        return jsonify({'message': 'Failed to register company'}), 500
+
 
 @app.route('/store-location', methods=['POST'])
 def store_location():
