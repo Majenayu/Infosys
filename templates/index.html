@@ -17,14 +17,17 @@
     <div class="row">
       <div class="col-lg-8 mx-auto">
         <div class="text-center mb-4">
-          <h1 class="display-4 mb-3">🏢 TrackSmart Company Portal</h1>
-          <p class="lead">Logistics Company Management System</p>
+          <h1 class="display-4 mb-3">🚛 TrackSmart</h1>
+          <p class="lead">Complete Logistics Management System</p>
         </div>
         
-        <!-- Customer Care -->
-        <div class="text-center mb-4">
-          <a href="tel:+919483246283" class="btn btn-danger">
-            📞 Customer Care: 9483246283
+        <!-- Navigation -->
+        <div class="d-flex justify-content-center gap-3 mb-4">
+          <a href="{{ url_for('delivery_page') }}" class="btn btn-warning btn-lg">
+            🚚 Delivery Partner
+          </a>
+          <a href="{{ url_for('user_page') }}" class="btn btn-success btn-lg">
+            👤 User
           </a>
         </div>
 

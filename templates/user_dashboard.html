@@ -249,11 +249,11 @@
           <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
             ← Back to Home
           </a>
-          <a href="https://tracksmart-company.onrender.com/qr" class="btn btn-outline-info">
+          <a href="{{ url_for('qr_generator') }}" class="btn btn-outline-info">
             QR Generator
           </a>
-          <a href="https://tracksmart-delivery.onrender.com/" class="btn btn-outline-warning">
-            Delivery Portal
+          <a href="{{ url_for('qr_scanner') }}" class="btn btn-outline-warning">
+            QR Scanner
           </a>
         </div>
       </div>
