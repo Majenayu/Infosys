@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackSmart - Service Selection</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .service-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+        }
+        .btn-service {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-service:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+            color: white;
+            text-decoration: none;
+        }
+        .main-title {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="main-title">🚛 TrackSmart</h1>
+                <p class="subtitle">Choose your service portal</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon">🏢</div>
+                    <div class="service-title">Company Portal</div>
+                    <div class="service-description">
+                        Register your company, generate QR codes, and manage deliveries
+                    </div>
+                    <a href="https://tracksmart-company.onrender.com" class="btn-service">
+                        Access Company Portal
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon">🚚</div>
+                    <div class="service-title">Delivery Partner</div>
+                    <div class="service-description">
+                        Register as delivery partner, scan QR codes, and track deliveries
+                    </div>
+                    <a href="https://tracksmart-delivery.onrender.com" class="btn-service">
+                        Access Delivery Portal
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="service-icon">👤</div>
+                    <div class="service-title">User Portal</div>
+                    <div class="service-description">
+                        Track your orders and monitor delivery progress
+                    </div>
+                    <a href="https://tracksmart-user.onrender.com" class="btn-service">
+                        Access User Portal
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center">
+                <p style="color: rgba(255, 255, 255, 0.6);">
+                    <small>Each service is independently hosted for better performance and security</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

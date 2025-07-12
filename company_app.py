@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 import sys
 import time
 import random
-from email_service import send_qr_email, send_simple_notification
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -159,9 +158,9 @@ def store_location():
                                 company['name'],
                                 data['name']
                             )
-                            app.logger.info(f"Email sent to {user['email']} for QR {qr_id}")
+                            app.logger.info(f"QR {qr_id} assigned to user {user['email']}")
                     except Exception as email_error:
-                        app.logger.error(f"Email sending failed: {str(email_error)}")
+                        app.logger.error(f"Email notification failed: {str(email_error)}")
                         # Continue without failing the whole request
                 
                 app.logger.info(f"Location stored with QR ID: {qr_id}")
@@ -680,6 +679,19 @@ def get_qr_code_data(qr_id):
     except Exception as e:
         app.logger.error(f"Error retrieving QR data: {str(e)}")
         return jsonify({'message': 'Failed to retrieve QR data'}), 500
+
+def send_simple_notification(user_email, user_name, qr_id, company_name, location_name):
+    """
+    Simple email notification function (disabled for deployment)
+    """
+    try:
+        # Email functionality disabled for deployment
+        # In production, implement with SendGrid, SES, or similar service
+        app.logger.info(f"Email notification would be sent to {user_email} for QR {qr_id}")
+        return True
+    except Exception as e:
+        app.logger.error(f"Email notification failed: {str(e)}")
+        return False
 
 def initialize_mongodb():
     """Initialize MongoDB connection"""
