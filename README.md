@@ -4,11 +4,18 @@
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Python](https://img.shields.io/badge/Python-42.4%25-blue?style=flat-square)
-![JavaScript](https://img.shields.io/badge/JavaScript-40.3%25-yellow?style=flat-square)
-![HTML](https://img.shields.io/badge/HTML-16.4%25-red?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.8+-blue)
 ![Flask](https://img.shields.io/badge/Flask-2.0+-green)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-brightgreen)
+![Stars](https://img.shields.io/github/stars/Majenayu/Infosys?style=social)
+![Forks](https://img.shields.io/github/forks/Majenayu/Infosys?style=social)
+![Issues](https://img.shields.io/github/issues/Majenayu/Infosys)
+![Last Commit](https://img.shields.io/github/last-commit/Majenayu/Infosys)
+![Deployment](https://img.shields.io/badge/deployment-Render-success)
+![Microservices](https://img.shields.io/badge/architecture-Microservices-orange)
+```
+
 
 **A comprehensive QR-code based delivery tracking and management platform with real-time location monitoring**
 
