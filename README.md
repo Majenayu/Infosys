@@ -14,7 +14,6 @@
 ![Last Commit](https://img.shields.io/github/last-commit/Majenayu/Infosys)
 ![Deployment](https://img.shields.io/badge/deployment-Render-success)
 ![Microservices](https://img.shields.io/badge/architecture-Microservices-orange)
-```
 
 
 **A comprehensive QR-code based delivery tracking and management platform with real-time location monitoring**
